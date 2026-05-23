@@ -1,0 +1,165 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  projects: CollectionEntry<"projects">[];
+}
+
+const { projects } = Astro.props;
+const disciplines = Array.from(new Set(projects.flatMap((project) => project.data.disciplines))).sort();
+const years = Array.from(new Set(projects.map((project) => project.data.year))).sort((a, b) => b - a);
+---
+
+<section class="archive" data-archive>
+  <div class="archive__controls" data-reveal>
+    <label>
+      <span>Search</span>
+      <input data-archive-search type="search" placeholder="Search projects, roles, mediums" />
+    </label>
+    <label>
+      <span>Discipline</span>
+      <select data-archive-discipline>
+        <option value="all">All disciplines</option>
+        {disciplines.map((discipline) => <option value={discipline}>{discipline}</option>)}
+      </select>
+    </label>
+    <label>
+      <span>Year</span>
+      <select data-archive-year>
+        <option value="all">All years</option>
+        {years.map((year) => <option value={year}>{year}</option>)}
+      </select>
+    </label>
+    <label>
+      <span>Sort</span>
+      <select data-archive-sort>
+        <option value="featured">Featured</option>
+        <option value="recent">Recent</option>
+        <option value="title">Title</option>
+      </select>
+    </label>
+    <div class="archive__view-toggle" aria-label="Archive view">
+      <button type="button" data-view="grid" aria-pressed="true">Grid</button>
+      <button type="button" data-view="index" aria-pressed="false">Index</button>
+    </div>
+  </div>
+
+  <div class="archive__grid" data-archive-grid>
+    {
+      projects.map((project) => (
+        <article
+          class="archive-item"
+          data-archive-item
+          data-title={project.data.title}
+          data-year={project.data.year}
+          data-order={project.data.order}
+          data-featured={project.data.featured ? "1" : "0"}
+          data-disciplines={project.data.disciplines.join("|")}
+          data-medium={project.data.medium.join("|")}
+          data-search={[
+            project.data.title,
+            project.data.dek,
+            project.data.summary,
+            project.data.role,
+            project.data.client,
+            project.data.disciplines.join(" "),
+            project.data.medium.join(" "),
+          ]
+            .join(" ")
+            .toLowerCase()}
+          style={`--accent: ${project.data.accent};`}
+        >
+          <a href={`/work/${project.id}/`}>
+            <figure>
+              <img src={project.data.cover} alt={project.data.coverAlt} loading="lazy" />
+            </figure>
+            <div class="archive-item__content">
+              <p class="archive-item__meta">
+                <span>{project.data.year}</span>
+                <span>{project.data.disciplines.join(" / ")}</span>
+              </p>
+              <h2>{project.data.title}</h2>
+              <p>{project.data.dek}</p>
+            </div>
+          </a>
+        </article>
+      ))
+    }
+  </div>
+  <p class="archive__empty" data-archive-empty hidden>No projects match those filters.</p>
+</section>
+
+<script>
+  const archive = document.querySelector("[data-archive]");
+
+  if (archive) {
+    const search = archive.querySelector("[data-archive-search]");
+    const discipline = archive.querySelector("[data-archive-discipline]");
+    const year = archive.querySelector("[data-archive-year]");
+    const sort = archive.querySelector("[data-archive-sort]");
+    const grid = archive.querySelector("[data-archive-grid]");
+    const empty = archive.querySelector("[data-archive-empty]");
+    const cards = Array.from(archive.querySelectorAll("[data-archive-item]"));
+    const viewButtons = Array.from(archive.querySelectorAll("[data-view]"));
+
+    const getValue = (control: Element | null) =>
+      control instanceof HTMLInputElement || control instanceof HTMLSelectElement ? control.value : "";
+
+    const syncArchive = () => {
+      const term = getValue(search).trim().toLowerCase();
+      const activeDiscipline = getValue(discipline);
+      const activeYear = getValue(year);
+      const sortMode = getValue(sort);
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        if (!(card instanceof HTMLElement)) return;
+
+        const matchesTerm = !term || card.dataset.search?.includes(term);
+        const matchesDiscipline =
+          activeDiscipline === "all" || card.dataset.disciplines?.split("|").includes(activeDiscipline);
+        const matchesYear = activeYear === "all" || card.dataset.year === activeYear;
+        const isVisible = Boolean(matchesTerm && matchesDiscipline && matchesYear);
+
+        card.hidden = !isVisible;
+        if (isVisible) visibleCount += 1;
+      });
+
+      const sortedCards = cards.toSorted((a, b) => {
+        if (!(a instanceof HTMLElement) || !(b instanceof HTMLElement)) return 0;
+
+        if (sortMode === "title") {
+          return (a.dataset.title || "").localeCompare(b.dataset.title || "");
+        }
+
+        if (sortMode === "recent") {
+          return Number(b.dataset.year || 0) - Number(a.dataset.year || 0);
+        }
+
+        return Number(a.dataset.order || 999) - Number(b.dataset.order || 999);
+      });
+
+      sortedCards.forEach((card) => grid?.append(card));
+
+      if (empty instanceof HTMLElement) {
+        empty.hidden = visibleCount > 0;
+      }
+    };
+
+    [search, discipline, year, sort].forEach((control) => {
+      control?.addEventListener("input", syncArchive);
+      control?.addEventListener("change", syncArchive);
+    });
+
+    viewButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const view = button.dataset.view || "grid";
+        archive.setAttribute("data-current-view", view);
+        viewButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+      });
+    });
+
+    syncArchive();
+  }
+</script>

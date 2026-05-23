@@ -1,0 +1,19 @@
+---
+import { getCollection } from "astro:content";
+import ArchiveView from "../../components/ArchiveView.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Work Archive" description="A filterable archive of graphic design, identity, editorial, and campaign projects.">
+  <section class="page-hero page-hero--compact">
+    <p class="eyebrow" data-reveal>Work archive</p>
+    <h1 data-reveal>Browse the projects like an editorial index.</h1>
+    <p data-reveal>
+      Filter by discipline, scan by year, or move into a full case study when a project needs a deeper read.
+    </p>
+  </section>
+
+  <ArchiveView projects={projects} />
+</BaseLayout>

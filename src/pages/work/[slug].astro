@@ -1,0 +1,87 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const allProjects = (await getCollection("projects")).filter((item) => item.id !== project.id);
+const relatedProjects = allProjects
+  .filter((item) => item.data.disciplines.some((discipline) => project.data.disciplines.includes(discipline)))
+  .slice(0, 2);
+---
+
+<BaseLayout title={project.data.title} description={project.data.summary} bodyClass={`project-theme-${project.data.theme}`}>
+  <article class="project">
+    <header class="project-hero">
+      <div class="project-hero__copy" data-reveal>
+        <p class="eyebrow">{project.data.year} / {project.data.disciplines.join(" / ")}</p>
+        <h1>{project.data.title}</h1>
+        <p>{project.data.dek}</p>
+      </div>
+      <figure class="project-hero__media" data-parallax>
+        <img src={project.data.cover} alt={project.data.coverAlt} />
+      </figure>
+    </header>
+
+    <section class="project-facts" aria-label="Project facts" data-reveal>
+      <div>
+        <span>Role</span>
+        <p>{project.data.role}</p>
+      </div>
+      <div>
+        <span>Client</span>
+        <p>{project.data.client}</p>
+      </div>
+      <div>
+        <span>Medium</span>
+        <p>{project.data.medium.join(", ")}</p>
+      </div>
+      <div>
+        <span>Location</span>
+        <p>{project.data.location ?? "Remote"}</p>
+      </div>
+    </section>
+
+    <section class="project-chapter" data-sticky-chapter>
+      <div class="project-chapter__copy" data-reveal>
+        <p class="eyebrow">Case study</p>
+        <h2>A product-page rhythm for graphic design work.</h2>
+        <p>
+          This chapter format lets each project open with a cinematic image, then move through
+          context, concept, system, and outcome without hiding the practical details.
+        </p>
+      </div>
+      <figure class="project-chapter__media" data-chapter-media>
+        <img src={project.data.cover} alt="" />
+      </figure>
+    </section>
+
+    <section class="project-body" data-reveal>
+      <Content />
+    </section>
+
+    {
+      relatedProjects.length > 0 && (
+        <section class="section">
+          <div class="section__heading" data-reveal>
+            <p class="eyebrow">Related work</p>
+            <h2>Continue through the archive</h2>
+          </div>
+          <div class="featured-grid">
+            {relatedProjects.map((related) => <ProjectCard project={related} />)}
+          </div>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>

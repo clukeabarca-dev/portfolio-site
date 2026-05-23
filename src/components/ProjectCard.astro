@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  featured?: boolean;
+}
+
+const { project, featured = false } = Astro.props;
+const data = project.data;
+---
+
+<article
+  class:list={["project-card", featured && "project-card--featured"]}
+  style={`--accent: ${data.accent};`}
+  data-reveal
+>
+  <a href={`/work/${project.id}/`}>
+    <figure class="project-card__media" data-parallax>
+      <img src={data.cover} alt={data.coverAlt} loading={featured ? "eager" : "lazy"} />
+    </figure>
+    <div class="project-card__body">
+      <p class="project-card__meta">
+        <span>{data.year}</span>
+        <span>{data.disciplines[0]}</span>
+      </p>
+      <h3>{data.title}</h3>
+      <p>{data.summary}</p>
+    </div>
+  </a>
+</article>

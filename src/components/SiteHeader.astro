@@ -1,0 +1,28 @@
+---
+const navItems = [
+  { href: "/", label: "Index" },
+  { href: "/work/", label: "Work" },
+  { href: "/about/", label: "About" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header" data-reveal>
+  <a class="site-header__brand" href="/" aria-label="Christopher Abarca home">
+    <span class="site-header__mark">CA</span>
+    <span>Christopher Abarca</span>
+  </a>
+  <nav class="site-header__nav" aria-label="Primary navigation">
+    {
+      navItems.map((item) => (
+        <a
+          href={item.href}
+          aria-current={currentPath === item.href ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>

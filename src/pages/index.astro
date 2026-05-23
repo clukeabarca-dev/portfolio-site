@@ -1,0 +1,72 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+
+const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
+const featuredProjects = projects.filter((project) => project.data.featured);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="hero__inner">
+      <p class="eyebrow" data-reveal>Graphic design / identity / editorial systems</p>
+      <h1 data-reveal>
+        Christopher Abarca builds visual systems with Pacific rhythm and editorial precision.
+      </h1>
+      <div class="hero__summary" data-reveal>
+        <p>
+          A graphic designer relocating from Hawaii to Seattle, creating identity work,
+          campaign systems, and case studies that move with the confidence of product launches.
+        </p>
+        <div class="hero__actions" aria-label="Primary actions">
+          <a class="button" href="/work/">View archive</a>
+          <a class="button button--quiet" href="/about/">Read bio</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero__visual" aria-hidden="true" data-reveal>
+      <div class="hero__panel hero__panel--paper">
+        <span>01</span>
+        <strong>Archive</strong>
+      </div>
+      <div class="hero__panel hero__panel--blue">
+        <span>02</span>
+        <strong>Systems</strong>
+      </div>
+      <div class="hero__panel hero__panel--coral">
+        <span>03</span>
+        <strong>Stories</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--split">
+    <div data-reveal>
+      <p class="eyebrow">Working format</p>
+      <h2>Editorial browsing with product-page depth.</h2>
+    </div>
+    <p data-reveal>
+      The site is built to scan quickly from the archive, then slow down inside each project.
+      Featured work gets immersive scroll chapters, while the index keeps every project easy to find.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section__heading" data-reveal>
+      <p class="eyebrow">Featured work</p>
+      <h2>Selected project systems</h2>
+    </div>
+    <div class="featured-grid">
+      {featuredProjects.map((project) => <ProjectCard project={project} featured />)}
+    </div>
+  </section>
+
+  <section class="index-band" data-reveal>
+    <div>
+      <p class="eyebrow">Archive logic</p>
+      <h2>Project cards carry enough metadata to work as a design index.</h2>
+    </div>
+    <a class="button button--dark" href="/work/">Open work archive</a>
+  </section>
+</BaseLayout>
