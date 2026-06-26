@@ -18,6 +18,14 @@ const allProjects = (await getCollection("projects")).filter((item) => item.id !
 const relatedProjects = allProjects
   .filter((item) => item.data.disciplines.some((discipline) => project.data.disciplines.includes(discipline)))
   .slice(0, 2);
+const gallery = project.data.gallery ?? [];
+const leadVisual = gallery[0] ?? {
+  src: project.data.cover,
+  alt: project.data.coverAlt,
+  caption: project.data.summary,
+  layout: "wide",
+};
+const chapterVisual = gallery[3] ?? leadVisual;
 ---
 
 <BaseLayout title={project.data.title} description={project.data.summary} bodyClass={`project-theme-${project.data.theme}`}>
@@ -50,25 +58,68 @@ const relatedProjects = allProjects
         <span>Location</span>
         <p>{project.data.location ?? "Remote"}</p>
       </div>
+      <div>
+        <span>Images</span>
+        <p>{gallery.length} visual moments</p>
+      </div>
     </section>
+
+    {
+      gallery.length > 0 && (
+        <section class="project-visual-strip" aria-label="Project visual preview">
+          {gallery.slice(0, 3).map((image, index) => (
+            <figure class:list={["project-visual-strip__item", index === 1 && "project-visual-strip__item--tall"]} data-reveal>
+              <img src={image.src} alt={image.alt} loading="lazy" />
+              <figcaption>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {image.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </section>
+      )
+    }
 
     <section class="project-chapter" data-sticky-chapter>
       <div class="project-chapter__copy" data-reveal>
-        <p class="eyebrow">Case study</p>
-        <h2>A product-page rhythm for graphic design work.</h2>
+        <p class="eyebrow">Visual system</p>
+        <h2>Each project gets room for atmosphere, detail, process, and final work.</h2>
         <p>
-          This chapter format lets each project open with a cinematic image, then move through
-          context, concept, system, and outcome without hiding the practical details.
+          The case study format now supports a richer visual sequence, so project pages can
+          behave more like designed stories than text pages with one cover image.
         </p>
       </div>
       <figure class="project-chapter__media" data-chapter-media>
-        <img src={project.data.cover} alt="" />
+        <img src={chapterVisual.src} alt={chapterVisual.alt} loading="lazy" />
+        <figcaption>{chapterVisual.caption}</figcaption>
       </figure>
     </section>
 
     <section class="project-body" data-reveal>
       <Content />
     </section>
+
+    {
+      gallery.length > 0 && (
+        <section class="project-gallery" aria-label={`${project.data.title} image gallery`}>
+          <div class="project-gallery__heading" data-reveal>
+            <p class="eyebrow">Image archive</p>
+            <h2>{gallery.length} selected visual moments</h2>
+          </div>
+          <div class="project-gallery__grid">
+            {gallery.map((image, index) => (
+              <figure class:list={["project-gallery__item", `project-gallery__item--${image.layout}`]} data-reveal>
+                <img src={image.src} alt={image.alt} loading={index < 2 ? "eager" : "lazy"} />
+                <figcaption>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {image.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     {
       relatedProjects.length > 0 && (

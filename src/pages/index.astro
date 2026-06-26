@@ -5,57 +5,110 @@ import ProjectCard from "../components/ProjectCard.astro";
 
 const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
 const featuredProjects = projects.filter((project) => project.data.featured);
+const heroVisuals = [
+  {
+    src: featuredProjects[0]?.data.cover ?? projects[0]?.data.cover,
+    alt: featuredProjects[0]?.data.coverAlt ?? projects[0]?.data.coverAlt,
+    label: "Identity",
+  },
+  {
+    src: featuredProjects[1]?.data.gallery?.[0]?.src ?? featuredProjects[1]?.data.cover ?? projects[1]?.data.cover,
+    alt: featuredProjects[1]?.data.gallery?.[0]?.alt ?? featuredProjects[1]?.data.coverAlt ?? projects[1]?.data.coverAlt,
+    label: "Campaign",
+  },
+  {
+    src: projects[2]?.data.gallery?.[1]?.src ?? projects[2]?.data.cover,
+    alt: projects[2]?.data.gallery?.[1]?.alt ?? projects[2]?.data.coverAlt,
+    label: "Archive",
+  },
+].filter((image) => image.src && image.alt);
+const visualReel = projects
+  .flatMap((project) => [
+    {
+      src: project.data.cover,
+      alt: project.data.coverAlt,
+      title: project.data.title,
+      caption: project.data.disciplines[0],
+    },
+    ...(project.data.gallery ?? []).slice(0, 2).map((image) => ({
+      src: image.src,
+      alt: image.alt,
+      title: project.data.title,
+      caption: image.caption,
+    })),
+  ])
+  .slice(0, 7);
 ---
 
 <BaseLayout>
   <section class="hero">
     <div class="hero__inner">
-      <p class="eyebrow" data-reveal>Graphic design / identity / editorial systems</p>
+      <p class="eyebrow" data-reveal>Graphic design / brand systems / digital</p>
       <h1 data-reveal>
-        Christopher Abarca builds visual systems with Pacific rhythm and editorial precision.
+        Visual systems for brands that need to live in the real world.
       </h1>
       <div class="hero__summary" data-reveal>
         <p>
-          A graphic designer relocating from Hawaii to Seattle, creating identity work,
-          campaign systems, and case studies that move with the confidence of product launches.
+          I am Christopher Abarca, a graphic designer moving from Hawaii to Seattle. I create identity,
+          brand, print, environmental, and digital work with a focus on clear systems and memorable
+          visual presence.
         </p>
         <div class="hero__actions" aria-label="Primary actions">
-          <a class="button" href="/work/">View archive</a>
-          <a class="button button--quiet" href="/about/">Read bio</a>
+          <a class="button" href="/work/">View work</a>
+          <a class="button button--quiet" href="/about/">About me</a>
         </div>
       </div>
     </div>
-    <div class="hero__visual" aria-hidden="true" data-reveal>
-      <div class="hero__panel hero__panel--paper">
-        <span>01</span>
-        <strong>Archive</strong>
-      </div>
-      <div class="hero__panel hero__panel--blue">
-        <span>02</span>
-        <strong>Systems</strong>
-      </div>
-      <div class="hero__panel hero__panel--coral">
-        <span>03</span>
-        <strong>Stories</strong>
-      </div>
+    <div class="hero__visual" data-reveal>
+      {
+        heroVisuals.map((image, index) => (
+          <figure class={`hero__image hero__image--${index + 1}`} data-parallax>
+            <img src={image.src} alt={image.alt} loading={index === 0 ? "eager" : "lazy"} />
+            <figcaption>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              {image.label}
+            </figcaption>
+          </figure>
+        ))
+      }
     </div>
   </section>
 
   <section class="section section--split">
     <div data-reveal>
-      <p class="eyebrow">Working format</p>
-      <h2>Editorial browsing with product-page depth.</h2>
+      <p class="eyebrow">Practice</p>
+      <h2>Design that carries from first impression to final touchpoint.</h2>
     </div>
     <p data-reveal>
-      The site is built to scan quickly from the archive, then slow down inside each project.
-      Featured work gets immersive scroll chapters, while the index keeps every project easy to find.
+      A mark is only the start. I build the language around it, from type and color to physical
+      touchpoints and digital experiences, so a brand can feel consistent wherever people meet it.
     </p>
+  </section>
+
+  <section class="visual-reel" aria-label="Visual project preview">
+    <div class="visual-reel__intro" data-reveal>
+      <p class="eyebrow">Approach</p>
+      <h2>Useful systems with enough visual energy to be remembered.</h2>
+    </div>
+    <div class="visual-reel__track">
+      {
+        visualReel.map((image, index) => (
+          <figure class:list={["visual-reel__item", index % 3 === 1 && "visual-reel__item--tall"]} data-reveal>
+            <img src={image.src} alt={image.alt} loading="lazy" />
+            <figcaption>
+              <span>{image.title}</span>
+              {image.caption}
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
   </section>
 
   <section class="section">
     <div class="section__heading" data-reveal>
       <p class="eyebrow">Featured work</p>
-      <h2>Selected project systems</h2>
+      <h2>Selected work across identity, campaigns, environments, and digital products.</h2>
     </div>
     <div class="featured-grid">
       {featuredProjects.map((project) => <ProjectCard project={project} featured />)}
@@ -64,9 +117,9 @@ const featuredProjects = projects.filter((project) => project.data.featured);
 
   <section class="index-band" data-reveal>
     <div>
-      <p class="eyebrow">Archive logic</p>
-      <h2>Project cards carry enough metadata to work as a design index.</h2>
+      <p class="eyebrow">Work archive</p>
+      <h2>Browse brand systems, printed pieces, spatial graphics, and digital experiences.</h2>
     </div>
-    <a class="button button--dark" href="/work/">Open work archive</a>
+    <a class="button button--dark" href="/work/">View all work</a>
   </section>
 </BaseLayout>

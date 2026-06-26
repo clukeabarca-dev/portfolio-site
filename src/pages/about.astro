@@ -1,40 +1,209 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const capabilities = [
+  "Identity systems",
+  "Brand development",
+  "Packaging and print",
+  "Posters and campaign graphics",
+  "Commercial signage",
+  "Websites and applications",
+];
+
+const clients = [
+  "CVS",
+  "Longs Drugs",
+  "University of Hawaii",
+  "Manoa Now",
+  "KTUH Radio",
+  "KTM Enjoy Snacks",
+  "Aloha Gourmet",
+  "Island Living",
+  "Mondelez",
+  "Rotary Hawaii",
+  "United States Navy",
+  "Vital View 3D",
+  "Kelly Lui",
+];
+
+const aboutImages = [
+  {
+    src: "https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&w=1400&q=85",
+    alt: "Design workspace with tools, paper, and sketches.",
+    caption: "Process",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1529119368496-2dfda6ec2804?auto=format&fit=crop&w=1200&q=85",
+    alt: "Printed paper textures and design material on a work surface.",
+    caption: "Print",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=85",
+    alt: "Geometric exterior structure with signage-like forms.",
+    caption: "Place",
+  },
+];
+
+const everydayImages = [
+  {
+    src: "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?auto=format&fit=crop&w=1000&q=85",
+    alt: "Printed paper and design material arranged on a desk.",
+    caption: "Printed matter",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1524230572899-a752b3835840?auto=format&fit=crop&w=1000&q=85",
+    alt: "Architectural interior with warm light and graphic structure.",
+    caption: "Spatial rhythm",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1542223616-740d5dff7f56?auto=format&fit=crop&w=1000&q=85",
+    alt: "Wet city street with storefronts and urban texture.",
+    caption: "Street texture",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1000&q=85",
+    alt: "Geometric architectural surface with light and shadow.",
+    caption: "Pattern and shadow",
+  },
+];
+
+const principles = [
+  {
+    title: "Clarity first",
+    text: "The work has to be easy to understand before it can be memorable. I start by organizing the message, audience, and touchpoints.",
+  },
+  {
+    title: "Systems over one-offs",
+    text: "A good visual direction should hold together across a logo, package, poster, sign, website, or app screen.",
+  },
+  {
+    title: "Place with restraint",
+    text: "Moving from Hawaii to Seattle gives the work a sense of transition, texture, and atmosphere without leaning on obvious visual cliches.",
+  },
+];
+
+const process = ["Listen", "Structure", "Design", "Extend"];
 ---
 
-<BaseLayout title="About" description="About Christopher Abarca, a graphic designer relocating from Hawaii to Seattle.">
-  <section class="page-hero">
-    <p class="eyebrow" data-reveal>About</p>
-    <h1 data-reveal>A designer moving from Hawaii to Seattle with a practice built around clarity, rhythm, and place.</h1>
+<BaseLayout
+  title="About"
+  description="About Christopher Abarca, a graphic designer with 10 years of experience in identity, brand, print, environmental, and digital design."
+>
+  <section class="about-hero">
+    <div class="about-hero__copy" data-reveal>
+      <p class="eyebrow">About</p>
+      <h1>Graphic designer building brand systems across identity, print, environments, and digital products.</h1>
+      <p>
+        I am Christopher Abarca, a graphic designer with 10 years of experience creating identity, brand,
+        print, environmental, and digital work. I am moving from Hawaii to Seattle and building a practice
+        around clear visual systems, strong imagery, and practical design that can carry across many touchpoints.
+      </p>
+    </div>
+    <div class="about-hero__card" data-reveal aria-label="Location transition">
+      <span>HNL</span>
+      <strong>Pacific point of view</strong>
+      <em>SEA</em>
+      <p>Graphic Designer. 10 years of experience. Open to freelance, full-time, and contract opportunities.</p>
+    </div>
   </section>
 
-  <section class="about-grid">
+  <section class="about-image-strip" aria-label="About page visual references">
+    {
+      aboutImages.map((image, index) => (
+        <figure class:list={["about-image-strip__item", index === 1 && "about-image-strip__item--tall"]} data-reveal>
+          <img src={image.src} alt={image.alt} loading="lazy" />
+          <figcaption>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            {image.caption}
+          </figcaption>
+        </figure>
+      ))
+    }
+  </section>
+
+  <section class="about-grid about-grid--statement">
     <div class="about-grid__intro" data-reveal>
+      <p class="eyebrow">Practice</p>
       <p>
-        This portfolio is being rebuilt as both a brand system and a working archive. The goal is to show
-        design work with the polish of a product launch and the usefulness of an editorial index.
+        I work best where a brand has to show up in more than one place. That can mean an identity system,
+        packaging direction, poster series, storefront sign, website, or application interface. The goal is
+        to make each piece feel connected without making every touchpoint look identical.
       </p>
       <p>
-        The brand direction uses Pacific warmth, Northwest restraint, precise typography, and tactile image
-        treatment to create a site that feels personal without leaning on obvious location cliches.
+        I care about the balance between structure and feeling. The structure makes the work useful. The
+        feeling makes it worth remembering.
       </p>
     </div>
     <div class="about-grid__notes" data-reveal>
-      <h2>Focus</h2>
+      <h2>Capabilities</h2>
       <ul>
-        <li>Identity systems</li>
-        <li>Editorial design</li>
-        <li>Campaign art direction</li>
-        <li>Digital portfolio storytelling</li>
+        {capabilities.map((capability) => <li>{capability}</li>)}
       </ul>
     </div>
+  </section>
+
+  <section class="about-clients" aria-label="Selected clients and collaborators">
+    <div data-reveal>
+      <p class="eyebrow">Selected clients and collaborators</p>
+      <h2>Experience across retail, education, food, media, civic, military, healthcare, and local business.</h2>
+    </div>
+    <ul data-reveal>
+      {clients.map((client) => <li>{client}</li>)}
+    </ul>
+  </section>
+
+  <section class="about-principles" aria-label="Design principles">
+    {
+      principles.map((principle, index) => (
+        <article data-reveal>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h2>{principle.title}</h2>
+          <p>{principle.text}</p>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="about-process">
+    <div data-reveal>
+      <p class="eyebrow">How I work</p>
+      <h2>A simple process for building visual systems that can keep expanding.</h2>
+    </div>
+    <ol data-reveal>
+      {
+        process.map((step) => (
+          <li>
+            <span>{step}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="about-personal" data-reveal>
+    <p class="eyebrow">Point of view</p>
+    <p>
+      Outside of project work, I pay attention to everyday design: storefronts, menus, posters, packaging,
+      and the small details that make a place feel recognizable.
+    </p>
+  </section>
+
+  <section class="about-everyday" aria-label="Everyday design references">
+    {
+      everydayImages.map((image) => (
+        <figure data-reveal>
+          <img src={image.src} alt={image.alt} loading="lazy" />
+          <figcaption>{image.caption}</figcaption>
+        </figure>
+      ))
+    }
   </section>
 
   <section class="index-band index-band--light" data-reveal>
     <div>
       <p class="eyebrow">Availability</p>
-      <h2>Open to Seattle-based opportunities, freelance projects, and collaborative design work.</h2>
+      <h2>Open to freelance, full-time, and contract opportunities in Seattle, Hawaii, and remote teams.</h2>
     </div>
-    <a class="button" href="mailto:hello@example.com">Start a conversation</a>
+    <a class="button" href="mailto:clukeabarca@icloud.com">Start a conversation</a>
   </section>
 </BaseLayout>

@@ -8,6 +8,7 @@ interface Props {
 
 const { project, featured = false } = Astro.props;
 const data = project.data;
+const previewImages = (data.gallery ?? []).slice(0, 2);
 ---
 
 <article
@@ -18,6 +19,15 @@ const data = project.data;
   <a href={`/work/${project.id}/`}>
     <figure class="project-card__media" data-parallax>
       <img src={data.cover} alt={data.coverAlt} loading={featured ? "eager" : "lazy"} />
+      {
+        previewImages.length > 0 && (
+          <div class="project-card__thumbs" aria-hidden="true">
+            {previewImages.map((image) => (
+              <img src={image.src} alt="" loading="lazy" />
+            ))}
+          </div>
+        )
+      }
     </figure>
     <div class="project-card__body">
       <p class="project-card__meta">

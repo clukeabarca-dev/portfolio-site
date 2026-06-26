@@ -7,7 +7,14 @@ interface Props {
 
 const { projects } = Astro.props;
 const disciplines = Array.from(new Set(projects.flatMap((project) => project.data.disciplines))).sort();
-const years = Array.from(new Set(projects.map((project) => project.data.year))).sort((a, b) => b - a);
+const getYearSortValue = (year: number | string) => {
+  const matches = String(year).match(/\d{4}/g);
+
+  return matches ? Math.max(...matches.map(Number)) : 0;
+};
+const years = Array.from(new Set(projects.map((project) => project.data.year))).sort(
+  (a, b) => getYearSortValue(b) - getYearSortValue(a),
+);
 ---
 
 <section class="archive" data-archive>
@@ -51,7 +58,7 @@ const years = Array.from(new Set(projects.map((project) => project.data.year))).
           class="archive-item"
           data-archive-item
           data-title={project.data.title}
-          data-year={project.data.year}
+          data-year={String(project.data.year)}
           data-order={project.data.order}
           data-featured={project.data.featured ? "1" : "0"}
           data-disciplines={project.data.disciplines.join("|")}
@@ -133,7 +140,13 @@ const years = Array.from(new Set(projects.map((project) => project.data.year))).
         }
 
         if (sortMode === "recent") {
-          return Number(b.dataset.year || 0) - Number(a.dataset.year || 0);
+          const getSortYear = (value: string | undefined) => {
+            const matches = value?.match(/\d{4}/g);
+
+            return matches ? Math.max(...matches.map(Number)) : 0;
+          };
+
+          return getSortYear(b.dataset.year) - getSortYear(a.dataset.year);
         }
 
         return Number(a.dataset.order || 999) - Number(b.dataset.order || 999);

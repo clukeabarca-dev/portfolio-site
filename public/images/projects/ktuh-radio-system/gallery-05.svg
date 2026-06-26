@@ -1,0 +1,49 @@
+<svg width="1600" height="1100" viewBox="0 0 1600 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1100" fill="#F4F1EA"/>
+  <rect x="0" y="0" width="1600" height="1100" fill="#265CFF" opacity="0.16"/>
+  <path d="M0 862C249 721 431 752 620 614C819 469 930 237 1160 182C1307 147 1447 187 1600 86V1100H0V862Z" fill="#265CFF" opacity="0.78"/>
+  <path d="M1230 0H1600V1100H1076L1230 0Z" fill="#111315" opacity="0.86"/>
+  <g opacity="0.12">
+    <path d="M0 24H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 100H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 176H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 252H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 328H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 404H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 480H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 556H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 632H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 708H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 784H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 860H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 936H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 1012H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 1088H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M0 1164H1600" stroke="#111315" stroke-width="1"/>
+    <path d="M18 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M100 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M182 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M264 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M346 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M428 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M510 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M592 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M674 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M756 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M838 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M920 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M1002 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M1084 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M1166 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M1248 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M1330 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M1412 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M1494 0V1100" stroke="#111315" stroke-width="1"/>
+    <path d="M1576 0V1100" stroke="#111315" stroke-width="1"/>
+  </g>
+  <rect x="48" y="48" width="1504" height="1004" rx="18" stroke="#111315" stroke-width="2" opacity="0.22"/>
+  <text x="72" y="104" fill="#111315" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="6">Gallery 05</text>
+  <text x="72" y="502" fill="#111315" font-family="Georgia, serif" font-size="78" font-weight="400"><tspan x="72" dy="0">KTUH Radio System</tspan></text>
+  <text x="72" y="988" fill="#111315" font-family="Arial, sans-serif" font-size="24" letter-spacing="5" opacity="0.62">ktuh-radio-system</text>
+  <text x="1320" y="988" fill="#F4F1EA" font-family="Arial, sans-serif" font-size="24" letter-spacing="5">PLACEHOLDER</text>
+</svg>
