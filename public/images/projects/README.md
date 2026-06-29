@@ -2,7 +2,7 @@
 
 Each project folder contains a cover SVG and ten gallery placeholders. The project pages currently reference the first five gallery images. Add more gallery entries in the matching MDX file when a project needs six to ten images.
 
-Use `image-size-guide.csv` as the production checklist. It lists every project image, the page route where it appears, the current placeholder path, the recommended replacement filename, export size, aspect ratio, and crop notes.
+Use `image-size-guide.csv` as the production checklist. It lists every project image, the page route where it appears, the current placeholder path, the recommended replacement filename, export size, aspect ratio, and crop notes. The `Homepage` rows show which project images are reused in the home hero and visual reel.
 
 Recommended final image sizes:
 - cover: 2400x1600
