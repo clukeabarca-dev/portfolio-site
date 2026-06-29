@@ -7,13 +7,13 @@ const projects = (await getCollection("projects")).sort((a, b) => a.data.order -
 const featuredProjects = projects.filter((project) => project.data.featured);
 const heroVisuals = [
   {
-    src: featuredProjects[0]?.data.cover ?? projects[0]?.data.cover,
+    src: "/images/projects/longs-drugs-brand-revival/cover.webp",
     alt: featuredProjects[0]?.data.coverAlt ?? projects[0]?.data.coverAlt,
     label: "Identity",
   },
   {
-    src: featuredProjects[1]?.data.gallery?.[0]?.src ?? featuredProjects[1]?.data.cover ?? projects[1]?.data.cover,
-    alt: featuredProjects[1]?.data.gallery?.[0]?.alt ?? featuredProjects[1]?.data.coverAlt ?? projects[1]?.data.coverAlt,
+    src: "/images/projects/hana-paw-pet-goods/cover.webp",
+    alt: "Dog resting in soft natural light.",
     label: "Campaign",
   },
   {
