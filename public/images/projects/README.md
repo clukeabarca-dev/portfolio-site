@@ -1,8 +1,10 @@
-# Project Image Placeholders
+# Project Image Assets
 
-Each project folder contains a cover SVG and ten gallery placeholders. The project pages currently reference the first five gallery images. Add more gallery entries in the matching MDX file when a project needs six to ten images.
+Each project folder contains legacy SVG layout placeholders, plus realistic draft WebP mockup assets for the cover and first five gallery images. The project pages currently reference the WebP files. Add more gallery entries in the matching MDX file when a project needs six to ten images.
 
-Use `image-size-guide.csv` as the production checklist. It lists every project image, the page route where it appears, the current placeholder path, the recommended replacement filename, export size, aspect ratio, and crop notes. The `Homepage` rows show which project images are reused in the home hero and visual reel.
+Use `image-size-guide.csv` as the production checklist. It lists every project image, the page route where it appears, the current site path, the recommended replacement filename, export size, aspect ratio, and crop notes. The `Homepage` rows show which project images are reused in the home hero and visual reel.
+
+The realistic mockup source images live in `public/images/source-mockups/`. They are AI-generated blank product, print, screen, apparel, signage, jewelry, gallery, and typography scenes used to create the current draft WebP assets.
 
 Recommended final image sizes:
 - cover: 2400x1600
