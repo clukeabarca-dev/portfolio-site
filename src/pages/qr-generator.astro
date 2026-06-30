@@ -582,6 +582,34 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       return `<rect class="qr-frame" x="0" y="0" width="${total}" height="${total}" fill="${fill}"/>`;
     }
 
+    function circlePoint(center, radius, degrees) {
+      const radians = (degrees * Math.PI) / 180;
+      return {
+        x: center + radius * Math.cos(radians),
+        y: center + radius * Math.sin(radians),
+      };
+    }
+
+    function circleArc(center, radius, startDegrees, endDegrees) {
+      const start = circlePoint(center, radius, startDegrees);
+      const end = circlePoint(center, radius, endDegrees);
+      return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${radius.toFixed(2)} ${radius.toFixed(2)} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`;
+    }
+
+    function frameDecoration(shape, total, stroke) {
+      if (shape !== "circle") return "";
+      const center = total / 2;
+      const radius = center - Math.max(4, total * 0.08);
+      const strokeWidth = Math.max(0.7, total * 0.014);
+      const arcs = [
+        circleArc(center, radius, 245, 295),
+        circleArc(center, radius, -25, 25),
+        circleArc(center, radius, 65, 115),
+        circleArc(center, radius, 155, 205),
+      ].join(" ");
+      return `<path class="qr-frame-line" d="${arcs}" fill="none" stroke="${stroke}" stroke-width="${strokeWidth.toFixed(2)}" stroke-linecap="round"/>`;
+    }
+
     function inFinder(row, col, size) {
       return (
         (row < 7 && col < 7) ||
@@ -622,7 +650,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       if (normalizedShape === "square") return 0;
       if (normalizedShape === "circle") {
         const tightCircleMargin = Math.ceil((size * (Math.SQRT2 - 1)) / 2);
-        return Math.max(0, Math.round((tightCircleMargin - quietMargin) * 0.84));
+        return Math.max(0, Math.round((tightCircleMargin - quietMargin) * 1.092));
       }
       return Math.max(2, Math.round(size * 0.0525));
     }
@@ -650,7 +678,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         finderPattern(size - 7 + margin, margin, code.cornerShape || "square", dark, light),
         finderPattern(margin, size - 7 + margin, code.cornerShape || "square", dark, light),
       ].join("");
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="960" height="960" role="img" aria-label="${esc(code.name)} QR code" data-qr-content-size="${contentSize}" data-qr-content-offset="${badgePadding}">${frameShape(frame, total, light)}${modules.join("")}${finders}</svg>`;
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="960" height="960" role="img" aria-label="${esc(code.name)} QR code" data-qr-content-size="${contentSize}" data-qr-content-offset="${badgePadding}">${frameShape(frame, total, light)}${frameDecoration(frame, total, dark)}${modules.join("")}${finders}</svg>`;
     }
 
     async function renderQr() {
