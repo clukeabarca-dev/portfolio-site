@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
@@ -27,35 +27,8 @@ cpSync(staticDir, join(distDir, "client"), { recursive: true });
 mkdirSync(join(distDir, ".openai"), { recursive: true });
 cpSync(join(root, ".openai", "hosting.json"), join(distDir, ".openai", "hosting.json"));
 
-writeFileSync(
-  join(distDir, "server", "index.js"),
-  `export default {
-  async fetch(request, env) {
-    const assets = env && env.ASSETS;
-    if (!assets || typeof assets.fetch !== "function") {
-      return new Response("Missing ASSETS binding", { status: 500 });
-    }
+if (existsSync(join(root, "drizzle"))) {
+  cpSync(join(root, "drizzle"), join(distDir, ".openai", "drizzle"), { recursive: true });
+}
 
-    const direct = await assets.fetch(request);
-    if (direct.status !== 404) {
-      return direct;
-    }
-
-    const url = new URL(request.url);
-    if (!url.pathname.includes(".")) {
-      const indexUrl = new URL(
-        url.pathname.endsWith("/") ? url.pathname + "index.html" : url.pathname + "/index.html",
-        request.url
-      );
-      const indexRequest = new Request(indexUrl, request);
-      const index = await assets.fetch(indexRequest);
-      if (index.status !== 404) {
-        return index;
-      }
-    }
-
-    return direct;
-  }
-};
-`
-);
+cpSync(join(root, "worker", "index.js"), join(distDir, "server", "index.js"));
