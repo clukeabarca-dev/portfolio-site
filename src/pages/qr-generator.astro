@@ -211,6 +211,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     // @ts-nocheck
     import QRCodeLib from "qrcode";
     const publicQrOrigin = "https://portfolio-qr-generator.clukeabarca.workers.dev";
+    const publicShortOrigin = "https://clukeabarca.com";
     if (["clukeabarca.com", "www.clukeabarca.com"].includes(window.location.hostname)) {
       window.location.replace(new URL(`${window.location.pathname}${window.location.search}${window.location.hash}`, publicQrOrigin).toString());
       await new Promise(() => {});
@@ -431,7 +432,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         qrPreview.innerHTML = "";
         return;
       }
-      const target = `${window.location.origin}/qr-generator/q/${state.selected.slug}`;
+      const target = `${publicShortOrigin}/qr-generator/q/${state.selected.slug}`;
       shortLinkEl.textContent = target;
       const svg = await QRCodeLib.toString(target, {
         type: "svg",
