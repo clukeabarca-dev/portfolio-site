@@ -210,7 +210,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <section class="qr-panel">
               <div class="qr-panel-header">
                 <h2>QR SVG</h2>
-                <button type="button" class="qr-icon-button qr-icon-button--dark" data-download-svg title="Download SVG" aria-label="Download SVG">↓</button>
+                <div class="qr-download-actions" aria-label="Download QR code">
+                  <button type="button" class="button button--quiet" data-download-svg>SVG</button>
+                  <button type="button" class="button button--quiet" data-download-png>PNG</button>
+                  <button type="button" class="button button--quiet" data-download-jpg>JPG</button>
+                </div>
               </div>
               <div class="qr-svg-preview" data-qr-preview></div>
               <dl class="qr-facts">
@@ -572,15 +576,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
     function frameShape(shape, total, fill) {
       if (shape === "circle") {
-        return `<circle cx="${total / 2}" cy="${total / 2}" r="${total / 2}" fill="${fill}"/>`;
+        return `<circle class="qr-frame" cx="${total / 2}" cy="${total / 2}" r="${total / 2}" fill="${fill}"/>`;
       }
       if (shape === "diamond") {
-        return `<polygon points="${total / 2},0 ${total},${total / 2} ${total / 2},${total} 0,${total / 2}" fill="${fill}"/>`;
+        return `<polygon class="qr-frame" points="${total / 2},0 ${total},${total / 2} ${total / 2},${total} 0,${total / 2}" fill="${fill}"/>`;
       }
       if (shape === "rounded") {
-        return `<rect x="0" y="0" width="${total}" height="${total}" rx="4" fill="${fill}"/>`;
+        return `<rect class="qr-frame" x="0" y="0" width="${total}" height="${total}" rx="${total * 0.18}" fill="${fill}"/>`;
       }
-      return `<rect x="0" y="0" width="${total}" height="${total}" fill="${fill}"/>`;
+      return `<rect class="qr-frame" x="0" y="0" width="${total}" height="${total}" fill="${fill}"/>`;
     }
 
     function inFinder(row, col, size) {
@@ -617,7 +621,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     function styledQrSvg(target, code) {
       const qr = QRCodeLib.create(target, { errorCorrectionLevel: "H" });
       const size = qr.modules.size;
-      const margin = 2;
+      const quietMargin = 2;
+      const badgePadding = code.frameShape && code.frameShape !== "square" ? Math.max(7, Math.round(size * 0.2)) : 0;
+      const margin = quietMargin + badgePadding;
+      const contentSize = size + quietMargin * 2;
       const total = size + margin * 2;
       const dark = code.fgColor;
       const light = code.bgColor;
@@ -633,7 +640,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         finderPattern(size - 7 + margin, margin, code.cornerShape || "square", dark, light),
         finderPattern(margin, size - 7 + margin, code.cornerShape || "square", dark, light),
       ].join("");
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="960" height="960" role="img" aria-label="${esc(code.name)} QR code">${frameShape(code.frameShape || "square", total, light)}${modules.join("")}${finders}</svg>`;
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="960" height="960" role="img" aria-label="${esc(code.name)} QR code" data-qr-content-size="${contentSize}" data-qr-content-offset="${badgePadding}">${frameShape(code.frameShape || "square", total, light)}${modules.join("")}${finders}</svg>`;
     }
 
     async function renderQr() {
@@ -669,12 +676,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       if (!dataUrl) return svg;
       const viewBox = svg.match(/viewBox="0 0 ([0-9.]+) ([0-9.]+)"/);
       const size = viewBox ? Number(viewBox[1]) : 37;
-      const logoSize = size * 0.22;
-      const pad = size * 0.035;
+      const contentSizeMatch = svg.match(/data-qr-content-size="([0-9.]+)"/);
+      const contentSize = contentSizeMatch ? Number(contentSizeMatch[1]) : size;
+      const logoSize = contentSize * 0.22;
+      const pad = contentSize * 0.035;
       const boxSize = logoSize + pad * 2;
       const x = (size - boxSize) / 2;
       const logoX = (size - logoSize) / 2;
-      const radius = size * 0.035;
+      const radius = contentSize * 0.035;
       const overlay = `<rect x="${x}" y="${x}" width="${boxSize}" height="${boxSize}" rx="${radius}" fill="${bgColor}"/><image href="${dataUrl}" x="${logoX}" y="${logoX}" width="${logoSize}" height="${logoSize}" preserveAspectRatio="xMidYMid meet"/>`;
       return svg.replace("</svg>", `${overlay}</svg>`);
     }
@@ -808,6 +817,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       }
     });
 
+    async function updateDraftPreview(event) {
+      const name = event.target?.name;
+      if (!state.selected || !["fgColor", "bgColor", "moduleShape", "cornerShape", "frameShape"].includes(name)) return;
+      state.selected = { ...state.selected, [name]: event.target.value };
+      await renderQr();
+    }
+
+    editForm.addEventListener("input", updateDraftPreview);
+    editForm.addEventListener("change", updateDraftPreview);
+
     filterForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       state.filters = {
@@ -834,6 +853,59 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       a.download = `qr-scans-${state.filters.from}-to-${state.filters.to}.csv`;
       a.click();
       URL.revokeObjectURL(a.href);
+    }
+
+    function downloadBlob(blob, filename) {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    async function svgToRasterBlob(type) {
+      if (!state.svg || !state.selected) {
+        throw new Error("Select a QR code before downloading.");
+      }
+
+      const image = new Image();
+      const svgBlob = new Blob([state.svg], { type: "image/svg+xml;charset=utf-8" });
+      const svgUrl = URL.createObjectURL(svgBlob);
+      try {
+        await new Promise((resolve, reject) => {
+          image.addEventListener("load", resolve, { once: true });
+          image.addEventListener("error", () => reject(new Error("QR image render failed.")), { once: true });
+          image.src = svgUrl;
+        });
+
+        const canvas = document.createElement("canvas");
+        canvas.width = 2048;
+        canvas.height = 2048;
+        const context = canvas.getContext("2d");
+        if (!context) {
+          throw new Error("Image export is not available in this browser.");
+        }
+        if (type === "image/jpeg") {
+          context.fillStyle = state.selected.bgColor || "#ffffff";
+          context.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        return await new Promise((resolve, reject) => {
+          canvas.toBlob(
+            (blob) => (blob ? resolve(blob) : reject(new Error("Image export failed."))),
+            type,
+            type === "image/jpeg" ? 0.94 : undefined,
+          );
+        });
+      } finally {
+        URL.revokeObjectURL(svgUrl);
+      }
+    }
+
+    async function downloadRaster(format) {
+      const type = format === "jpg" ? "image/jpeg" : "image/png";
+      const blob = await svgToRasterBlob(type);
+      downloadBlob(blob, `${state.selected.slug}.${format}`);
     }
 
     app.addEventListener("click", async (event) => {
@@ -870,11 +942,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       }
       if (target.matches("[data-download-svg]") && state.svg && state.selected) {
         const blob = new Blob([state.svg], { type: "image/svg+xml" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `${state.selected.slug}.svg`;
-        a.click();
-        URL.revokeObjectURL(a.href);
+        downloadBlob(blob, `${state.selected.slug}.svg`);
+      }
+      if ((target.matches("[data-download-png]") || target.matches("[data-download-jpg]")) && state.svg && state.selected) {
+        try {
+          await downloadRaster(target.matches("[data-download-jpg]") ? "jpg" : "png");
+          showStatus("QR image downloaded", "success");
+        } catch (error) {
+          showStatus(error.message, "error");
+        }
       }
       if (target.matches("[data-export-csv]")) {
         try {

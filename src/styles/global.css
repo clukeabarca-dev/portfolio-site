@@ -548,6 +548,19 @@ main {
   white-space: nowrap;
 }
 
+.qr-download-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.qr-download-actions .button {
+  min-height: 34px;
+  padding: 0 10px;
+  font-size: 0.68rem;
+}
+
 .qr-svg-preview {
   display: grid;
   aspect-ratio: 1;
