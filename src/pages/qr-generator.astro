@@ -618,11 +618,20 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       return svgShape("square", x, y, 1, fill, "qr-module");
     }
 
+    function badgePaddingForFrame(shape, size, quietMargin) {
+      if (!shape || shape === "square") return 0;
+      if (shape === "circle") {
+        const tightCircleMargin = Math.ceil((size * (Math.SQRT2 - 1)) / 2);
+        return Math.max(0, tightCircleMargin - quietMargin);
+      }
+      return Math.max(4, Math.round(size * 0.12));
+    }
+
     function styledQrSvg(target, code) {
       const qr = QRCodeLib.create(target, { errorCorrectionLevel: "H" });
       const size = qr.modules.size;
       const quietMargin = 2;
-      const badgePadding = code.frameShape && code.frameShape !== "square" ? Math.max(7, Math.round(size * 0.2)) : 0;
+      const badgePadding = badgePaddingForFrame(code.frameShape, size, quietMargin);
       const margin = quietMargin + badgePadding;
       const contentSize = size + quietMargin * 2;
       const total = size + margin * 2;
