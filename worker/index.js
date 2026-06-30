@@ -5,7 +5,7 @@ const MAX_LOGO_BYTES = 240 * 1024;
 const LOGO_TYPES = new Set(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]);
 const MODULE_SHAPES = new Set(["square", "rounded", "circle", "diamond"]);
 const CORNER_SHAPES = new Set(["square", "rounded", "circle", "diamond"]);
-const FRAME_SHAPES = new Set(["square", "rounded", "circle", "diamond"]);
+const FRAME_SHAPES = new Set(["square", "rounded", "circle"]);
 
 let schemaReady = null;
 
@@ -392,7 +392,7 @@ function toCode(row, users = []) {
     bgColor: row.bg_color,
     moduleShape: row.module_shape || "square",
     cornerShape: row.corner_shape || "square",
-    frameShape: row.frame_shape || "square",
+    frameShape: normalizeChoice(row.frame_shape, FRAME_SHAPES, "square"),
     isActive: row.is_active === 1,
     hasLogo: Boolean(row.logo_key),
     logoEnabled: row.logo_enabled === 1 && Boolean(row.logo_key),
@@ -828,7 +828,11 @@ async function updateCode(env, id, payload, auth) {
   const bgColor = normalizeColor(payload.bgColor, existing.bgColor);
   const moduleShape = normalizeChoice(payload.moduleShape, MODULE_SHAPES, existing.moduleShape);
   const cornerShape = normalizeChoice(payload.cornerShape, CORNER_SHAPES, existing.cornerShape);
-  const frameShape = normalizeChoice(payload.frameShape, FRAME_SHAPES, existing.frameShape);
+  const frameShape = normalizeChoice(
+    payload.frameShape,
+    FRAME_SHAPES,
+    normalizeChoice(existing.frameShape, FRAME_SHAPES, "square")
+  );
   validateQrColors(fgColor, bgColor);
   const isActive =
     typeof payload.isActive === "boolean" ? (payload.isActive ? 1 : 0) : existing.isActive ? 1 : 0;

@@ -93,7 +93,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
                   <option value="square">Square</option>
                   <option value="rounded">Rounded</option>
                   <option value="circle">Circle</option>
-                  <option value="diamond">Diamond</option>
                 </select>
               </label>
             </div>
@@ -176,7 +175,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
                       <option value="square">Square</option>
                       <option value="rounded">Rounded</option>
                       <option value="circle">Circle</option>
-                      <option value="diamond">Diamond</option>
                     </select>
                   </label>
                 </div>
@@ -578,9 +576,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       if (shape === "circle") {
         return `<circle class="qr-frame" cx="${total / 2}" cy="${total / 2}" r="${total / 2}" fill="${fill}"/>`;
       }
-      if (shape === "diamond") {
-        return `<polygon class="qr-frame" points="${total / 2},0 ${total},${total / 2} ${total / 2},${total} 0,${total / 2}" fill="${fill}"/>`;
-      }
       if (shape === "rounded") {
         return `<rect class="qr-frame" x="0" y="0" width="${total}" height="${total}" rx="${total * 0.18}" fill="${fill}"/>`;
       }
@@ -618,20 +613,26 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       return svgShape("square", x, y, 1, fill, "qr-module");
     }
 
+    function normalizeFrameShape(shape) {
+      return shape === "circle" || shape === "rounded" ? shape : "square";
+    }
+
     function badgePaddingForFrame(shape, size, quietMargin) {
-      if (!shape || shape === "square") return 0;
-      if (shape === "circle") {
+      const normalizedShape = normalizeFrameShape(shape);
+      if (normalizedShape === "square") return 0;
+      if (normalizedShape === "circle") {
         const tightCircleMargin = Math.ceil((size * (Math.SQRT2 - 1)) / 2);
-        return Math.max(0, Math.round((tightCircleMargin - quietMargin) * 0.6));
+        return Math.max(0, Math.round((tightCircleMargin - quietMargin) * 0.84));
       }
-      return Math.max(3, Math.round(size * 0.075));
+      return Math.max(2, Math.round(size * 0.0525));
     }
 
     function styledQrSvg(target, code) {
       const qr = QRCodeLib.create(target, { errorCorrectionLevel: "H" });
       const size = qr.modules.size;
       const quietMargin = 2;
-      const badgePadding = badgePaddingForFrame(code.frameShape, size, quietMargin);
+      const frame = normalizeFrameShape(code.frameShape);
+      const badgePadding = badgePaddingForFrame(frame, size, quietMargin);
       const margin = quietMargin + badgePadding;
       const contentSize = size + quietMargin * 2;
       const total = size + margin * 2;
@@ -649,7 +650,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         finderPattern(size - 7 + margin, margin, code.cornerShape || "square", dark, light),
         finderPattern(margin, size - 7 + margin, code.cornerShape || "square", dark, light),
       ].join("");
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="960" height="960" role="img" aria-label="${esc(code.name)} QR code" data-qr-content-size="${contentSize}" data-qr-content-offset="${badgePadding}">${frameShape(code.frameShape || "square", total, light)}${modules.join("")}${finders}</svg>`;
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="960" height="960" role="img" aria-label="${esc(code.name)} QR code" data-qr-content-size="${contentSize}" data-qr-content-offset="${badgePadding}">${frameShape(frame, total, light)}${modules.join("")}${finders}</svg>`;
     }
 
     async function renderQr() {
@@ -709,7 +710,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       editForm.elements.bgColor.value = code.bgColor;
       editForm.elements.moduleShape.value = code.moduleShape || "square";
       editForm.elements.cornerShape.value = code.cornerShape || "square";
-      editForm.elements.frameShape.value = code.frameShape || "square";
+      editForm.elements.frameShape.value = normalizeFrameShape(code.frameShape);
       if (editForm.elements.users) editForm.elements.users.value = usersToText(code.users);
       state.activeDraft = code.isActive;
       codeStatus.textContent = code.isActive ? "Active" : "Paused";
