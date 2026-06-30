@@ -56,3 +56,10 @@ CREATE TABLE `qr_code_users` (
 CREATE UNIQUE INDEX `qr_code_users_access_idx` ON `qr_code_users` (`access_key`);
 --> statement-breakpoint
 CREATE INDEX `qr_code_users_code_idx` ON `qr_code_users` (`qr_code_id`);
+--> statement-breakpoint
+CREATE TABLE `qr_logo_assets` (
+  `logo_key` text PRIMARY KEY NOT NULL,
+  `data_base64` text NOT NULL,
+  `content_type` text NOT NULL,
+  `created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
+);

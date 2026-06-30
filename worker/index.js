@@ -34,10 +34,7 @@ function getD1(env) {
 }
 
 function getAssets(env) {
-  if (!env.QR_ASSETS) {
-    throw new Error("Missing R2 binding QR_ASSETS");
-  }
-  return env.QR_ASSETS;
+  return env.QR_ASSETS || null;
 }
 
 function getAdminPassword(env) {
@@ -221,6 +218,12 @@ async function createSchema(env) {
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       UNIQUE(qr_code_id, email)
+    )`),
+    db.prepare(`CREATE TABLE IF NOT EXISTS qr_logo_assets (
+      logo_key TEXT PRIMARY KEY,
+      data_base64 TEXT NOT NULL,
+      content_type TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )`),
     db.prepare("CREATE UNIQUE INDEX IF NOT EXISTS qr_codes_slug_idx ON qr_codes (slug)"),
     db.prepare("CREATE INDEX IF NOT EXISTS qr_scans_code_time_idx ON qr_scans (qr_code_id, scanned_at)"),
@@ -442,6 +445,84 @@ function routeError(error) {
     return "That short slug is already in use.";
   }
   return message;
+}
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  const chunkSize = 0x8000;
+  for (let index = 0; index < bytes.length; index += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(index, index + chunkSize));
+  }
+  return btoa(binary);
+}
+
+function base64ToBytes(value) {
+  const binary = atob(value);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  return bytes;
+}
+
+async function storeLogoAsset(env, key, file) {
+  const buffer = await file.arrayBuffer();
+  const assets = getAssets(env);
+  if (assets) {
+    await assets.put(key, buffer, {
+      httpMetadata: { contentType: file.type },
+    });
+    return;
+  }
+
+  await getD1(env)
+    .prepare(
+      `INSERT INTO qr_logo_assets (logo_key, data_base64, content_type)
+       VALUES (?, ?, ?)
+       ON CONFLICT(logo_key) DO UPDATE SET
+         data_base64 = excluded.data_base64,
+         content_type = excluded.content_type`
+    )
+    .bind(key, arrayBufferToBase64(buffer), file.type)
+    .run();
+}
+
+async function deleteLogoAsset(env, key) {
+  const assets = getAssets(env);
+  if (assets) {
+    await assets.delete(key).catch(() => {});
+  }
+  await getD1(env).prepare("DELETE FROM qr_logo_assets WHERE logo_key = ?").bind(key).run();
+}
+
+async function getLogoAsset(env, key, fallbackContentType) {
+  const assets = getAssets(env);
+  if (assets) {
+    const object = await assets.get(key);
+    if (object) {
+      return new Response(object.body, {
+        headers: {
+          "Content-Type": fallbackContentType || object.httpMetadata?.contentType || "application/octet-stream",
+          "Cache-Control": "no-store",
+        },
+      });
+    }
+  }
+
+  const row = await getD1(env)
+    .prepare("SELECT data_base64, content_type FROM qr_logo_assets WHERE logo_key = ?")
+    .bind(key)
+    .first();
+  if (!row?.data_base64) {
+    return null;
+  }
+  return new Response(base64ToBytes(row.data_base64), {
+    headers: {
+      "Content-Type": row.content_type || fallbackContentType || "application/octet-stream",
+      "Cache-Control": "no-store",
+    },
+  });
 }
 
 function accessHeader(request) {
@@ -703,11 +784,9 @@ async function uploadLogo(env, id, request, auth) {
   const db = getD1(env);
   const existing = await db.prepare("SELECT logo_key FROM qr_codes WHERE id = ?").bind(id).first();
   const key = `qr-logos/${id}/${Date.now()}-${randomToken(6)}`;
-  await getAssets(env).put(key, await file.arrayBuffer(), {
-    httpMetadata: { contentType: file.type },
-  });
+  await storeLogoAsset(env, key, file);
   if (existing?.logo_key) {
-    await getAssets(env).delete(existing.logo_key).catch(() => {});
+    await deleteLogoAsset(env, existing.logo_key);
   }
   await db
     .prepare("UPDATE qr_codes SET logo_key = ?, logo_mime = ?, logo_enabled = 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?")
@@ -728,7 +807,7 @@ async function deleteLogo(env, id, auth) {
   const db = getD1(env);
   const existing = await db.prepare("SELECT logo_key FROM qr_codes WHERE id = ?").bind(id).first();
   if (existing?.logo_key) {
-    await getAssets(env).delete(existing.logo_key).catch(() => {});
+    await deleteLogoAsset(env, existing.logo_key);
   }
   await db
     .prepare("UPDATE qr_codes SET logo_key = NULL, logo_mime = NULL, logo_enabled = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?")
@@ -746,16 +825,7 @@ async function getLogo(env, id, auth) {
   if (!row?.logo_key) {
     return null;
   }
-  const object = await getAssets(env).get(row.logo_key);
-  if (!object) {
-    return null;
-  }
-  return new Response(object.body, {
-    headers: {
-      "Content-Type": row.logo_mime || object.httpMetadata?.contentType || "application/octet-stream",
-      "Cache-Control": "no-store",
-    },
-  });
+  return getLogoAsset(env, row.logo_key, row.logo_mime);
 }
 
 async function deleteCode(env, id, auth) {

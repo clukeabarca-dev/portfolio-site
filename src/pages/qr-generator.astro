@@ -210,6 +210,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <script>
     // @ts-nocheck
     import QRCodeLib from "qrcode";
+    const publicQrOrigin = "https://portfolio-qr-generator.clukeabarca.workers.dev";
+    if (["clukeabarca.com", "www.clukeabarca.com"].includes(window.location.hostname)) {
+      window.location.replace(new URL(`${window.location.pathname}${window.location.search}${window.location.hash}`, publicQrOrigin).toString());
+      await new Promise(() => {});
+    }
     const app = document.querySelector("[data-qr-app]");
     const authPanel = app.querySelector("[data-auth-panel]");
     const authForm = app.querySelector("[data-auth-form]");

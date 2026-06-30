@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "portfolio-qr-generator",
+  "main": "dist/server/index.js",
+  "compatibility_date": "2026-06-30",
+  "assets": {
+    "directory": "dist/client",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "portfolio-qr-generator-db",
+      "database_id": "455bec60-9cf7-4d7d-b8e5-17ab63d1dad1"
+    }
+  ]
+}
