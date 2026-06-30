@@ -3,6 +3,9 @@ const COOKIE_NAME = "qr_admin_session";
 const SESSION_DAYS = 7;
 const MAX_LOGO_BYTES = 240 * 1024;
 const LOGO_TYPES = new Set(["image/png", "image/jpeg", "image/webp", "image/svg+xml"]);
+const MODULE_SHAPES = new Set(["square", "rounded", "circle", "diamond"]);
+const CORNER_SHAPES = new Set(["square", "rounded", "circle", "diamond"]);
+const FRAME_SHAPES = new Set(["square", "rounded", "circle", "diamond"]);
 
 let schemaReady = null;
 
@@ -186,6 +189,9 @@ async function createSchema(env) {
       destination_url TEXT NOT NULL,
       fg_color TEXT NOT NULL DEFAULT '#17352f',
       bg_color TEXT NOT NULL DEFAULT '#fbfaf6',
+      module_shape TEXT NOT NULL DEFAULT 'square',
+      corner_shape TEXT NOT NULL DEFAULT 'square',
+      frame_shape TEXT NOT NULL DEFAULT 'square',
       logo_key TEXT,
       logo_mime TEXT,
       logo_enabled INTEGER NOT NULL DEFAULT 0,
@@ -234,6 +240,9 @@ async function createSchema(env) {
   await ensureColumn(db, "qr_codes", "logo_key", "TEXT");
   await ensureColumn(db, "qr_codes", "logo_mime", "TEXT");
   await ensureColumn(db, "qr_codes", "logo_enabled", "INTEGER NOT NULL DEFAULT 0");
+  await ensureColumn(db, "qr_codes", "module_shape", "TEXT NOT NULL DEFAULT 'square'");
+  await ensureColumn(db, "qr_codes", "corner_shape", "TEXT NOT NULL DEFAULT 'square'");
+  await ensureColumn(db, "qr_codes", "frame_shape", "TEXT NOT NULL DEFAULT 'square'");
 }
 
 async function ensureColumn(db, table, column, definition) {
@@ -289,8 +298,8 @@ async function seedLongsTestCode(env) {
 
   await db
     .prepare(
-      `INSERT INTO qr_codes (name, slug, destination_url, fg_color, bg_color)
-       VALUES ('Longs Test QR', 'longs-test', 'https://www.longs.com/', '#17352f', '#fbfaf6')`
+      `INSERT INTO qr_codes (name, slug, destination_url, fg_color, bg_color, module_shape, corner_shape, frame_shape)
+       VALUES ('Longs Test QR', 'longs-test', 'https://www.longs.com/', '#17352f', '#fbfaf6', 'square', 'square', 'square')`
     )
     .run();
 }
@@ -324,6 +333,11 @@ function normalizeColor(value, fallback) {
   return typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value.trim())
     ? value.trim().toLowerCase()
     : fallback;
+}
+
+function normalizeChoice(value, allowed, fallback) {
+  const normalized = String(value || "").trim().toLowerCase();
+  return allowed.has(normalized) ? normalized : fallback;
 }
 
 function hexToRgb(hex) {
@@ -376,6 +390,9 @@ function toCode(row, users = []) {
     destinationUrl: row.destination_url,
     fgColor: row.fg_color,
     bgColor: row.bg_color,
+    moduleShape: row.module_shape || "square",
+    cornerShape: row.corner_shape || "square",
+    frameShape: row.frame_shape || "square",
     isActive: row.is_active === 1,
     hasLogo: Boolean(row.logo_key),
     logoEnabled: row.logo_enabled === 1 && Boolean(row.logo_key),
@@ -445,6 +462,97 @@ function routeError(error) {
     return "That short slug is already in use.";
   }
   return message;
+}
+
+function isoDay(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function parseDay(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))) {
+    return null;
+  }
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return Number.isNaN(date.getTime()) ? null : isoDay(date);
+}
+
+function defaultDateFilters() {
+  const toDate = new Date();
+  const fromDate = new Date(toDate);
+  fromDate.setUTCDate(fromDate.getUTCDate() - 13);
+  return { from: isoDay(fromDate), to: isoDay(toDate) };
+}
+
+function dateFiltersFromRequest(request) {
+  const defaults = defaultDateFilters();
+  const params = new URL(request.url).searchParams;
+  let from = parseDay(params.get("from")) || defaults.from;
+  let to = parseDay(params.get("to")) || defaults.to;
+
+  if (from > to) {
+    [from, to] = [to, from];
+  }
+
+  const fromDate = new Date(`${from}T00:00:00.000Z`);
+  const toDate = new Date(`${to}T00:00:00.000Z`);
+  const maxDays = 366;
+  const spanDays = Math.round((toDate.getTime() - fromDate.getTime()) / 86400000) + 1;
+  if (spanDays > maxDays) {
+    const cappedFrom = new Date(toDate);
+    cappedFrom.setUTCDate(cappedFrom.getUTCDate() - (maxDays - 1));
+    from = isoDay(cappedFrom);
+  }
+
+  return { from, to };
+}
+
+function scanFilterClause(auth, filters, tableAlias = "s") {
+  const clauses = [];
+  const args = [];
+
+  if (auth.type !== "admin") {
+    clauses.push(`${tableAlias}.qr_code_id IN (SELECT qr_code_id FROM qr_code_users WHERE access_key = ?)`);
+    args.push(auth.user.accessKey);
+  }
+  if (filters?.from) {
+    clauses.push(`${tableAlias}.scanned_at >= datetime(?)`);
+    args.push(`${filters.from} 00:00:00`);
+  }
+  if (filters?.to) {
+    clauses.push(`${tableAlias}.scanned_at <= datetime(?)`);
+    args.push(`${filters.to} 23:59:59`);
+  }
+
+  return { sql: clauses.length ? `WHERE ${clauses.join(" AND ")}` : "", args };
+}
+
+function scanJoinFilter(filters, tableAlias = "s") {
+  const clauses = [];
+  const args = [];
+  if (filters?.from) {
+    clauses.push(`${tableAlias}.scanned_at >= datetime(?)`);
+    args.push(`${filters.from} 00:00:00`);
+  }
+  if (filters?.to) {
+    clauses.push(`${tableAlias}.scanned_at <= datetime(?)`);
+    args.push(`${filters.to} 23:59:59`);
+  }
+  return { sql: clauses.length ? `AND ${clauses.join(" AND ")}` : "", args };
+}
+
+function csvCell(value) {
+  const text = String(value ?? "");
+  return /[",\n\r]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+function csvResponse(filename, rows) {
+  return new Response(rows.map((row) => row.map(csvCell).join(",")).join("\n"), {
+    headers: {
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition": `attachment; filename="${filename}"`,
+      "Cache-Control": "no-store",
+    },
+  });
 }
 
 function arrayBufferToBase64(buffer) {
@@ -552,16 +660,6 @@ function deny(status, message) {
   return json({ error: message }, { status });
 }
 
-function codeScopeClause(auth, tableAlias = "s") {
-  if (auth.type === "admin") {
-    return { sql: "", args: [] };
-  }
-  return {
-    sql: `WHERE ${tableAlias}.qr_code_id IN (SELECT qr_code_id FROM qr_code_users WHERE access_key = ?)`,
-    args: [auth.user.accessKey],
-  };
-}
-
 async function listUsers(env, codeIds, auth) {
   if (!codeIds.length) {
     return new Map();
@@ -586,19 +684,20 @@ async function listUsers(env, codeIds, auth) {
   return byCode;
 }
 
-async function listCodes(env, auth) {
+async function listCodes(env, auth, filters = defaultDateFilters()) {
   const db = getD1(env);
   const collaboratorJoin =
     auth.type === "admin"
       ? ""
       : "JOIN qr_code_users u ON u.qr_code_id = c.id AND u.access_key = ?";
-  const args = auth.type === "admin" ? [] : [auth.user.accessKey];
+  const scanJoin = scanJoinFilter(filters, "s");
+  const args = auth.type === "admin" ? [...scanJoin.args] : [auth.user.accessKey, ...scanJoin.args];
   const { results = [] } = await db
     .prepare(
       `SELECT c.*, COUNT(s.id) AS total_scans, MAX(s.scanned_at) AS last_scanned_at
        FROM qr_codes c
        ${collaboratorJoin}
-       LEFT JOIN qr_scans s ON s.qr_code_id = c.id
+       LEFT JOIN qr_scans s ON s.qr_code_id = c.id ${scanJoin.sql}
        GROUP BY c.id
        ORDER BY c.updated_at DESC, c.id DESC`
     )
@@ -693,13 +792,18 @@ async function createCode(env, payload, auth) {
   const slug = normalizeSlug(payload.slug, name);
   const fgColor = normalizeColor(payload.fgColor, "#17352f");
   const bgColor = normalizeColor(payload.bgColor, "#fbfaf6");
+  const moduleShape = normalizeChoice(payload.moduleShape, MODULE_SHAPES, "square");
+  const cornerShape = normalizeChoice(payload.cornerShape, CORNER_SHAPES, "square");
+  const frameShape = normalizeChoice(payload.frameShape, FRAME_SHAPES, "square");
   validateQrColors(fgColor, bgColor);
   const insert = await db
     .prepare(
-      `INSERT INTO qr_codes (name, slug, destination_url, fg_color, bg_color)
-       VALUES (?, ?, ?, ?, ?)`
+      `INSERT INTO qr_codes (
+         name, slug, destination_url, fg_color, bg_color, module_shape, corner_shape, frame_shape
+       )
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
-    .bind(name, slug, destinationUrl, fgColor, bgColor)
+    .bind(name, slug, destinationUrl, fgColor, bgColor, moduleShape, cornerShape, frameShape)
     .run();
 
   const id = insert.meta?.last_row_id;
@@ -722,6 +826,9 @@ async function updateCode(env, id, payload, auth) {
     payload.destinationUrl !== undefined ? normalizeUrl(payload.destinationUrl) : existing.destinationUrl;
   const fgColor = normalizeColor(payload.fgColor, existing.fgColor);
   const bgColor = normalizeColor(payload.bgColor, existing.bgColor);
+  const moduleShape = normalizeChoice(payload.moduleShape, MODULE_SHAPES, existing.moduleShape);
+  const cornerShape = normalizeChoice(payload.cornerShape, CORNER_SHAPES, existing.cornerShape);
+  const frameShape = normalizeChoice(payload.frameShape, FRAME_SHAPES, existing.frameShape);
   validateQrColors(fgColor, bgColor);
   const isActive =
     typeof payload.isActive === "boolean" ? (payload.isActive ? 1 : 0) : existing.isActive ? 1 : 0;
@@ -740,10 +847,19 @@ async function updateCode(env, id, payload, auth) {
   await db
     .prepare(
       `UPDATE qr_codes
-       SET name = ?, slug = ?, destination_url = ?, fg_color = ?, bg_color = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
+       SET name = ?,
+           slug = ?,
+           destination_url = ?,
+           fg_color = ?,
+           bg_color = ?,
+           module_shape = ?,
+           corner_shape = ?,
+           frame_shape = ?,
+           is_active = ?,
+           updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`
     )
-    .bind(name, slug, destinationUrl, fgColor, bgColor, isActive, id)
+    .bind(name, slug, destinationUrl, fgColor, bgColor, moduleShape, cornerShape, frameShape, isActive, id)
     .run();
 
   if (auth.type === "admin" && Array.isArray(payload.users)) {
@@ -841,14 +957,14 @@ async function deleteCode(env, id, auth) {
   ]);
 }
 
-async function dashboard(env, auth) {
+async function dashboard(env, auth, filters = defaultDateFilters()) {
   const db = getD1(env);
-  const codes = await listCodes(env, auth);
-  const scope = codeScopeClause(auth, "s");
+  const codes = await listCodes(env, auth, filters);
+  const scope = scanFilterClause(auth, filters, "s");
   const codeIds = codes.map((code) => code.id);
 
   if (auth.type !== "admin" && !codeIds.length) {
-    return emptyDashboard();
+    return emptyDashboard(filters);
   }
 
   const countRows = await Promise.all([
@@ -862,7 +978,6 @@ async function dashboard(env, auth) {
         `SELECT date(scanned_at) AS day, COUNT(*) AS scans
          FROM qr_scans s
          ${scope.sql}
-         ${scope.sql ? "AND" : "WHERE"} scanned_at >= datetime('now', '-13 days')
          GROUP BY date(scanned_at)
          ORDER BY day ASC`
       )
@@ -892,10 +1007,32 @@ async function dashboard(env, auth) {
       .all(),
     db
       .prepare(
+        `SELECT os AS label, COUNT(*) AS scans
+         FROM qr_scans s
+         ${scope.sql}
+         GROUP BY os
+         ORDER BY scans DESC
+         LIMIT 6`
+      )
+      .bind(...scope.args)
+      .all(),
+    db
+      .prepare(
         `SELECT COALESCE(country, 'Unknown') AS label, COUNT(*) AS scans
          FROM qr_scans s
          ${scope.sql}
          GROUP BY COALESCE(country, 'Unknown')
+         ORDER BY scans DESC
+         LIMIT 6`
+      )
+      .bind(...scope.args)
+      .all(),
+    db
+      .prepare(
+        `SELECT COALESCE(NULLIF(referer, ''), 'Direct / unknown') AS label, COUNT(*) AS scans
+         FROM qr_scans s
+         ${scope.sql}
+         GROUP BY COALESCE(NULLIF(referer, ''), 'Direct / unknown')
          ORDER BY scans DESC
          LIMIT 6`
       )
@@ -917,6 +1054,7 @@ async function dashboard(env, auth) {
   const totalScans = Number(countRows[0]?.count || 0);
   const scansToday = Number(countRows[1]?.count || 0);
   return {
+    filters,
     codes,
     metrics: {
       totalCodes: codes.length,
@@ -925,11 +1063,13 @@ async function dashboard(env, auth) {
       scansToday,
       topCode: codes.reduce((winner, code) => (!winner || code.totalScans > winner.totalScans ? code : winner), null),
     },
-    dailyScans: fillLastTwoWeeks(countRows[2]?.results || []),
+    dailyScans: fillDateRange(countRows[2]?.results || [], filters),
     deviceBreakdown: normalizeBreakdown(countRows[3]?.results || []),
     browserBreakdown: normalizeBreakdown(countRows[4]?.results || []),
-    countryBreakdown: normalizeBreakdown(countRows[5]?.results || []),
-    recentScans: (countRows[6]?.results || []).map((row) => ({
+    osBreakdown: normalizeBreakdown(countRows[5]?.results || []),
+    countryBreakdown: normalizeBreakdown(countRows[6]?.results || []),
+    referrerBreakdown: normalizeBreakdown(countRows[7]?.results || []),
+    recentScans: (countRows[8]?.results || []).map((row) => ({
       id: row.id,
       qrCodeId: row.qr_code_id,
       name: row.name,
@@ -947,8 +1087,9 @@ async function dashboard(env, auth) {
   };
 }
 
-function emptyDashboard() {
+function emptyDashboard(filters = defaultDateFilters()) {
   return {
+    filters,
     codes: [],
     metrics: {
       totalCodes: 0,
@@ -957,28 +1098,88 @@ function emptyDashboard() {
       scansToday: 0,
       topCode: null,
     },
-    dailyScans: fillLastTwoWeeks([]),
+    dailyScans: fillDateRange([], filters),
     deviceBreakdown: [],
     browserBreakdown: [],
+    osBreakdown: [],
     countryBreakdown: [],
+    referrerBreakdown: [],
     recentScans: [],
   };
 }
 
-function fillLastTwoWeeks(rows) {
+function fillDateRange(rows, filters) {
   const byDay = new Map(rows.map((row) => [row.day, Number(row.scans)]));
   const days = [];
-  for (let index = 13; index >= 0; index -= 1) {
-    const date = new Date();
-    date.setUTCDate(date.getUTCDate() - index);
-    const day = date.toISOString().slice(0, 10);
+  const current = new Date(`${filters.from}T00:00:00.000Z`);
+  const end = new Date(`${filters.to}T00:00:00.000Z`);
+  while (current <= end) {
+    const day = isoDay(current);
     days.push({ day, scans: byDay.get(day) || 0 });
+    current.setUTCDate(current.getUTCDate() + 1);
   }
   return days;
 }
 
 function normalizeBreakdown(rows) {
   return rows.map((row) => ({ label: row.label || "Unknown", scans: Number(row.scans || 0) }));
+}
+
+async function exportScansCsv(env, auth, filters) {
+  const scope = scanFilterClause(auth, filters, "s");
+  const { results = [] } = await getD1(env)
+    .prepare(
+      `SELECT s.scanned_at,
+              c.name,
+              s.slug,
+              s.destination_url,
+              s.device_type,
+              s.browser,
+              s.os,
+              s.country,
+              s.region,
+              s.city,
+              s.referer,
+              s.user_agent
+       FROM qr_scans s
+       JOIN qr_codes c ON c.id = s.qr_code_id
+       ${scope.sql}
+       ORDER BY s.scanned_at DESC, s.id DESC`
+    )
+    .bind(...scope.args)
+    .all();
+
+  const rows = [
+    [
+      "scanned_at",
+      "qr_name",
+      "slug",
+      "destination_url",
+      "device_type",
+      "browser",
+      "os",
+      "country",
+      "region",
+      "city",
+      "referer",
+      "user_agent",
+    ],
+    ...results.map((row) => [
+      row.scanned_at,
+      row.name,
+      row.slug,
+      row.destination_url,
+      row.device_type,
+      row.browser,
+      row.os,
+      row.country,
+      row.region,
+      row.city,
+      row.referer,
+      row.user_agent,
+    ]),
+  ];
+  return csvResponse(`qr-scans-${filters.from}-to-${filters.to}.csv`, rows);
 }
 
 async function recordScan(env, code, request) {
@@ -1109,7 +1310,11 @@ async function handleApi(request, env, path) {
     }
 
     if (path === `${QR_BASE}/api/dashboard` && request.method === "GET") {
-      return json(await dashboard(env, auth));
+      return json(await dashboard(env, auth, dateFiltersFromRequest(request)));
+    }
+
+    if (path === `${QR_BASE}/api/export.csv` && request.method === "GET") {
+      return exportScansCsv(env, auth, dateFiltersFromRequest(request));
     }
 
     if (path === `${QR_BASE}/api/codes` && request.method === "POST") {

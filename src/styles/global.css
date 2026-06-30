@@ -389,7 +389,8 @@ main {
 }
 
 .qr-admin-shell input,
-.qr-admin-shell textarea {
+.qr-admin-shell textarea,
+.qr-admin-shell select {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -398,7 +399,8 @@ main {
   outline: none;
 }
 
-.qr-admin-shell input {
+.qr-admin-shell input,
+.qr-admin-shell select {
   min-height: 42px;
   padding: 0 12px;
 }
@@ -410,18 +412,41 @@ main {
 }
 
 .qr-admin-shell input:focus,
-.qr-admin-shell textarea:focus {
+.qr-admin-shell textarea:focus,
+.qr-admin-shell select:focus {
   border-color: var(--evergreen);
   box-shadow: 0 0 0 3px rgba(23, 53, 47, 0.12);
 }
 
 .qr-color-row,
+.qr-style-row,
 .qr-logo-row,
 .qr-preview-grid,
 .qr-insights {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.qr-style-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.qr-filter-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 160px 160px auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.qr-filter-panel h2 {
+  margin: 0;
+}
+
+.qr-filter-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .qr-logo-row {
@@ -1900,7 +1925,9 @@ body.is-lightbox-open {
 
   .qr-admin-header,
   .qr-auth-panel,
+  .qr-filter-panel,
   .qr-logo-row,
+  .qr-style-row,
   .qr-edit-grid {
     grid-template-columns: 1fr;
   }
@@ -1920,6 +1947,7 @@ body.is-lightbox-open {
   .qr-color-row,
   .qr-link-row,
   .qr-facts,
+  .qr-filter-actions,
   .qr-user-links article {
     display: grid;
     grid-template-columns: 1fr;
