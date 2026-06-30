@@ -622,9 +622,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       if (!shape || shape === "square") return 0;
       if (shape === "circle") {
         const tightCircleMargin = Math.ceil((size * (Math.SQRT2 - 1)) / 2);
-        return Math.max(0, tightCircleMargin - quietMargin);
+        return Math.max(0, Math.round((tightCircleMargin - quietMargin) * 0.6));
       }
-      return Math.max(4, Math.round(size * 0.12));
+      return Math.max(3, Math.round(size * 0.075));
     }
 
     function styledQrSvg(target, code) {
