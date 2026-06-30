@@ -46,7 +46,7 @@ function getAdminPassword(env) {
 
 async function hashPassword(password, salt = randomToken(16)) {
   const encoder = new TextEncoder();
-  const iterations = 120000;
+  const iterations = 100000;
   const key = await crypto.subtle.importKey(
     "raw",
     encoder.encode(password),
