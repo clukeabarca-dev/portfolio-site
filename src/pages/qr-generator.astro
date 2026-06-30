@@ -1,0 +1,682 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="QR Generator"
+  description="Private dynamic QR code manager for editable QR links and scan insights."
+  bodyClass="qr-generator-page"
+>
+  <section class="qr-admin-shell" data-qr-app>
+    <header class="qr-admin-header">
+      <div>
+        <p class="eyebrow">Private tool</p>
+        <h1>QR Generator</h1>
+      </div>
+      <div class="qr-admin-actions">
+        <button type="button" class="qr-icon-button" data-refresh title="Refresh" aria-label="Refresh">↻</button>
+        <button type="button" class="qr-icon-button" data-logout title="Sign out" aria-label="Sign out">⇥</button>
+      </div>
+    </header>
+
+    <section class="qr-auth-panel" data-auth-panel hidden>
+      <div>
+        <p class="eyebrow" data-auth-eyebrow>Admin</p>
+        <h2 data-auth-title>Sign in</h2>
+        <p data-auth-copy>Enter the admin password to manage QR codes.</p>
+      </div>
+      <form class="qr-auth-form" data-auth-form>
+        <label>
+          Password
+          <input type="password" name="password" autocomplete="current-password" required minlength="12" />
+        </label>
+        <button type="submit" class="button" data-auth-submit>Continue</button>
+      </form>
+    </section>
+
+    <section class="qr-status" data-status hidden></section>
+
+    <section class="qr-dashboard" data-dashboard hidden>
+      <div class="qr-metrics" data-metrics></div>
+
+      <div class="qr-workspace">
+        <aside class="qr-sidebar">
+          <form class="qr-panel qr-create-form" data-create-form>
+            <div class="qr-panel-header">
+              <h2>New Code</h2>
+              <button type="submit" class="qr-icon-button qr-icon-button--dark" title="Create QR code" aria-label="Create QR code">+</button>
+            </div>
+            <label>
+              Name
+              <input name="name" value="Longs Test QR" required />
+            </label>
+            <label>
+              Destination
+              <input name="destinationUrl" value="https://www.longs.com/" required />
+            </label>
+            <label>
+              Slug
+              <input name="slug" value="longs-test" />
+            </label>
+            <div class="qr-color-row">
+              <label>
+                QR color
+                <input type="color" name="fgColor" value="#17352f" />
+              </label>
+              <label>
+                Background
+                <input type="color" name="bgColor" value="#fbfaf6" />
+              </label>
+            </div>
+            <label class="qr-admin-only">
+              Assigned users
+              <textarea
+                name="users"
+                rows="4"
+                placeholder="email@example.com | Name | editor"
+              ></textarea>
+            </label>
+          </form>
+
+          <section class="qr-panel">
+            <div class="qr-panel-header">
+              <h2>Codes</h2>
+              <span data-code-count>0</span>
+            </div>
+            <div class="qr-code-list" data-code-list></div>
+          </section>
+        </aside>
+
+        <div class="qr-main">
+          <section class="qr-panel qr-edit-panel" data-edit-panel hidden>
+            <form data-edit-form>
+              <div class="qr-panel-header">
+                <h2>Dynamic Link</h2>
+                <div class="qr-admin-actions">
+                  <button type="button" class="qr-icon-button" data-toggle-active title="Pause or activate" aria-label="Pause or activate">⏻</button>
+                  <button type="submit" class="qr-icon-button qr-icon-button--dark" title="Save changes" aria-label="Save changes">✓</button>
+                  <button type="button" class="qr-icon-button qr-icon-button--danger qr-admin-only" data-delete title="Delete QR code" aria-label="Delete QR code">×</button>
+                </div>
+              </div>
+
+              <div class="qr-edit-grid">
+                <label>
+                  Name
+                  <input name="name" required />
+                </label>
+                <label>
+                  Slug
+                  <input name="slug" required data-admin-field />
+                </label>
+                <label class="qr-span-2">
+                  Destination
+                  <input name="destinationUrl" required />
+                </label>
+                <div class="qr-color-row qr-span-2">
+                  <label>
+                    QR color
+                    <input type="color" name="fgColor" />
+                  </label>
+                  <label>
+                    Background
+                    <input type="color" name="bgColor" />
+                  </label>
+                </div>
+                <div class="qr-logo-row qr-span-2">
+                  <label>
+                    Logo image
+                    <input type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" data-logo-file />
+                  </label>
+                  <button type="button" class="button button--quiet" data-clear-logo>Clear logo</button>
+                  <span data-logo-status>No logo</span>
+                </div>
+                <label class="qr-span-2 qr-admin-only">
+                  Assigned users
+                  <textarea
+                    name="users"
+                    rows="4"
+                    placeholder="email@example.com | Name | editor"
+                  ></textarea>
+                </label>
+              </div>
+
+              <div class="qr-link-row">
+                <code data-short-link></code>
+                <button type="button" class="qr-icon-button" data-copy-link title="Copy short link" aria-label="Copy short link">⧉</button>
+                <button type="button" class="qr-icon-button" data-open-link title="Open short link" aria-label="Open short link">↗</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="qr-preview-grid" data-selected-tools hidden>
+            <section class="qr-panel">
+              <div class="qr-panel-header">
+                <h2>QR SVG</h2>
+                <button type="button" class="qr-icon-button qr-icon-button--dark" data-download-svg title="Download SVG" aria-label="Download SVG">↓</button>
+              </div>
+              <div class="qr-svg-preview" data-qr-preview></div>
+              <dl class="qr-facts">
+                <div>
+                  <dt>Status</dt>
+                  <dd data-code-status>Active</dd>
+                </div>
+                <div>
+                  <dt>Last scan</dt>
+                  <dd data-last-scan>Never</dd>
+                </div>
+              </dl>
+            </section>
+
+            <section class="qr-panel qr-admin-only">
+              <div class="qr-panel-header">
+                <h2>User Access</h2>
+              </div>
+              <div class="qr-user-links" data-user-links></div>
+            </section>
+          </section>
+
+          <section class="qr-insights">
+            <section class="qr-panel">
+              <div class="qr-panel-header">
+                <h2>Last 14 Days</h2>
+              </div>
+              <div class="qr-trend" data-trend></div>
+            </section>
+            <section class="qr-panel">
+              <div class="qr-panel-header">
+                <h2>Devices</h2>
+              </div>
+              <div class="qr-breakdown" data-devices></div>
+            </section>
+            <section class="qr-panel">
+              <div class="qr-panel-header">
+                <h2>Countries</h2>
+              </div>
+              <div class="qr-breakdown" data-countries></div>
+            </section>
+          </section>
+
+          <section class="qr-panel">
+            <div class="qr-panel-header">
+              <h2>Recent Scans</h2>
+            </div>
+            <div class="qr-scan-table" data-recent-scans></div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <script>
+    // @ts-nocheck
+    import QRCodeLib from "qrcode";
+    const app = document.querySelector("[data-qr-app]");
+    const authPanel = app.querySelector("[data-auth-panel]");
+    const authForm = app.querySelector("[data-auth-form]");
+    const authTitle = app.querySelector("[data-auth-title]");
+    const authCopy = app.querySelector("[data-auth-copy]");
+    const authEyebrow = app.querySelector("[data-auth-eyebrow]");
+    const authSubmit = app.querySelector("[data-auth-submit]");
+    const dashboard = app.querySelector("[data-dashboard]");
+    const statusBox = app.querySelector("[data-status]");
+    const codeList = app.querySelector("[data-code-list]");
+    const metrics = app.querySelector("[data-metrics]");
+    const codeCount = app.querySelector("[data-code-count]");
+    const createForm = app.querySelector("[data-create-form]");
+    const editPanel = app.querySelector("[data-edit-panel]");
+    const editForm = app.querySelector("[data-edit-form]");
+    const selectedTools = app.querySelector("[data-selected-tools]");
+    const qrPreview = app.querySelector("[data-qr-preview]");
+    const userLinks = app.querySelector("[data-user-links]");
+    const shortLinkEl = app.querySelector("[data-short-link]");
+    const codeStatus = app.querySelector("[data-code-status]");
+    const lastScan = app.querySelector("[data-last-scan]");
+    const trend = app.querySelector("[data-trend]");
+    const devices = app.querySelector("[data-devices]");
+    const countries = app.querySelector("[data-countries]");
+    const recentScans = app.querySelector("[data-recent-scans]");
+
+    const params = new URLSearchParams(window.location.search);
+    const accessFromUrl = params.get("access");
+    if (accessFromUrl) {
+      sessionStorage.setItem("qrAccessKey", accessFromUrl);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+
+    const state = {
+      role: null,
+      setupRequired: false,
+      data: null,
+      selectedId: null,
+      selected: null,
+      activeDraft: true,
+      svg: "",
+    };
+
+    function accessKey() {
+      return sessionStorage.getItem("qrAccessKey") || "";
+    }
+
+    function headers(json = true) {
+      const h = new Headers();
+      if (json) h.set("Content-Type", "application/json");
+      if (accessKey()) h.set("X-QR-Access-Key", accessKey());
+      return h;
+    }
+
+    async function api(path, options = {}) {
+      const response = await fetch(`/qr-generator/api${path}`, {
+        ...options,
+        credentials: "same-origin",
+        headers: options.headers || headers(Boolean(options.body)),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || "Request failed");
+      }
+      return data;
+    }
+
+    function showStatus(message, tone = "info") {
+      statusBox.hidden = !message;
+      statusBox.textContent = message || "";
+      statusBox.dataset.tone = tone;
+    }
+
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;",
+      })[char]);
+    }
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat().format(Number(value || 0));
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "Never";
+      return new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(new Date(`${String(value).replace(" ", "T")}Z`));
+    }
+
+    function parseUsers(value) {
+      return String(value || "")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const [email, name = "", role = "editor"] = line.split("|").map((part) => part.trim());
+          return { email, name, role: role === "viewer" ? "viewer" : "editor" };
+        });
+    }
+
+    function usersToText(users = []) {
+      return users
+        .map((user) => [user.email, user.name, user.role].filter(Boolean).join(" | "))
+        .join("\n");
+    }
+
+    function formPayload(form, includeUsers = false) {
+      const data = new FormData(form);
+      const payload = {
+        name: data.get("name"),
+        destinationUrl: data.get("destinationUrl"),
+        slug: data.get("slug"),
+        fgColor: data.get("fgColor"),
+        bgColor: data.get("bgColor"),
+        isActive: state.activeDraft,
+      };
+      if (includeUsers) payload.users = parseUsers(data.get("users"));
+      return payload;
+    }
+
+    function currentCanEdit() {
+      if (state.role === "admin") return true;
+      return Boolean(state.selected?.users?.some((user) => user.role === "editor"));
+    }
+
+    function setAdminVisibility() {
+      const isAdmin = state.role === "admin";
+      app.querySelectorAll(".qr-admin-only").forEach((el) => {
+        el.hidden = !isAdmin;
+      });
+      app.querySelectorAll("[data-admin-field]").forEach((el) => {
+        el.disabled = !isAdmin;
+      });
+      createForm.hidden = !isAdmin;
+    }
+
+    async function loadSession() {
+      try {
+        const session = await api("/session", { method: "GET", headers: headers(false) });
+        state.role = session.role;
+        state.setupRequired = Boolean(session.setupRequired);
+        if (session.authenticated) {
+          authPanel.hidden = true;
+          dashboard.hidden = false;
+          setAdminVisibility();
+          await loadDashboard();
+          return;
+        }
+
+        dashboard.hidden = true;
+        authPanel.hidden = false;
+        authTitle.textContent = state.setupRequired ? "Set Admin Password" : "Sign in";
+        authEyebrow.textContent = state.setupRequired ? "First run" : accessKey() ? "Assigned user" : "Admin";
+        authCopy.textContent = state.setupRequired
+          ? "Create the admin password for this QR manager. Use at least 12 characters."
+          : accessKey()
+            ? "This access link was not accepted. Sign in as admin or check the assigned-user link."
+            : "Enter the admin password to manage QR codes.";
+        authSubmit.textContent = state.setupRequired ? "Create admin" : "Sign in";
+      } catch (error) {
+        showStatus(error.message, "error");
+      }
+    }
+
+    async function loadDashboard() {
+      const data = await api("/dashboard", { method: "GET", headers: headers(false) });
+      state.data = data;
+      if (!state.selectedId || !data.codes.some((code) => code.id === state.selectedId)) {
+        state.selectedId = data.codes[0]?.id || null;
+      }
+      state.selected = data.codes.find((code) => code.id === state.selectedId) || null;
+      render();
+    }
+
+    function renderMetrics() {
+      const m = state.data?.metrics || {};
+      const cards = [
+        ["Total scans", formatNumber(m.totalScans), `${formatNumber(m.scansToday)} today`],
+        ["Active codes", formatNumber(m.activeCodes), `${formatNumber(m.totalCodes)} total`],
+        ["Top code", m.topCode?.name || "None", `${formatNumber(m.topCode?.totalScans)} scans`],
+        ["Selected", state.selected?.name || "No code", state.selected ? `${formatNumber(state.selected.totalScans)} scans` : "Create a code"],
+      ];
+      metrics.innerHTML = cards
+        .map(([label, value, detail]) => `<article><span>${esc(label)}</span><strong>${esc(value)}</strong><em>${esc(detail)}</em></article>`)
+        .join("");
+    }
+
+    function renderCodeList() {
+      const codes = state.data?.codes || [];
+      codeCount.textContent = String(codes.length);
+      codeList.innerHTML = codes.length
+        ? codes
+            .map(
+              (code) => `<button type="button" data-code-id="${code.id}" class="${code.id === state.selectedId ? "is-selected" : ""}">
+                <span><strong>${esc(code.name)}</strong><small>/qr-generator/q/${esc(code.slug)}</small></span>
+                <em>${formatNumber(code.totalScans)}</em>
+              </button>`
+            )
+            .join("")
+        : `<p class="qr-empty">No QR codes yet. The first form is set up for the Longs test QR.</p>`;
+    }
+
+    async function renderQr() {
+      if (!state.selected) {
+        state.svg = "";
+        qrPreview.innerHTML = "";
+        return;
+      }
+      const target = `${window.location.origin}/qr-generator/q/${state.selected.slug}`;
+      shortLinkEl.textContent = target;
+      const svg = await QRCodeLib.toString(target, {
+        type: "svg",
+        width: 960,
+        margin: 2,
+        errorCorrectionLevel: "H",
+        color: {
+          dark: state.selected.fgColor,
+          light: state.selected.bgColor,
+        },
+      });
+      state.svg = state.selected.logoEnabled
+        ? addLogoToSvg(svg, await logoDataUrl(state.selected), state.selected.bgColor)
+        : svg;
+      qrPreview.innerHTML = state.svg;
+    }
+
+    async function logoDataUrl(code) {
+      const response = await fetch(`/qr-generator/api/codes/${code.id}/logo?v=${encodeURIComponent(code.updatedAt)}`, {
+        headers: headers(false),
+        credentials: "same-origin",
+      });
+      if (!response.ok) return "";
+      const blob = await response.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => resolve(String(reader.result || "")));
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    function addLogoToSvg(svg, dataUrl, bgColor) {
+      if (!dataUrl) return svg;
+      const viewBox = svg.match(/viewBox="0 0 ([0-9.]+) ([0-9.]+)"/);
+      const size = viewBox ? Number(viewBox[1]) : 37;
+      const logoSize = size * 0.22;
+      const pad = size * 0.035;
+      const boxSize = logoSize + pad * 2;
+      const x = (size - boxSize) / 2;
+      const logoX = (size - logoSize) / 2;
+      const radius = size * 0.035;
+      const overlay = `<rect x="${x}" y="${x}" width="${boxSize}" height="${boxSize}" rx="${radius}" fill="${bgColor}"/><image href="${dataUrl}" x="${logoX}" y="${logoX}" width="${logoSize}" height="${logoSize}" preserveAspectRatio="xMidYMid meet"/>`;
+      return svg.replace("</svg>", `${overlay}</svg>`);
+    }
+
+    function renderEditForm() {
+      const code = state.selected;
+      editPanel.hidden = !code;
+      selectedTools.hidden = !code;
+      if (!code) return;
+      editForm.elements.name.value = code.name;
+      editForm.elements.slug.value = code.slug;
+      editForm.elements.destinationUrl.value = code.destinationUrl;
+      editForm.elements.fgColor.value = code.fgColor;
+      editForm.elements.bgColor.value = code.bgColor;
+      if (editForm.elements.users) editForm.elements.users.value = usersToText(code.users);
+      state.activeDraft = code.isActive;
+      codeStatus.textContent = code.isActive ? "Active" : "Paused";
+      lastScan.textContent = formatDateTime(code.lastScannedAt);
+      const logoStatus = app.querySelector("[data-logo-status]");
+      const logoFile = app.querySelector("[data-logo-file]");
+      const clearLogo = app.querySelector("[data-clear-logo]");
+      logoStatus.textContent = code.logoEnabled ? "Logo active" : code.hasLogo ? "Logo stored" : "No logo";
+      logoFile.disabled = !currentCanEdit();
+      clearLogo.hidden = !code.hasLogo || !currentCanEdit();
+      userLinks.innerHTML = code.users?.length
+        ? code.users
+            .map((user) => {
+              const url = `${window.location.origin}/qr-generator?access=${user.accessKey}`;
+              return `<article>
+                <strong>${esc(user.name || user.email)}</strong>
+                <span>${esc(user.email)} · ${esc(user.role)}</span>
+                <button type="button" data-copy-user-link="${url}">Copy access link</button>
+              </article>`;
+            })
+            .join("")
+        : `<p class="qr-empty">No assigned users for this code.</p>`;
+    }
+
+    function renderBreakdown(el, rows) {
+      const max = Math.max(1, ...(rows || []).map((row) => row.scans));
+      el.innerHTML = rows?.length
+        ? rows.map((row) => `<div><span>${esc(row.label)}</span><strong>${formatNumber(row.scans)}</strong><i style="width:${Math.max(6, (row.scans / max) * 100)}%"></i></div>`).join("")
+        : `<p class="qr-empty">No scan data yet.</p>`;
+    }
+
+    function renderTrend() {
+      const rows = state.data?.dailyScans || [];
+      const max = Math.max(1, ...rows.map((row) => row.scans));
+      trend.innerHTML = rows
+        .map(
+          (row) => `<div title="${esc(row.day)}: ${formatNumber(row.scans)} scans"><i style="height:${Math.max(8, (row.scans / max) * 104)}px;opacity:${row.scans ? 1 : 0.24}"></i><span>${esc(row.day.slice(5))}</span></div>`
+        )
+        .join("");
+    }
+
+    function renderRecent() {
+      const rows = state.data?.recentScans || [];
+      recentScans.innerHTML = rows.length
+        ? `<table><thead><tr><th>Time</th><th>Code</th><th>Device</th><th>Browser</th><th>Location</th></tr></thead><tbody>${rows
+            .map(
+              (scan) => `<tr><td>${esc(formatDateTime(scan.scannedAt))}</td><td>${esc(scan.name)}</td><td>${esc(scan.deviceType)} / ${esc(scan.os)}</td><td>${esc(scan.browser)}</td><td>${esc([scan.city, scan.region, scan.country].filter(Boolean).join(", ") || "Unknown")}</td></tr>`
+            )
+            .join("")}</tbody></table>`
+        : `<p class="qr-empty">Scans will appear here as QR links are opened.</p>`;
+    }
+
+    async function render() {
+      setAdminVisibility();
+      renderMetrics();
+      renderCodeList();
+      renderEditForm();
+      renderBreakdown(devices, state.data?.deviceBreakdown || []);
+      renderBreakdown(countries, state.data?.countryBreakdown || []);
+      renderTrend();
+      renderRecent();
+      await renderQr();
+    }
+
+    authForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      showStatus("");
+      const password = new FormData(authForm).get("password");
+      try {
+        await api(state.setupRequired ? "/setup" : "/session", {
+          method: "POST",
+          headers: headers(true),
+          body: JSON.stringify({ password }),
+        });
+        authForm.reset();
+        await loadSession();
+      } catch (error) {
+        showStatus(error.message, "error");
+      }
+    });
+
+    createForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      showStatus("");
+      try {
+        const result = await api("/codes", {
+          method: "POST",
+          body: JSON.stringify(formPayload(createForm, true)),
+        });
+        state.selectedId = result.code.id;
+        showStatus(`Created ${result.code.name}`, "success");
+        await loadDashboard();
+      } catch (error) {
+        showStatus(error.message, "error");
+      }
+    });
+
+    editForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!state.selected) return;
+      try {
+        await api(`/codes/${state.selected.id}`, {
+          method: "PATCH",
+          body: JSON.stringify(formPayload(editForm, state.role === "admin")),
+        });
+        showStatus("QR code updated", "success");
+        await loadDashboard();
+      } catch (error) {
+        showStatus(error.message, "error");
+      }
+    });
+
+    app.addEventListener("click", async (event) => {
+      const target = event.target.closest("button");
+      if (!target) return;
+
+      if (target.dataset.codeId) {
+        state.selectedId = Number(target.dataset.codeId);
+        state.selected = state.data.codes.find((code) => code.id === state.selectedId);
+        await render();
+      }
+      if (target.matches("[data-refresh]")) await loadDashboard();
+      if (target.matches("[data-logout]")) {
+        sessionStorage.removeItem("qrAccessKey");
+        await api("/session", { method: "DELETE", headers: headers(false) });
+        window.location.href = "/qr-generator";
+      }
+      if (target.matches("[data-toggle-active]")) {
+        if (!currentCanEdit()) return showStatus("Viewer access cannot edit this QR code.", "error");
+        state.activeDraft = !state.activeDraft;
+        codeStatus.textContent = state.activeDraft ? "Active" : "Paused";
+      }
+      if (target.matches("[data-delete]") && state.selected && confirm(`Delete "${state.selected.name}" and its scans?`)) {
+        await api(`/codes/${state.selected.id}`, { method: "DELETE", headers: headers(false) });
+        state.selectedId = null;
+        await loadDashboard();
+      }
+      if (target.matches("[data-copy-link]") && state.selected) {
+        await navigator.clipboard.writeText(shortLinkEl.textContent);
+        showStatus("Short link copied", "success");
+      }
+      if (target.matches("[data-open-link]") && state.selected) {
+        window.open(shortLinkEl.textContent, "_blank", "noopener,noreferrer");
+      }
+      if (target.matches("[data-download-svg]") && state.svg && state.selected) {
+        const blob = new Blob([state.svg], { type: "image/svg+xml" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `${state.selected.slug}.svg`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+      if (target.matches("[data-clear-logo]") && state.selected) {
+        const result = await api(`/codes/${state.selected.id}/logo`, {
+          method: "DELETE",
+          headers: headers(false),
+        });
+        state.selectedId = result.code.id;
+        showStatus("Logo removed", "success");
+        await loadDashboard();
+      }
+      if (target.dataset.copyUserLink) {
+        await navigator.clipboard.writeText(target.dataset.copyUserLink);
+        showStatus("Assigned-user access link copied", "success");
+      }
+    });
+
+    app.querySelector("[data-logo-file]").addEventListener("change", async (event) => {
+      if (!state.selected || !event.target.files?.[0]) return;
+      const file = event.target.files[0];
+      if (file.size > 240 * 1024) {
+        event.target.value = "";
+        return showStatus("Logo image must be smaller than 240 KB.", "error");
+      }
+      const form = new FormData();
+      form.set("logo", file);
+      try {
+        const response = await fetch(`/qr-generator/api/codes/${state.selected.id}/logo`, {
+          method: "POST",
+          credentials: "same-origin",
+          headers: headers(false),
+          body: form,
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Logo upload failed");
+        state.selectedId = result.code.id;
+        showStatus("Logo added", "success");
+        await loadDashboard();
+      } catch (error) {
+        showStatus(error.message, "error");
+      } finally {
+        event.target.value = "";
+      }
+    });
+
+    loadSession();
+  </script>
+</BaseLayout>
