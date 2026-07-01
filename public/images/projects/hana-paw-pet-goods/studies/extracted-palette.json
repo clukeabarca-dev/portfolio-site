@@ -1,0 +1,88 @@
+{
+  "source": [
+    "public/images/projects/hana-paw-pet-goods/gallery-01.webp",
+    "public/images/projects/hana-paw-pet-goods/gallery-02.webp"
+  ],
+  "palette": [
+    {
+      "name": "deep pacific blue",
+      "hex": "#0A2D66",
+      "rgb": [
+        10,
+        45,
+        102
+      ],
+      "samples": 117445
+    },
+    {
+      "name": "navy outline",
+      "hex": "#06265C",
+      "rgb": [
+        6,
+        38,
+        92
+      ],
+      "samples": 73302
+    },
+    {
+      "name": "surf red",
+      "hex": "#CA3C37",
+      "rgb": [
+        202,
+        60,
+        55
+      ],
+      "samples": 81116
+    },
+    {
+      "name": "snack yellow",
+      "hex": "#D1AA3C",
+      "rgb": [
+        209,
+        170,
+        60
+      ],
+      "samples": 53203
+    },
+    {
+      "name": "jerky green",
+      "hex": "#0D9723",
+      "rgb": [
+        13,
+        151,
+        35
+      ],
+      "samples": 21145
+    },
+    {
+      "name": "warm treat brown",
+      "hex": "#7B583B",
+      "rgb": [
+        123,
+        88,
+        59
+      ],
+      "samples": 106562
+    },
+    {
+      "name": "cream backdrop",
+      "hex": "#DCCEB4",
+      "rgb": [
+        220,
+        206,
+        180
+      ],
+      "samples": 334997
+    },
+    {
+      "name": "soft gray floor",
+      "hex": "#DAD9D9",
+      "rgb": [
+        218,
+        217,
+        217
+      ],
+      "samples": 722973
+    }
+  ]
+}
