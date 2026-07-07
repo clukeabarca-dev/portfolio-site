@@ -34,6 +34,9 @@ const projects = defineCollection({
     accent: z.string(),
     theme: z.enum(["light", "dark"]).default("light"),
     summary: z.string(),
+    chapterEyebrow: z.string().optional(),
+    chapterTitle: z.string().optional(),
+    chapterBody: z.string().optional(),
   }),
 });
 
