@@ -1538,6 +1538,21 @@ main {
   padding: 10px;
 }
 
+.project--manoa-now-identity .project-hero__media,
+.project--manoa-now-identity .project-chapter__media,
+.project--rotary-hawaii-big-west .project-hero__media,
+.project--rotary-hawaii-big-west .project-chapter__media,
+.project--identity-studies-archive .project-hero__media,
+.project--identity-studies-archive .project-chapter__media,
+.project--shigeru-ban-architecture-study .project-hero__media,
+.project--shigeru-ban-architecture-study .project-chapter__media,
+.project--akira-toriyama-early-works .project-hero__media,
+.project--akira-toriyama-early-works .project-chapter__media {
+  height: auto;
+  min-height: 0;
+  align-self: center;
+}
+
 .project--manoa-now-identity .project-chapter__media,
 .project--manoa-now-identity .project-visual-strip__item,
 .project--rotary-hawaii-big-west .project-chapter__media,
@@ -1579,6 +1594,19 @@ main {
 .project--shigeru-ban-architecture-study .project-visual-strip__item--tall,
 .project--akira-toriyama-early-works .project-visual-strip__item,
 .project--akira-toriyama-early-works .project-visual-strip__item--tall {
+  height: auto;
+}
+
+.project--manoa-now-identity .project-hero__media img,
+.project--manoa-now-identity .project-chapter__media img,
+.project--rotary-hawaii-big-west .project-hero__media img,
+.project--rotary-hawaii-big-west .project-chapter__media img,
+.project--identity-studies-archive .project-hero__media img,
+.project--identity-studies-archive .project-chapter__media img,
+.project--shigeru-ban-architecture-study .project-hero__media img,
+.project--shigeru-ban-architecture-study .project-chapter__media img,
+.project--akira-toriyama-early-works .project-hero__media img,
+.project--akira-toriyama-early-works .project-chapter__media img {
   height: auto;
 }
 
