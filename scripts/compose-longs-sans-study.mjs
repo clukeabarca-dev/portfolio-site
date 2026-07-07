@@ -429,21 +429,20 @@ const gallery04 = svgShell({
       <rect x="62" y="724" width="536" height="28" rx="14" fill="#ded4c4"/>
       <rect x="62" y="784" width="382" height="28" rx="14" fill="#ded4c4"/>
     </g>
-    <g transform="translate(690 48) rotate(2)" filter="url(#softShadow)">
-      ${roundedRect({ x: 0, y: 0, w: 680, h: 888, r: 22, fill: "#f8f3eb" })}
-      <rect x="48" y="50" width="584" height="236" rx="20" fill="url(#greenPanel)"/>
-      <text class="xl" x="84" y="178" fill="#fffaf2" font-size="88">Store Pickup</text>
-      <text class="med" x="86" y="238" fill="#fffaf2" font-size="31" opacity="0.86" letter-spacing="3">READY TODAY</text>
-      <text class="bold" x="50" y="416" fill="${palette.ink}" font-size="72">Signage suite</text>
-      <text class="reg" x="52" y="492" fill="${palette.muted}" font-size="38">Service, pickup, and aisle IDs.</text>
-      <text class="xl" x="52" y="726" fill="${palette.blue}" font-size="176">A12</text>
+    <g transform="translate(672 48) rotate(2)" filter="url(#softShadow)">
+      ${roundedRect({ x: 0, y: 0, w: 724, h: 888, r: 22, fill: "#f8f3eb" })}
+      <rect x="62" y="64" width="600" height="236" rx="20" fill="url(#greenPanel)"/>
+      <text class="xl" x="108" y="190" fill="#fffaf2" font-size="80">Store Pickup</text>
+      <text class="med" x="112" y="246" fill="#fffaf2" font-size="30" opacity="0.86" letter-spacing="3">READY TODAY</text>
+      <text class="bold" x="64" y="424" fill="${palette.ink}" font-size="70">Signage suite</text>
+      <text class="reg" x="66" y="500" fill="${palette.muted}" font-size="36">Service, pickup, and aisle IDs.</text>
+      <text class="xl" x="66" y="728" fill="${palette.blue}" font-size="172">A12</text>
     </g>
     <g transform="translate(1398 -12) rotate(-1)" filter="url(#softShadow)">
       ${roundedRect({ x: 0, y: 0, w: 704, h: 944, r: 22, fill: palette.paper })}
       ${imageBlock({ id: "print-proof-photo", uri: longsImages.everyday, x: 52, y: 52, w: 600, h: 300, r: 22 })}
-      <text class="reg" x="54" y="430" fill="${palette.muted}" font-size="34" letter-spacing="4">BODY COPY TEST</text>
-      <text class="xl" x="52" y="554" fill="${palette.ink}" font-size="102">Easy to scan,</text>
-      <text class="xl" x="52" y="654" fill="${palette.ink}" font-size="102">hard to miss.</text>
+      <text class="xl" x="52" y="506" fill="${palette.ink}" font-size="102">Easy to scan,</text>
+      <text class="xl" x="52" y="606" fill="${palette.ink}" font-size="102">hard to miss.</text>
       <rect x="54" y="768" width="344" height="86" rx="43" fill="${palette.red}"/>
       <text class="bold" x="110" y="824" fill="#fffaf2" font-size="39">Shop ad</text>
     </g>
