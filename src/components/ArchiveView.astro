@@ -55,7 +55,7 @@ const years = Array.from(new Set(projects.map((project) => project.data.year))).
     {
       projects.map((project) => (
         <article
-          class="archive-item"
+          class:list={["archive-item", `archive-item--${project.id}`]}
           data-archive-item
           data-title={project.data.title}
           data-year={String(project.data.year)}

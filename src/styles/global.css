@@ -1169,6 +1169,24 @@ main {
   border-radius: 6px;
 }
 
+.project-card--identity-studies-archive .project-card__media,
+.archive-item--identity-studies-archive figure {
+  background: linear-gradient(135deg, #f6f1e8, #e4d8c6);
+}
+
+.project-card--identity-studies-archive .project-card__media > img,
+.archive-item--identity-studies-archive figure > img {
+  padding: 10px;
+  object-fit: contain;
+  object-position: center;
+  background: #f6f1e8;
+}
+
+.project-card--identity-studies-archive .project-card__media::after,
+.archive-item--identity-studies-archive figure::after {
+  display: none;
+}
+
 .archive__empty {
   padding: 48px 0;
   color: var(--muted);
@@ -1709,7 +1727,29 @@ main {
   color: var(--muted);
 }
 
+.project--identity-studies-archive .project-hero {
+  grid-template-columns: minmax(0, 0.58fr) minmax(520px, 1.16fr);
+  gap: 42px;
+}
+
+.project--identity-studies-archive .project-hero__media,
+.project--identity-studies-archive .project-chapter__media {
+  background: linear-gradient(135deg, #f6f1e8, #e4d8c6);
+}
+
+.project--identity-studies-archive .project-hero__media img {
+  aspect-ratio: 1.96;
+  object-position: center;
+}
+
 @media (max-width: 980px) {
+  .project--identity-studies-archive .project-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 56px 0 72px;
+    align-items: start;
+  }
+
   .project--manoa-now-identity .project-hero__media,
   .project--rotary-hawaii-big-west .project-hero__media,
   .project--identity-studies-archive .project-hero__media,
