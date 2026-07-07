@@ -1,35 +1,176 @@
 {
   "source": [
-    "public/images/projects/hana-paw-pet-goods/studies/blue-bag-source.png"
+    "public/images/projects/hana-paw-pet-goods/studies/source-group.jpeg",
+    "public/images/projects/hana-paw-pet-goods/studies/blue-bag-source.png",
+    "public/images/projects/hana-paw-pet-goods/studies/source-green-bag.png",
+    "public/images/projects/hana-paw-pet-goods/studies/source-red-bag.png",
+    "public/images/projects/hana-paw-pet-goods/studies/source-small-red-bag.png",
+    "public/images/projects/hana-paw-pet-goods/studies/source-yellow-bag.png"
   ],
-  "palette": [
+  "global_palette": [
     {
-      "name": "loco moco blue",
-      "hex": "#234B8D"
+      "name": "deep logo blue",
+      "hex": "#0B3572"
     },
     {
-      "name": "navy outline",
-      "hex": "#06265C"
+      "name": "package blue",
+      "hex": "#20498E"
     },
     {
-      "name": "coral red",
-      "hex": "#FF5058"
+      "name": "surf red",
+      "hex": "#EF6264"
+    },
+    {
+      "name": "puppy yellow",
+      "hex": "#F3C946"
+    },
+    {
+      "name": "jerky green",
+      "hex": "#22A947"
     },
     {
       "name": "moco yellow",
-      "hex": "#FFD25A"
+      "hex": "#FFD45A"
     },
     {
-      "name": "kibble brown",
-      "hex": "#7B583B"
+      "name": "studio cream",
+      "hex": "#D8CCB4"
     },
     {
-      "name": "cream backdrop",
-      "hex": "#DCCEB4"
-    },
-    {
-      "name": "soft floor gray",
-      "hex": "#DAD9D9"
+      "name": "treat brown",
+      "hex": "#7B5436"
     }
-  ]
+  ],
+  "sku_palettes": {
+    "yellow": [
+      {
+        "name": "Puppy yellow 1",
+        "hex": "#EAC65A"
+      },
+      {
+        "name": "Puppy yellow 2",
+        "hex": "#36A236"
+      },
+      {
+        "name": "Puppy yellow 3",
+        "hex": "#FCD8A2"
+      },
+      {
+        "name": "Puppy yellow 4",
+        "hex": "#12367E"
+      },
+      {
+        "name": "Puppy yellow 5",
+        "hex": "#A25A24"
+      },
+      {
+        "name": "Puppy yellow 6",
+        "hex": "#EA5A48"
+      }
+    ],
+    "blue": [
+      {
+        "name": "Recipe blue 1",
+        "hex": "#24487E"
+      },
+      {
+        "name": "Recipe blue 2",
+        "hex": "#FC485A"
+      },
+      {
+        "name": "Recipe blue 3",
+        "hex": "#FCD85A"
+      },
+      {
+        "name": "Recipe blue 4",
+        "hex": "#B4A290"
+      },
+      {
+        "name": "Recipe blue 5",
+        "hex": "#5A4836"
+      },
+      {
+        "name": "Recipe blue 6",
+        "hex": "#907E6C"
+      }
+    ],
+    "red": [
+      {
+        "name": "Chow red 1",
+        "hex": "#EA5A5A"
+      },
+      {
+        "name": "Chow red 2",
+        "hex": "#24487E"
+      },
+      {
+        "name": "Chow red 3",
+        "hex": "#EAD8C6"
+      },
+      {
+        "name": "Chow red 4",
+        "hex": "#EAD85A"
+      },
+      {
+        "name": "Chow red 5",
+        "hex": "#C69048"
+      },
+      {
+        "name": "Chow red 6",
+        "hex": "#C6B4A2"
+      }
+    ],
+    "green": [
+      {
+        "name": "Jerky green 1",
+        "hex": "#24A248"
+      },
+      {
+        "name": "Jerky green 2",
+        "hex": "#EAC65A"
+      },
+      {
+        "name": "Jerky green 3",
+        "hex": "#6C3612"
+      },
+      {
+        "name": "Jerky green 4",
+        "hex": "#24487E"
+      },
+      {
+        "name": "Jerky green 5",
+        "hex": "#A26C36"
+      },
+      {
+        "name": "Jerky green 6",
+        "hex": "#C6905A"
+      }
+    ],
+    "small-red": [
+      {
+        "name": "Treat red 1",
+        "hex": "#EA5A5A"
+      },
+      {
+        "name": "Treat red 2",
+        "hex": "#24487E"
+      },
+      {
+        "name": "Treat red 3",
+        "hex": "#EAD85A"
+      },
+      {
+        "name": "Treat red 4",
+        "hex": "#D8D8D8"
+      },
+      {
+        "name": "Treat red 5",
+        "hex": "#A25A6C"
+      },
+      {
+        "name": "Treat red 6",
+        "hex": "#363624"
+      }
+    ]
+  }
 }
