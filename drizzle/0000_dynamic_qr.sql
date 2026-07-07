@@ -11,6 +11,9 @@ CREATE TABLE `qr_codes` (
   `destination_url` text NOT NULL,
   `fg_color` text DEFAULT '#17352f' NOT NULL,
   `bg_color` text DEFAULT '#fbfaf6' NOT NULL,
+  `module_shape` text DEFAULT 'square' NOT NULL,
+  `corner_shape` text DEFAULT 'square' NOT NULL,
+  `frame_shape` text DEFAULT 'square' NOT NULL,
   `logo_key` text,
   `logo_mime` text,
   `logo_enabled` integer DEFAULT 0 NOT NULL,
@@ -56,3 +59,10 @@ CREATE TABLE `qr_code_users` (
 CREATE UNIQUE INDEX `qr_code_users_access_idx` ON `qr_code_users` (`access_key`);
 --> statement-breakpoint
 CREATE INDEX `qr_code_users_code_idx` ON `qr_code_users` (`qr_code_id`);
+--> statement-breakpoint
+CREATE TABLE `qr_logo_assets` (
+  `logo_key` text PRIMARY KEY NOT NULL,
+  `data_base64` text NOT NULL,
+  `content_type` text NOT NULL,
+  `created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
+);

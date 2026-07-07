@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1800" viewBox="0 0 1800 1800">
+<defs><filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="24" stdDeviation="20" flood-color="#3a2a1e" flood-opacity="0.18"/></filter><filter id="paperShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#3a2a1e" flood-opacity="0.12"/></filter><pattern id="paw-puppy" width="126" height="126" patternUnits="userSpaceOnUse"><circle cx="63" cy="72" r="23" fill="#FFF6BD" opacity="0.18"/><circle cx="34" cy="43" r="10" fill="#FFF6BD" opacity="0.18"/><circle cx="59" cy="31" r="11" fill="#FFF6BD" opacity="0.18"/><circle cx="84" cy="35" r="10" fill="#FFF6BD" opacity="0.18"/><circle cx="98" cy="57" r="9" fill="#FFF6BD" opacity="0.18"/></pattern><pattern id="paw-kitty" width="126" height="126" patternUnits="userSpaceOnUse"><circle cx="63" cy="72" r="23" fill="#FFF6BD" opacity="0.18"/><circle cx="34" cy="43" r="10" fill="#FFF6BD" opacity="0.18"/><circle cx="59" cy="31" r="11" fill="#FFF6BD" opacity="0.18"/><circle cx="84" cy="35" r="10" fill="#FFF6BD" opacity="0.18"/><circle cx="98" cy="57" r="9" fill="#FFF6BD" opacity="0.18"/></pattern><pattern id="paw-treats" width="126" height="126" patternUnits="userSpaceOnUse"><circle cx="63" cy="72" r="23" fill="#FFF6BD" opacity="0.18"/><circle cx="34" cy="43" r="10" fill="#FFF6BD" opacity="0.18"/><circle cx="59" cy="31" r="11" fill="#FFF6BD" opacity="0.18"/><circle cx="84" cy="35" r="10" fill="#FFF6BD" opacity="0.18"/><circle cx="98" cy="57" r="9" fill="#FFF6BD" opacity="0.18"/></pattern><pattern id="paw-jerky" width="126" height="126" patternUnits="userSpaceOnUse"><circle cx="63" cy="72" r="23" fill="#FFF6BD" opacity="0.18"/><circle cx="34" cy="43" r="10" fill="#FFF6BD" opacity="0.18"/><circle cx="59" cy="31" r="11" fill="#FFF6BD" opacity="0.18"/><circle cx="84" cy="35" r="10" fill="#FFF6BD" opacity="0.18"/><circle cx="98" cy="57" r="9" fill="#FFF6BD" opacity="0.18"/></pattern><pattern id="grid" width="72" height="72" patternUnits="userSpaceOnUse"><path d="M72 0H0V72" fill="none" stroke="#bda986" stroke-width="1" opacity="0.18"/></pattern></defs>
+<rect width="1800" height="1800" fill="#DCCEB4"/><rect width="1800" height="1800" fill="url(#grid)"/><rect x="72" y="72" width="1656" height="1656" rx="38" fill="#F3E7D0" opacity="0.82"/>
+<text x="118" y="154" font-family="Arial Black, Arial, sans-serif" font-size="72" fill="#06265C">Hana Paw+</text><text x="120" y="212" font-family="Arial, sans-serif" font-size="28" letter-spacing="4" fill="#7B583B">COLOR AND PACKAGE STUDIES</text>
+<g transform="translate(120 276)"><g transform="translate(0 0)"><rect width="176" height="76" rx="18" fill="#0A2D66"/><text x="0" y="111" font-family="Arial, sans-serif" font-size="23" fill="#171A1F">Deep Pacific</text><text x="0" y="142" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#7B583B">#0A2D66</text></g><g transform="translate(228 0)"><rect width="176" height="76" rx="18" fill="#06265C"/><text x="0" y="111" font-family="Arial, sans-serif" font-size="23" fill="#171A1F">Navy Outline</text><text x="0" y="142" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#7B583B">#06265C</text></g><g transform="translate(456 0)"><rect width="176" height="76" rx="18" fill="#CA3C37"/><text x="0" y="111" font-family="Arial, sans-serif" font-size="23" fill="#171A1F">Surf Red</text><text x="0" y="142" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#7B583B">#CA3C37</text></g><g transform="translate(684 0)"><rect width="176" height="76" rx="18" fill="#D1AA3C"/><text x="0" y="111" font-family="Arial, sans-serif" font-size="23" fill="#171A1F">Snack Yellow</text><text x="0" y="142" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#7B583B">#D1AA3C</text></g><g transform="translate(0 166)"><rect width="176" height="76" rx="18" fill="#0D9723"/><text x="0" y="111" font-family="Arial, sans-serif" font-size="23" fill="#171A1F">Jerky Green</text><text x="0" y="142" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#7B583B">#0D9723</text></g><g transform="translate(228 166)"><rect width="176" height="76" rx="18" fill="#7B583B"/><text x="0" y="111" font-family="Arial, sans-serif" font-size="23" fill="#171A1F">Treat Brown</text><text x="0" y="142" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#7B583B">#7B583B</text></g><g transform="translate(456 166)"><rect width="176" height="76" rx="18" fill="#DCCEB4"/><text x="0" y="111" font-family="Arial, sans-serif" font-size="23" fill="#171A1F">Cream Base</text><text x="0" y="142" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#7B583B">#DCCEB4</text></g><g transform="translate(684 166)"><rect width="176" height="76" rx="18" fill="#DAD9D9"/><text x="0" y="111" font-family="Arial, sans-serif" font-size="23" fill="#171A1F">Floor Gray</text><text x="0" y="142" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#7B583B">#DAD9D9</text></g></g>
+<g transform="translate(1000 272)" filter="url(#paperShadow)"><rect x="0" y="0" width="630" height="292" rx="28" fill="#FFF7E8"/><text x="38" y="58" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#06265C">System notes</text><text x="38" y="108" font-family="Arial, sans-serif" font-size="24" fill="#171A1F">Bright SKU colors stay playful.</text><text x="38" y="152" font-family="Arial, sans-serif" font-size="24" fill="#171A1F">Navy/red outlines hold the logo.</text><text x="38" y="196" font-family="Arial, sans-serif" font-size="24" fill="#171A1F">Paw textures carry across bags.</text><text x="38" y="240" font-family="Arial, sans-serif" font-size="24" fill="#171A1F">Cream backgrounds keep it warm.</text></g>
+<g filter="url(#softShadow)">
+    <path d="M160,704 H441 Q473,704 473,736 V1360 H128 V736 Q128,704 160,704Z" fill="#D1AA3C"/>
+    <rect x="128" y="704" width="345" height="98" fill="#F0C74A" opacity="0.97"/>
+    <rect x="162" y="752" width="277" height="9" rx="4" fill="#fff" opacity="0.32"/>
+    <rect x="162" y="772" width="277" height="6" rx="3" fill="#fff" opacity="0.20"/>
+    <rect x="164" y="840" width="273" height="282.08" rx="30" fill="url(#paw-puppy)"/>
+    <text x="182" y="906" font-family="Arial Black, Arial, sans-serif" font-size="38" fill="#FFF3D6" stroke="#06265C" stroke-width="6" paint-order="stroke">Hana Paw+</text>
+    <text x="188" y="982" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#FFF3D6">Puppy Chow</text>
+    <circle cx="417" cy="956" r="38" fill="#D1AA3C" opacity="0.96"/>
+    <path d="M158,1184 C236,1118 361,1122 437,1184 L437,1308 H158Z" fill="#FFF3D6" opacity="0.96"/>
+    <circle cx="300.5" cy="1248" r="72" fill="#F3D18B" opacity="0.92"/>
+    <circle cx="274.5" cy="1234" r="9" fill="#171A1F" opacity="0.45"/>
+    <circle cx="326.5" cy="1234" r="9" fill="#171A1F" opacity="0.45"/>
+    <path d="M276.5,1274 Q300.5,1294 326.5,1274" fill="none" stroke="#171A1F" stroke-width="7" stroke-linecap="round" opacity="0.35"/>
+  </g><g filter="url(#softShadow)">
+    <path d="M540,654 H821 Q853,654 853,686 V1360 H508 V686 Q508,654 540,654Z" fill="#0A2D66"/>
+    <rect x="508" y="654" width="345" height="98" fill="#0D4FAB" opacity="0.97"/>
+    <rect x="542" y="702" width="277" height="9" rx="4" fill="#fff" opacity="0.32"/>
+    <rect x="542" y="722" width="277" height="6" rx="3" fill="#fff" opacity="0.20"/>
+    <rect x="544" y="790" width="273" height="303.58" rx="30" fill="url(#paw-kitty)"/>
+    <text x="562" y="856" font-family="Arial Black, Arial, sans-serif" font-size="38" fill="#FFF3D6" stroke="#06265C" stroke-width="6" paint-order="stroke">Hana Paw+</text>
+    <text x="568" y="932" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#FFF3D6">Kitty Chow</text>
+    <circle cx="797" cy="906" r="38" fill="#D1AA3C" opacity="0.96"/>
+    <path d="M538,1184 C616,1118 741,1122 817,1184 L817,1308 H538Z" fill="#FFF3D6" opacity="0.96"/>
+    <circle cx="680.5" cy="1248" r="72" fill="#C9D5E8" opacity="0.92"/>
+    <circle cx="654.5" cy="1234" r="9" fill="#171A1F" opacity="0.45"/>
+    <circle cx="706.5" cy="1234" r="9" fill="#171A1F" opacity="0.45"/>
+    <path d="M656.5,1274 Q680.5,1294 706.5,1274" fill="none" stroke="#171A1F" stroke-width="7" stroke-linecap="round" opacity="0.35"/>
+  </g><g filter="url(#softShadow)">
+    <path d="M920,704 H1201 Q1233,704 1233,736 V1360 H888 V736 Q888,704 920,704Z" fill="#CA3C37"/>
+    <rect x="888" y="704" width="345" height="98" fill="#EA5951" opacity="0.97"/>
+    <rect x="922" y="752" width="277" height="9" rx="4" fill="#fff" opacity="0.32"/>
+    <rect x="922" y="772" width="277" height="6" rx="3" fill="#fff" opacity="0.20"/>
+    <rect x="924" y="840" width="273" height="282.08" rx="30" fill="url(#paw-treats)"/>
+    <text x="942" y="906" font-family="Arial Black, Arial, sans-serif" font-size="38" fill="#FFF3D6" stroke="#06265C" stroke-width="6" paint-order="stroke">Hana Paw+</text>
+    <text x="948" y="982" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#FFF3D6">Training Treats</text>
+    <circle cx="1177" cy="956" r="38" fill="#D1AA3C" opacity="0.96"/>
+    <path d="M918,1184 C996,1118 1121,1122 1197,1184 L1197,1308 H918Z" fill="#FFF3D6" opacity="0.96"/>
+    <circle cx="1060.5" cy="1248" r="72" fill="#F3C9A6" opacity="0.92"/>
+    <circle cx="1034.5" cy="1234" r="9" fill="#171A1F" opacity="0.45"/>
+    <circle cx="1086.5" cy="1234" r="9" fill="#171A1F" opacity="0.45"/>
+    <path d="M1036.5,1274 Q1060.5,1294 1086.5,1274" fill="none" stroke="#171A1F" stroke-width="7" stroke-linecap="round" opacity="0.35"/>
+  </g><g filter="url(#softShadow)">
+    <path d="M1300,762 H1526 Q1558,762 1558,794 V1360 H1268 V794 Q1268,762 1300,762Z" fill="#0D9723"/>
+    <rect x="1268" y="762" width="290" height="98" fill="#11B934" opacity="0.97"/>
+    <rect x="1302" y="810" width="222" height="9" rx="4" fill="#fff" opacity="0.32"/>
+    <rect x="1302" y="830" width="222" height="6" rx="3" fill="#fff" opacity="0.20"/>
+    <rect x="1304" y="898" width="218" height="257.14" rx="30" fill="url(#paw-jerky)"/>
+    <text x="1322" y="964" font-family="Arial Black, Arial, sans-serif" font-size="33" fill="#FFF3D6" stroke="#06265C" stroke-width="6" paint-order="stroke">Hana Paw+</text>
+    <text x="1328" y="1040" font-family="Arial, sans-serif" font-size="23" font-weight="700" fill="#FFF3D6">Jerky Bites</text>
+    <circle cx="1502" cy="1014" r="38" fill="#D1AA3C" opacity="0.96"/>
+    <path d="M1298,1184 C1376,1118 1446,1122 1522,1184 L1522,1308 H1298Z" fill="#FFF3D6" opacity="0.96"/>
+    <circle cx="1413" cy="1248" r="72" fill="#D19D5D" opacity="0.92"/>
+    <circle cx="1387" cy="1234" r="9" fill="#171A1F" opacity="0.45"/>
+    <circle cx="1439" cy="1234" r="9" fill="#171A1F" opacity="0.45"/>
+    <path d="M1389,1274 Q1413,1294 1439,1274" fill="none" stroke="#171A1F" stroke-width="7" stroke-linecap="round" opacity="0.35"/>
+  </g>
+<g transform="translate(126 1438)" filter="url(#paperShadow)"><rect width="1548" height="198" rx="28" fill="#FFF7E8"/><path d="M68 112 H336 M68 146 H336" stroke="#06265C" stroke-width="8" stroke-linecap="round" opacity="0.22"/><rect x="406" y="42" width="238" height="112" rx="18" fill="#D1AA3C"/><rect x="704" y="42" width="238" height="112" rx="18" fill="#0A2D66"/><rect x="1002" y="42" width="238" height="112" rx="18" fill="#CA3C37"/><rect x="1300" y="42" width="154" height="112" rx="18" fill="#0D9723"/><text x="68" y="72" font-family="Arial, sans-serif" font-weight="700" font-size="28" fill="#06265C">Package hierarchy</text><text x="68" y="174" font-family="Arial, sans-serif" font-size="23" fill="#7B583B">Logo / flavor name / pet image / benefit badge / weight line</text></g>
+</svg>

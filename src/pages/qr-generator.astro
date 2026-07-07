@@ -68,6 +68,34 @@ import BaseLayout from "../layouts/BaseLayout.astro";
                 <input type="color" name="bgColor" value="#fbfaf6" />
               </label>
             </div>
+            <div class="qr-style-row">
+              <label>
+                Pixels
+                <select name="moduleShape">
+                  <option value="square">Square</option>
+                  <option value="rounded">Rounded</option>
+                  <option value="circle">Circle</option>
+                  <option value="diamond">Diamond</option>
+                </select>
+              </label>
+              <label>
+                Corners
+                <select name="cornerShape">
+                  <option value="square">Square</option>
+                  <option value="rounded">Rounded</option>
+                  <option value="circle">Circle</option>
+                  <option value="diamond">Diamond</option>
+                </select>
+              </label>
+              <label>
+                QR shape
+                <select name="frameShape">
+                  <option value="square">Square</option>
+                  <option value="rounded">Rounded</option>
+                  <option value="circle">Circle</option>
+                </select>
+              </label>
+            </div>
             <label class="qr-admin-only">
               Assigned users
               <textarea
@@ -122,6 +150,34 @@ import BaseLayout from "../layouts/BaseLayout.astro";
                     <input type="color" name="bgColor" />
                   </label>
                 </div>
+                <div class="qr-style-row qr-span-2">
+                  <label>
+                    Pixels
+                    <select name="moduleShape">
+                      <option value="square">Square</option>
+                      <option value="rounded">Rounded</option>
+                      <option value="circle">Circle</option>
+                      <option value="diamond">Diamond</option>
+                    </select>
+                  </label>
+                  <label>
+                    Corners
+                    <select name="cornerShape">
+                      <option value="square">Square</option>
+                      <option value="rounded">Rounded</option>
+                      <option value="circle">Circle</option>
+                      <option value="diamond">Diamond</option>
+                    </select>
+                  </label>
+                  <label>
+                    QR shape
+                    <select name="frameShape">
+                      <option value="square">Square</option>
+                      <option value="rounded">Rounded</option>
+                      <option value="circle">Circle</option>
+                    </select>
+                  </label>
+                </div>
                 <div class="qr-logo-row qr-span-2">
                   <label>
                     Logo image
@@ -152,7 +208,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <section class="qr-panel">
               <div class="qr-panel-header">
                 <h2>QR SVG</h2>
-                <button type="button" class="qr-icon-button qr-icon-button--dark" data-download-svg title="Download SVG" aria-label="Download SVG">↓</button>
+                <div class="qr-download-actions" aria-label="Download QR code">
+                  <button type="button" class="button button--quiet" data-download-svg>SVG</button>
+                  <button type="button" class="button button--quiet" data-download-png>PNG</button>
+                  <button type="button" class="button button--quiet" data-download-jpg>JPG</button>
+                </div>
               </div>
               <div class="qr-svg-preview" data-qr-preview></div>
               <dl class="qr-facts">
@@ -175,10 +235,29 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             </section>
           </section>
 
+          <form class="qr-panel qr-filter-panel" data-filter-form>
+            <div>
+              <p class="eyebrow">Insights</p>
+              <h2>Date Range</h2>
+            </div>
+            <label>
+              From
+              <input type="date" name="from" />
+            </label>
+            <label>
+              To
+              <input type="date" name="to" />
+            </label>
+            <div class="qr-filter-actions">
+              <button type="submit" class="button button--dark">Apply</button>
+              <button type="button" class="button button--quiet" data-export-csv>Export CSV</button>
+            </div>
+          </form>
+
           <section class="qr-insights">
             <section class="qr-panel">
               <div class="qr-panel-header">
-                <h2>Last 14 Days</h2>
+                <h2 data-trend-title>Selected Range</h2>
               </div>
               <div class="qr-trend" data-trend></div>
             </section>
@@ -190,9 +269,27 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             </section>
             <section class="qr-panel">
               <div class="qr-panel-header">
+                <h2>Browsers</h2>
+              </div>
+              <div class="qr-breakdown" data-browsers></div>
+            </section>
+            <section class="qr-panel">
+              <div class="qr-panel-header">
+                <h2>Operating Systems</h2>
+              </div>
+              <div class="qr-breakdown" data-os></div>
+            </section>
+            <section class="qr-panel">
+              <div class="qr-panel-header">
                 <h2>Countries</h2>
               </div>
               <div class="qr-breakdown" data-countries></div>
+            </section>
+            <section class="qr-panel">
+              <div class="qr-panel-header">
+                <h2>Referrers</h2>
+              </div>
+              <div class="qr-breakdown" data-referrers></div>
             </section>
           </section>
 
@@ -210,6 +307,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <script>
     // @ts-nocheck
     import QRCodeLib from "qrcode";
+    const publicQrOrigin = "https://portfolio-qr-generator.clukeabarca.workers.dev";
+    const publicShortOrigin = "https://clukeabarca.com";
+    if (["clukeabarca.com", "www.clukeabarca.com"].includes(window.location.hostname)) {
+      window.location.replace(new URL(`${window.location.pathname}${window.location.search}${window.location.hash}`, publicQrOrigin).toString());
+      await new Promise(() => {});
+    }
     const app = document.querySelector("[data-qr-app]");
     const authPanel = app.querySelector("[data-auth-panel]");
     const authForm = app.querySelector("[data-auth-form]");
@@ -231,9 +334,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     const shortLinkEl = app.querySelector("[data-short-link]");
     const codeStatus = app.querySelector("[data-code-status]");
     const lastScan = app.querySelector("[data-last-scan]");
+    const filterForm = app.querySelector("[data-filter-form]");
+    const trendTitle = app.querySelector("[data-trend-title]");
     const trend = app.querySelector("[data-trend]");
     const devices = app.querySelector("[data-devices]");
+    const browsers = app.querySelector("[data-browsers]");
+    const operatingSystems = app.querySelector("[data-os]");
     const countries = app.querySelector("[data-countries]");
+    const referrers = app.querySelector("[data-referrers]");
     const recentScans = app.querySelector("[data-recent-scans]");
 
     const params = new URLSearchParams(window.location.search);
@@ -250,8 +358,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       selectedId: null,
       selected: null,
       activeDraft: true,
+      filters: defaultFilters(),
       svg: "",
     };
+
+    filterForm.elements.from.value = state.filters.from;
+    filterForm.elements.to.value = state.filters.to;
 
     function accessKey() {
       return sessionStorage.getItem("qrAccessKey") || "";
@@ -307,6 +419,23 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       }).format(new Date(`${String(value).replace(" ", "T")}Z`));
     }
 
+    function defaultFilters() {
+      const to = new Date();
+      const from = new Date(to);
+      from.setDate(from.getDate() - 13);
+      return {
+        from: from.toISOString().slice(0, 10),
+        to: to.toISOString().slice(0, 10),
+      };
+    }
+
+    function filterQuery() {
+      const params = new URLSearchParams();
+      if (state.filters.from) params.set("from", state.filters.from);
+      if (state.filters.to) params.set("to", state.filters.to);
+      return params.toString();
+    }
+
     function parseUsers(value) {
       return String(value || "")
         .split("\n")
@@ -332,6 +461,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         slug: data.get("slug"),
         fgColor: data.get("fgColor"),
         bgColor: data.get("bgColor"),
+        moduleShape: data.get("moduleShape"),
+        cornerShape: data.get("cornerShape"),
+        frameShape: data.get("frameShape"),
         isActive: state.activeDraft,
       };
       if (includeUsers) payload.users = parseUsers(data.get("users"));
@@ -383,7 +515,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
 
     async function loadDashboard() {
-      const data = await api("/dashboard", { method: "GET", headers: headers(false) });
+      const query = filterQuery();
+      const data = await api(`/dashboard${query ? `?${query}` : ""}`, { method: "GET", headers: headers(false) });
+      state.filters = data.filters || state.filters;
+      filterForm.elements.from.value = state.filters.from;
+      filterForm.elements.to.value = state.filters.to;
       state.data = data;
       if (!state.selectedId || !data.codes.some((code) => code.id === state.selectedId)) {
         state.selectedId = data.codes[0]?.id || null;
@@ -420,24 +556,140 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         : `<p class="qr-empty">No QR codes yet. The first form is set up for the Longs test QR.</p>`;
     }
 
+    function svgShape(shape, x, y, size, fill, className = "") {
+      const cls = className ? ` class="${className}"` : "";
+      if (shape === "circle") {
+        const radius = size / 2;
+        return `<circle${cls} cx="${x + radius}" cy="${y + radius}" r="${radius}" fill="${fill}"/>`;
+      }
+      if (shape === "diamond") {
+        const center = size / 2;
+        return `<polygon${cls} points="${x + center},${y} ${x + size},${y + center} ${x + center},${y + size} ${x},${y + center}" fill="${fill}"/>`;
+      }
+      if (shape === "rounded") {
+        return `<rect${cls} x="${x}" y="${y}" width="${size}" height="${size}" rx="${size * 0.22}" fill="${fill}"/>`;
+      }
+      return `<rect${cls} x="${x}" y="${y}" width="${size}" height="${size}" fill="${fill}"/>`;
+    }
+
+    function frameShape(shape, total, fill) {
+      if (shape === "circle") {
+        return `<circle class="qr-frame" cx="${total / 2}" cy="${total / 2}" r="${total / 2}" fill="${fill}"/>`;
+      }
+      if (shape === "rounded") {
+        return `<rect class="qr-frame" x="0" y="0" width="${total}" height="${total}" rx="${total * 0.18}" fill="${fill}"/>`;
+      }
+      return `<rect class="qr-frame" x="0" y="0" width="${total}" height="${total}" fill="${fill}"/>`;
+    }
+
+    function circlePoint(center, radius, degrees) {
+      const radians = (degrees * Math.PI) / 180;
+      return {
+        x: center + radius * Math.cos(radians),
+        y: center + radius * Math.sin(radians),
+      };
+    }
+
+    function circleArc(center, radius, startDegrees, endDegrees) {
+      const start = circlePoint(center, radius, startDegrees);
+      const end = circlePoint(center, radius, endDegrees);
+      return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${radius.toFixed(2)} ${radius.toFixed(2)} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`;
+    }
+
+    function frameDecoration(shape, total, stroke) {
+      if (shape !== "circle") return "";
+      const center = total / 2;
+      const radius = center - Math.max(4, total * 0.08);
+      const strokeWidth = Math.max(0.7, total * 0.014);
+      const arcs = [
+        circleArc(center, radius, 245, 295),
+        circleArc(center, radius, -25, 25),
+        circleArc(center, radius, 65, 115),
+        circleArc(center, radius, 155, 205),
+      ].join(" ");
+      return `<path class="qr-frame-line" d="${arcs}" fill="none" stroke="${stroke}" stroke-width="${strokeWidth.toFixed(2)}" stroke-linecap="round"/>`;
+    }
+
+    function inFinder(row, col, size) {
+      return (
+        (row < 7 && col < 7) ||
+        (row < 7 && col >= size - 7) ||
+        (row >= size - 7 && col < 7)
+      );
+    }
+
+    function finderPattern(x, y, shape, fgColor, bgColor) {
+      return [
+        svgShape(shape, x, y, 7, fgColor, "qr-finder-outer"),
+        svgShape(shape, x + 1, y + 1, 5, bgColor, "qr-finder-inner"),
+        svgShape(shape, x + 2, y + 2, 3, fgColor, "qr-finder-center"),
+      ].join("");
+    }
+
+    function moduleShape(shape, row, col, margin, fill) {
+      const x = col + margin;
+      const y = row + margin;
+      if (shape === "circle") {
+        return svgShape("circle", x + 0.1, y + 0.1, 0.8, fill, "qr-module");
+      }
+      if (shape === "diamond") {
+        return svgShape("diamond", x + 0.06, y + 0.06, 0.88, fill, "qr-module");
+      }
+      if (shape === "rounded") {
+        return svgShape("rounded", x + 0.04, y + 0.04, 0.92, fill, "qr-module");
+      }
+      return svgShape("square", x, y, 1, fill, "qr-module");
+    }
+
+    function normalizeFrameShape(shape) {
+      return shape === "circle" || shape === "rounded" ? shape : "square";
+    }
+
+    function badgePaddingForFrame(shape, size, quietMargin) {
+      const normalizedShape = normalizeFrameShape(shape);
+      if (normalizedShape === "square") return 0;
+      if (normalizedShape === "circle") {
+        const tightCircleMargin = Math.ceil((size * (Math.SQRT2 - 1)) / 2);
+        return Math.max(0, Math.round((tightCircleMargin - quietMargin) * 1.092));
+      }
+      return Math.max(2, Math.round(size * 0.0525));
+    }
+
+    function styledQrSvg(target, code) {
+      const qr = QRCodeLib.create(target, { errorCorrectionLevel: "H" });
+      const size = qr.modules.size;
+      const quietMargin = 2;
+      const frame = normalizeFrameShape(code.frameShape);
+      const badgePadding = badgePaddingForFrame(frame, size, quietMargin);
+      const margin = quietMargin + badgePadding;
+      const contentSize = size + quietMargin * 2;
+      const total = size + margin * 2;
+      const dark = code.fgColor;
+      const light = code.bgColor;
+      const modules = [];
+      for (let row = 0; row < size; row += 1) {
+        for (let col = 0; col < size; col += 1) {
+          if (!qr.modules.data[row * size + col] || inFinder(row, col, size)) continue;
+          modules.push(moduleShape(code.moduleShape || "square", row, col, margin, dark));
+        }
+      }
+      const finders = [
+        finderPattern(margin, margin, code.cornerShape || "square", dark, light),
+        finderPattern(size - 7 + margin, margin, code.cornerShape || "square", dark, light),
+        finderPattern(margin, size - 7 + margin, code.cornerShape || "square", dark, light),
+      ].join("");
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" width="960" height="960" role="img" aria-label="${esc(code.name)} QR code" data-qr-content-size="${contentSize}" data-qr-content-offset="${badgePadding}">${frameShape(frame, total, light)}${frameDecoration(frame, total, dark)}${modules.join("")}${finders}</svg>`;
+    }
+
     async function renderQr() {
       if (!state.selected) {
         state.svg = "";
         qrPreview.innerHTML = "";
         return;
       }
-      const target = `${window.location.origin}/qr-generator/q/${state.selected.slug}`;
+      const target = `${publicShortOrigin}/qr-generator/q/${state.selected.slug}`;
       shortLinkEl.textContent = target;
-      const svg = await QRCodeLib.toString(target, {
-        type: "svg",
-        width: 960,
-        margin: 2,
-        errorCorrectionLevel: "H",
-        color: {
-          dark: state.selected.fgColor,
-          light: state.selected.bgColor,
-        },
-      });
+      const svg = styledQrSvg(target, state.selected);
       state.svg = state.selected.logoEnabled
         ? addLogoToSvg(svg, await logoDataUrl(state.selected), state.selected.bgColor)
         : svg;
@@ -462,12 +714,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       if (!dataUrl) return svg;
       const viewBox = svg.match(/viewBox="0 0 ([0-9.]+) ([0-9.]+)"/);
       const size = viewBox ? Number(viewBox[1]) : 37;
-      const logoSize = size * 0.22;
-      const pad = size * 0.035;
+      const contentSizeMatch = svg.match(/data-qr-content-size="([0-9.]+)"/);
+      const contentSize = contentSizeMatch ? Number(contentSizeMatch[1]) : size;
+      const logoSize = contentSize * 0.22;
+      const pad = contentSize * 0.035;
       const boxSize = logoSize + pad * 2;
       const x = (size - boxSize) / 2;
       const logoX = (size - logoSize) / 2;
-      const radius = size * 0.035;
+      const radius = contentSize * 0.035;
       const overlay = `<rect x="${x}" y="${x}" width="${boxSize}" height="${boxSize}" rx="${radius}" fill="${bgColor}"/><image href="${dataUrl}" x="${logoX}" y="${logoX}" width="${logoSize}" height="${logoSize}" preserveAspectRatio="xMidYMid meet"/>`;
       return svg.replace("</svg>", `${overlay}</svg>`);
     }
@@ -482,6 +736,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       editForm.elements.destinationUrl.value = code.destinationUrl;
       editForm.elements.fgColor.value = code.fgColor;
       editForm.elements.bgColor.value = code.bgColor;
+      editForm.elements.moduleShape.value = code.moduleShape || "square";
+      editForm.elements.cornerShape.value = code.cornerShape || "square";
+      editForm.elements.frameShape.value = normalizeFrameShape(code.frameShape);
       if (editForm.elements.users) editForm.elements.users.value = usersToText(code.users);
       state.activeDraft = code.isActive;
       codeStatus.textContent = code.isActive ? "Active" : "Paused";
@@ -516,6 +773,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     function renderTrend() {
       const rows = state.data?.dailyScans || [];
       const max = Math.max(1, ...rows.map((row) => row.scans));
+      trendTitle.textContent = `${state.filters.from} to ${state.filters.to}`;
       trend.innerHTML = rows
         .map(
           (row) => `<div title="${esc(row.day)}: ${formatNumber(row.scans)} scans"><i style="height:${Math.max(8, (row.scans / max) * 104)}px;opacity:${row.scans ? 1 : 0.24}"></i><span>${esc(row.day.slice(5))}</span></div>`
@@ -540,7 +798,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       renderCodeList();
       renderEditForm();
       renderBreakdown(devices, state.data?.deviceBreakdown || []);
+      renderBreakdown(browsers, state.data?.browserBreakdown || []);
+      renderBreakdown(operatingSystems, state.data?.osBreakdown || []);
       renderBreakdown(countries, state.data?.countryBreakdown || []);
+      renderBreakdown(referrers, state.data?.referrerBreakdown || []);
       renderTrend();
       renderRecent();
       await renderQr();
@@ -594,6 +855,97 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       }
     });
 
+    async function updateDraftPreview(event) {
+      const name = event.target?.name;
+      if (!state.selected || !["fgColor", "bgColor", "moduleShape", "cornerShape", "frameShape"].includes(name)) return;
+      state.selected = { ...state.selected, [name]: event.target.value };
+      await renderQr();
+    }
+
+    editForm.addEventListener("input", updateDraftPreview);
+    editForm.addEventListener("change", updateDraftPreview);
+
+    filterForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      state.filters = {
+        from: filterForm.elements.from.value || state.filters.from,
+        to: filterForm.elements.to.value || state.filters.to,
+      };
+      showStatus("");
+      await loadDashboard();
+    });
+
+    async function exportCsv() {
+      const query = filterQuery();
+      const response = await fetch(`/qr-generator/api/export.csv${query ? `?${query}` : ""}`, {
+        credentials: "same-origin",
+        headers: headers(false),
+      });
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "CSV export failed");
+      }
+      const blob = await response.blob();
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `qr-scans-${state.filters.from}-to-${state.filters.to}.csv`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function downloadBlob(blob, filename) {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    async function svgToRasterBlob(type) {
+      if (!state.svg || !state.selected) {
+        throw new Error("Select a QR code before downloading.");
+      }
+
+      const image = new Image();
+      const svgBlob = new Blob([state.svg], { type: "image/svg+xml;charset=utf-8" });
+      const svgUrl = URL.createObjectURL(svgBlob);
+      try {
+        await new Promise((resolve, reject) => {
+          image.addEventListener("load", resolve, { once: true });
+          image.addEventListener("error", () => reject(new Error("QR image render failed.")), { once: true });
+          image.src = svgUrl;
+        });
+
+        const canvas = document.createElement("canvas");
+        canvas.width = 2048;
+        canvas.height = 2048;
+        const context = canvas.getContext("2d");
+        if (!context) {
+          throw new Error("Image export is not available in this browser.");
+        }
+        if (type === "image/jpeg") {
+          context.fillStyle = state.selected.bgColor || "#ffffff";
+          context.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        return await new Promise((resolve, reject) => {
+          canvas.toBlob(
+            (blob) => (blob ? resolve(blob) : reject(new Error("Image export failed."))),
+            type,
+            type === "image/jpeg" ? 0.94 : undefined,
+          );
+        });
+      } finally {
+        URL.revokeObjectURL(svgUrl);
+      }
+    }
+
+    async function downloadRaster(format) {
+      const type = format === "jpg" ? "image/jpeg" : "image/png";
+      const blob = await svgToRasterBlob(type);
+      downloadBlob(blob, `${state.selected.slug}.${format}`);
+    }
+
     app.addEventListener("click", async (event) => {
       const target = event.target.closest("button");
       if (!target) return;
@@ -628,11 +980,23 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       }
       if (target.matches("[data-download-svg]") && state.svg && state.selected) {
         const blob = new Blob([state.svg], { type: "image/svg+xml" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `${state.selected.slug}.svg`;
-        a.click();
-        URL.revokeObjectURL(a.href);
+        downloadBlob(blob, `${state.selected.slug}.svg`);
+      }
+      if ((target.matches("[data-download-png]") || target.matches("[data-download-jpg]")) && state.svg && state.selected) {
+        try {
+          await downloadRaster(target.matches("[data-download-jpg]") ? "jpg" : "png");
+          showStatus("QR image downloaded", "success");
+        } catch (error) {
+          showStatus(error.message, "error");
+        }
+      }
+      if (target.matches("[data-export-csv]")) {
+        try {
+          await exportCsv();
+          showStatus("CSV export downloaded", "success");
+        } catch (error) {
+          showStatus(error.message, "error");
+        }
       }
       if (target.matches("[data-clear-logo]") && state.selected) {
         const result = await api(`/codes/${state.selected.id}/logo`, {

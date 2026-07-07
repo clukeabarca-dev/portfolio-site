@@ -1,0 +1,35 @@
+{
+  "source": [
+    "public/images/projects/hana-paw-pet-goods/studies/blue-bag-source.png"
+  ],
+  "palette": [
+    {
+      "name": "loco moco blue",
+      "hex": "#234B8D"
+    },
+    {
+      "name": "navy outline",
+      "hex": "#06265C"
+    },
+    {
+      "name": "coral red",
+      "hex": "#FF5058"
+    },
+    {
+      "name": "moco yellow",
+      "hex": "#FFD25A"
+    },
+    {
+      "name": "kibble brown",
+      "hex": "#7B583B"
+    },
+    {
+      "name": "cream backdrop",
+      "hex": "#DCCEB4"
+    },
+    {
+      "name": "soft floor gray",
+      "hex": "#DAD9D9"
+    }
+  ]
+}
