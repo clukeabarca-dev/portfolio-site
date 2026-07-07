@@ -46,17 +46,19 @@ ${fontFace("LD Sans Bold Italic", faces.boldItalic, 700, "italic")}
 const palette = {
   cream: "#f7f1e6",
   paper: "#fffaf2",
+  sand: "#eadfce",
   red: "#d71920",
   redDark: "#9e1419",
   ink: "#111315",
   charcoal: "#27302d",
   green: "#1d5a42",
   greenDeep: "#173c30",
-  blue: "#2b607c",
+  blue: "#245f7f",
+  blueDeep: "#173d58",
   yellow: "#f3c64d",
   coral: "#ef8b72",
-  muted: "#7b7468",
-  line: "#d9cfbf",
+  muted: "#726b61",
+  line: "#d5c8b8",
 };
 
 function esc(value) {
@@ -65,6 +67,43 @@ function esc(value) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+function fitSize(value, maxWidth, preferred, min = 16, ratio = 0.54) {
+  const safeLength = Math.max(String(value).length, 1);
+  return Math.max(min, Math.min(preferred, Math.floor(maxWidth / (safeLength * ratio))));
+}
+
+function textLine({
+  x,
+  y,
+  text,
+  maxWidth,
+  fill = palette.ink,
+  size = 40,
+  min = 16,
+  cls = "reg",
+  spacing = 0,
+  ratio = 0.54,
+  anchor = "start",
+  opacity = 1,
+}) {
+  const fontSize = maxWidth ? fitSize(text, maxWidth, size, min, ratio) : size;
+  return `<text class="${cls}" x="${x}" y="${y}" fill="${fill}" font-size="${fontSize}" letter-spacing="${spacing}" text-anchor="${anchor}" opacity="${opacity}">${esc(text)}</text>`;
+}
+
+function multiline({ x, y, lines, fill = palette.charcoal, size = 34, cls = "reg", leading = 46, spacing = 0 }) {
+  return `<text class="${cls}" x="${x}" y="${y}" fill="${fill}" font-size="${size}" letter-spacing="${spacing}">
+    ${lines.map((line, index) => `<tspan x="${x}" dy="${index === 0 ? 0 : leading}">${esc(line)}</tspan>`).join("")}
+  </text>`;
+}
+
+function label({ x, y, text, fill = palette.red, size = 25, cls = "bold", spacing = 4 }) {
+  return textLine({ x, y, text, fill, size, cls, spacing, ratio: 0.68 });
+}
+
+function roundedRect({ x, y, w, h, r = 24, fill = palette.paper, stroke = "none", sw = 0, opacity = 1, filter = "" }) {
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" opacity="${opacity}" ${filter ? `filter="${filter}"` : ""}/>`;
 }
 
 function svgShell({ width, height, bg = palette.cream, content }) {
@@ -83,29 +122,36 @@ function svgShell({ width, height, bg = palette.cream, content }) {
       text{dominant-baseline:alphabetic}
     </style>
     <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#111315" flood-opacity="0.16"/>
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#111315" flood-opacity="0.18"/>
     </filter>
     <filter id="tightShadow" x="-20%" y="-20%" width="140%" height="140%">
       <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#111315" flood-opacity="0.18"/>
     </filter>
     <linearGradient id="redPanel" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ed262c"/>
-      <stop offset="1" stop-color="#a90f16"/>
+      <stop offset="0" stop-color="#ed252c"/>
+      <stop offset="1" stop-color="#991016"/>
     </linearGradient>
     <linearGradient id="greenPanel" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#277454"/>
       <stop offset="1" stop-color="#12362b"/>
     </linearGradient>
+    <linearGradient id="bluePanel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2e7698"/>
+      <stop offset="1" stop-color="#173d58"/>
+    </linearGradient>
     <linearGradient id="paperSheen" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.42"/>
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.52"/>
       <stop offset="0.55" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="1" stop-color="#c7b9a6" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#c5b5a2" stop-opacity="0.24"/>
     </linearGradient>
     <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
-      <path d="M48 0H0V48" fill="none" stroke="#bdaea0" stroke-width="1" opacity="0.28"/>
+      <path d="M48 0H0V48" fill="none" stroke="#b9aa9a" stroke-width="1" opacity="0.26"/>
     </pattern>
     <pattern id="microDots" width="26" height="26" patternUnits="userSpaceOnUse">
       <circle cx="3" cy="3" r="1.3" fill="#ffffff" opacity="0.16"/>
+    </pattern>
+    <pattern id="slash" width="42" height="42" patternUnits="userSpaceOnUse" patternTransform="rotate(24)">
+      <rect width="10" height="42" fill="#ffffff" opacity="0.13"/>
     </pattern>
   </defs>
   <rect width="${width}" height="${height}" fill="${bg}"/>
@@ -113,60 +159,68 @@ function svgShell({ width, height, bg = palette.cream, content }) {
 </svg>`;
 }
 
-function label({ x, y, text, fill = palette.muted, size = 25, cls = "med", spacing = 3 }) {
-  return `<text class="${cls}" x="${x}" y="${y}" fill="${fill}" font-size="${size}" letter-spacing="${spacing}">${esc(text)}</text>`;
-}
-
-function paragraph({ x, y, lines, fill = palette.charcoal, size = 38, cls = "reg", leading = 48 }) {
-  return `<text class="${cls}" x="${x}" y="${y}" fill="${fill}" font-size="${size}">
-    ${lines.map((line, index) => `<tspan x="${x}" dy="${index === 0 ? 0 : leading}">${esc(line)}</tspan>`).join("")}
-  </text>`;
-}
-
-function roundedRect({ x, y, w, h, r = 28, fill = palette.paper, stroke = "none", sw = 0, opacity = 1, filter = "" }) {
-  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" opacity="${opacity}" ${filter ? `filter="${filter}"` : ""}/>`;
-}
-
 function priceTag({ x, y, w, h, headline, price, sub, color = palette.red }) {
-  const priceSize = Math.min(h * 0.38, ((w - 54) / Math.max(price.length, 3)) * 1.75);
+  const band = Math.min(Math.max(h * 0.26, 46), 76);
+  const headlineSize = fitSize(headline, w - 42, Math.min(30, band * 0.45), 13, 0.64);
+  const priceSize = fitSize(price, w - 48, Math.min(h * 0.33, 76), 24, 0.5);
+  const subSize = fitSize(sub, w - 52, Math.min(h * 0.105, 24), 13, 0.56);
+  const priceY = band + (h - band) * 0.54;
+
   return `<g transform="translate(${x} ${y})" filter="url(#tightShadow)">
-    ${roundedRect({ x: 0, y: 0, w, h, r: 18, fill: palette.paper, stroke: "#cbbcab", sw: 2 })}
-    <rect x="0" y="0" width="${w}" height="72" rx="18" fill="${color}"/>
-    <rect x="0" y="52" width="${w}" height="22" fill="${color}"/>
-    <text class="bold" x="28" y="46" fill="#fffaf2" font-size="31">${esc(headline)}</text>
-    <text class="xl" x="28" y="${h - 72}" fill="${palette.ink}" font-size="${priceSize}">${esc(price)}</text>
-    <text class="med" x="34" y="${h - 30}" fill="${palette.muted}" font-size="27">${esc(sub)}</text>
+    ${roundedRect({ x: 0, y: 0, w, h, r: 18, fill: palette.paper, stroke: "#ccbba9", sw: 2 })}
+    <rect x="0" y="0" width="${w}" height="${band}" rx="18" fill="${color}"/>
+    <rect x="0" y="${Math.max(0, band - 18)}" width="${w}" height="20" fill="${color}"/>
+    ${textLine({ x: 24, y: band * 0.64, text: headline, maxWidth: w - 48, fill: "#fffaf2", size: headlineSize, min: 13, cls: "bold", ratio: 0.64 })}
+    ${textLine({ x: 24, y: priceY, text: price, maxWidth: w - 48, fill: palette.ink, size: priceSize, min: 24, cls: "xl", ratio: 0.5 })}
+    ${textLine({ x: 28, y: h - 22, text: sub, maxWidth: w - 56, fill: palette.muted, size: subSize, min: 13, cls: "med", ratio: 0.56 })}
   </g>`;
 }
 
-function shelfBox({ x, y, w, h, labelText, color, product, meta }) {
-  const productSize = Math.min(h * 0.17, ((w - 56) / Math.max(product.length, 5)) * 1.8);
+function shelfTicket({ x, y, w, h, head, product, meta, color }) {
+  const headH = h * 0.29;
   return `<g transform="translate(${x} ${y})" filter="url(#tightShadow)">
-    ${roundedRect({ x: 0, y: 0, w, h, r: 16, fill: "#f0e6d7", stroke: "#d2c4b3", sw: 2 })}
-    <rect x="0" y="0" width="${w}" height="${h * 0.26}" rx="16" fill="${color}"/>
-    <rect x="0" y="${h * 0.18}" width="${w}" height="${h * 0.1}" fill="${color}"/>
-    <text class="xl" x="28" y="${h * 0.17}" fill="#fffaf2" font-size="${h * 0.14}">${esc(labelText)}</text>
-    <text class="bold" x="28" y="${h * 0.48}" fill="${palette.ink}" font-size="${productSize}">${esc(product)}</text>
-    <text class="reg" x="30" y="${h * 0.63}" fill="${palette.muted}" font-size="${h * 0.07}">${esc(meta)}</text>
-    <rect x="28" y="${h * 0.74}" width="${w - 56}" height="${h * 0.08}" rx="${h * 0.04}" fill="#d8cfbf"/>
-    <rect x="28" y="${h * 0.86}" width="${w * 0.46}" height="${h * 0.055}" rx="${h * 0.027}" fill="#d8cfbf"/>
+    ${roundedRect({ x: 0, y: 0, w, h, r: 18, fill: "#f5ecdd", stroke: "#d5c6b5", sw: 2 })}
+    <rect x="0" y="0" width="${w}" height="${headH}" rx="18" fill="${color}"/>
+    <rect x="0" y="${headH - 18}" width="${w}" height="20" fill="${color}"/>
+    ${textLine({ x: 28, y: headH * 0.62, text: head, maxWidth: w - 56, fill: "#fffaf2", size: h * 0.13, min: 20, cls: "xl", ratio: 0.62 })}
+    ${textLine({ x: 28, y: h * 0.51, text: product, maxWidth: w - 56, fill: palette.ink, size: h * 0.105, min: 20, cls: "bold", ratio: 0.54 })}
+    ${textLine({ x: 30, y: h * 0.64, text: meta, maxWidth: w - 60, fill: palette.muted, size: h * 0.062, min: 15, cls: "reg", ratio: 0.54 })}
+    <rect x="28" y="${h * 0.76}" width="${w - 56}" height="${h * 0.065}" rx="${h * 0.032}" fill="#ded3c4"/>
+    <rect x="28" y="${h * 0.88}" width="${w * 0.46}" height="${h * 0.047}" rx="${h * 0.024}" fill="#ded3c4"/>
   </g>`;
 }
 
-function specimenRow({ y, cls, labelText, sample, weight, size = 96 }) {
-  return `<g transform="translate(0 ${y})">
-    <text class="med" x="142" y="6" fill="${palette.muted}" font-size="27" letter-spacing="2">${esc(labelText)}</text>
-    <text class="reg" x="142" y="48" fill="${palette.muted}" font-size="24">${esc(weight)}</text>
-    <line x1="142" y1="82" x2="2220" y2="82" stroke="${palette.line}" stroke-width="2"/>
-    <text class="${cls}" x="458" y="62" fill="${palette.ink}" font-size="${size}">${esc(sample)}</text>
+function browserFrame({ x, y, w, h, content, barFill = "#101412" }) {
+  return `<g transform="translate(${x} ${y})" filter="url(#softShadow)">
+    ${roundedRect({ x: 0, y: 0, w, h, r: 34, fill: barFill })}
+    ${roundedRect({ x: 24, y: 30, w: w - 48, h: h - 60, r: 24, fill: palette.paper })}
+    ${content}
   </g>`;
 }
 
 function phoneFrame({ x, y, w, h, content }) {
   return `<g transform="translate(${x} ${y})" filter="url(#softShadow)">
-    ${roundedRect({ x: 0, y: 0, w, h, r: 42, fill: "#101412" })}
+    ${roundedRect({ x: 0, y: 0, w, h, r: 44, fill: "#101412" })}
     ${roundedRect({ x: 18, y: 24, w: w - 36, h: h - 48, r: 32, fill: palette.paper })}
     ${content}
+  </g>`;
+}
+
+function weightBand({ x, y, w, h, cls, name, weight, sample, color }) {
+  return `<g transform="translate(${x} ${y})">
+    <rect x="0" y="0" width="${w}" height="${h}" rx="18" fill="${color}" opacity="0.98"/>
+    ${textLine({ x: 32, y: 50, text: name, maxWidth: 190, fill: "#fffaf2", size: 30, min: 18, cls: "bold", ratio: 0.56 })}
+    ${textLine({ x: 32, y: 88, text: weight, maxWidth: 130, fill: "#fffaf2", size: 24, min: 16, cls: "reg", ratio: 0.56, opacity: 0.72 })}
+    ${textLine({ x: 268, y: 86, text: sample, maxWidth: w - 304, fill: "#fffaf2", size: 72, min: 34, cls, ratio: 0.52 })}
+  </g>`;
+}
+
+function imageBlock({ id, uri, x, y, w, h, r = 24, opacity = 1, filter = "", preserve = "xMidYMid slice" }) {
+  return `<g transform="translate(${x} ${y})" opacity="${opacity}" ${filter ? `filter="${filter}"` : ""}>
+    <clipPath id="${id}"><rect x="0" y="0" width="${w}" height="${h}" rx="${r}"/></clipPath>
+    <rect x="0" y="0" width="${w}" height="${h}" rx="${r}" fill="#e9dfd0"/>
+    <image href="${uri}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="${preserve}" clip-path="url(#${id})"/>
+    <rect x="0" y="0" width="${w}" height="${h}" rx="${r}" fill="url(#paperSheen)" opacity="0.18"/>
   </g>`;
 }
 
@@ -181,15 +235,6 @@ async function imageUri(path, { width = 1200, height = 800, fit = "cover", quali
     .toBuffer();
 
   return `data:image/jpeg;base64,${buffer.toString("base64")}`;
-}
-
-function imageBlock({ id, uri, x, y, w, h, r = 24, opacity = 1, filter = "", preserve = "xMidYMid slice" }) {
-  return `<g transform="translate(${x} ${y})" opacity="${opacity}" ${filter ? `filter="${filter}"` : ""}>
-    <clipPath id="${id}"><rect x="0" y="0" width="${w}" height="${h}" rx="${r}"/></clipPath>
-    <rect x="0" y="0" width="${w}" height="${h}" rx="${r}" fill="#e9dfd0"/>
-    <image href="${uri}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="${preserve}" clip-path="url(#${id})"/>
-    <rect x="0" y="0" width="${w}" height="${h}" rx="${r}" fill="url(#paperSheen)" opacity="0.16"/>
-  </g>`;
 }
 
 async function writeImage(name, svg, options = {}) {
@@ -217,48 +262,47 @@ const cover = svgShell({
   height: 1600,
   bg: palette.cream,
   content: `
-  <rect x="0" y="0" width="2400" height="1600" fill="url(#grid)" opacity="0.8"/>
-  <circle cx="2050" cy="160" r="470" fill="${palette.yellow}" opacity="0.48"/>
-  <circle cx="254" cy="1390" r="390" fill="${palette.blue}" opacity="0.16"/>
-  <g transform="translate(128 126)">
-    ${label({ x: 0, y: 0, text: "TYPEFACE STUDY / LONGS DRUGS", fill: palette.red, size: 30, cls: "bold", spacing: 7 })}
-    <text class="xl" x="0" y="220" fill="${palette.ink}" font-size="214">Longs Sans</text>
-    <text class="bolditalic" x="4" y="310" fill="${palette.red}" font-size="72">Retail clarity with a local, practical voice.</text>
-    ${paragraph({
-      x: 8,
-      y: 414,
+  <rect x="0" y="0" width="1018" height="1600" fill="url(#redPanel)"/>
+  <rect x="0" y="0" width="1018" height="1600" fill="url(#slash)"/>
+  <rect x="1018" y="0" width="1382" height="1600" fill="url(#grid)" opacity="0.72"/>
+  <text class="xl" x="-72" y="1420" fill="#fffaf2" font-size="760" opacity="0.12">LD</text>
+  <g transform="translate(116 126)">
+    ${label({ x: 0, y: 0, text: "TYPEFACE STUDY / LONGS DRUGS", fill: "#fffaf2", size: 31, spacing: 7 })}
+    <text class="xl" x="0" y="224" fill="#fffaf2" font-size="178">Longs</text>
+    <text class="xl" x="0" y="388" fill="#fffaf2" font-size="178">Sans</text>
+    ${multiline({
+      x: 4,
+      y: 502,
+      fill: "#fffaf2",
       size: 42,
-      leading: 55,
+      leading: 56,
       cls: "reg",
-      lines: [
-        "A sans serif system for signage, price messaging,",
-        "website modules, and everyday store communication.",
-      ],
+      lines: ["A retail type system for", "signage, web, price tags,", "and everyday store use."],
     })}
+    <rect x="2" y="724" width="610" height="2" fill="#fffaf2" opacity="0.42"/>
+    ${textLine({ x: 4, y: 818, text: "ExtraLight 200", fill: "#fffaf2", size: 32, cls: "extra", opacity: 0.76 })}
+    ${textLine({ x: 4, y: 904, text: "Regular 400", fill: "#fffaf2", size: 46, cls: "reg" })}
+    ${textLine({ x: 4, y: 1006, text: "Medium 500", fill: "#fffaf2", size: 58, cls: "med" })}
+    ${textLine({ x: 4, y: 1132, text: "Black 900", fill: "#fffaf2", size: 88, cls: "xl" })}
   </g>
-  <g transform="translate(132 682)">
-    ${specimenRow({ y: 0, cls: "extra", labelText: "ExtraLight", weight: "200", sample: "Weekly Ads 24/7", size: 90 })}
-    ${specimenRow({ y: 166, cls: "light", labelText: "Light", weight: "300", sample: "Pharmacy Pickup", size: 90 })}
-    ${specimenRow({ y: 332, cls: "reg", labelText: "Regular", weight: "400", sample: "Hilo Store Hours", size: 90 })}
-    ${specimenRow({ y: 498, cls: "med", labelText: "Medium", weight: "500", sample: "ExtraCare Savings", size: 90 })}
-    ${specimenRow({ y: 664, cls: "bold", labelText: "Bold", weight: "700", sample: "Local Deals", size: 90 })}
-    ${specimenRow({ y: 830, cls: "xl", labelText: "Black", weight: "900", sample: "Aisle 12", size: 90 })}
+  <g transform="translate(1100 116)">
+    ${imageBlock({ id: "cover-weekly", uri: longsImages.weeklyHero, x: 0, y: 0, w: 1138, h: 424, r: 34, filter: "url(#softShadow)" })}
+    <rect x="0" y="0" width="560" height="424" rx="34" fill="#fff7df" opacity="0.93"/>
+    <text class="med" x="58" y="86" fill="${palette.red}" font-size="30" letter-spacing="4">IN-USE TEST</text>
+    <text class="xl" x="56" y="198" fill="${palette.ink}" font-size="88">Weekly ad</text>
+    <text class="xl" x="56" y="286" fill="${palette.ink}" font-size="88">voice</text>
   </g>
-  <g transform="translate(1518 194)">
-    ${roundedRect({ x: 0, y: 0, w: 704, h: 372, r: 34, fill: "url(#redPanel)", filter: "url(#softShadow)" })}
-    <rect width="704" height="372" rx="34" fill="url(#microDots)"/>
-    <text class="xl" x="54" y="146" fill="#fffaf2" font-size="96">Longs</text>
-    <text class="xl" x="54" y="236" fill="#fffaf2" font-size="96">Drugs</text>
-    <text class="med" x="58" y="310" fill="#fffaf2" font-size="34" opacity="0.82" letter-spacing="2">SIGNAGE SCALE TEST</text>
+  <g transform="translate(1094 640)">
+    <text class="xl" x="0" y="116" fill="${palette.ink}" font-size="148">Aa Bb 123</text>
+    <text class="bolditalic" x="4" y="202" fill="${palette.red}" font-size="68">Bold Italic carries urgency.</text>
+    <rect x="0" y="284" width="1040" height="2" fill="${palette.line}"/>
+    ${textLine({ x: 0, y: 394, text: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", maxWidth: 1070, fill: palette.redDark, size: 54, min: 38, cls: "bold", ratio: 0.64 })}
+    ${textLine({ x: 0, y: 474, text: "0123456789  $ % / + - ?", maxWidth: 1070, fill: palette.ink, size: 58, min: 36, cls: "reg", ratio: 0.55 })}
   </g>
-  <g transform="translate(1536 690)">
-    ${priceTag({ x: 0, y: 0, w: 318, h: 392, headline: "CLUB PRICE", price: "$7.99", sub: "with card", color: palette.red })}
-    ${priceTag({ x: 356, y: 48, w: 318, h: 344, headline: "LOCAL BUY", price: "2/$5", sub: "selected items", color: palette.green })}
-  </g>
-  <g transform="translate(1528 1186)">
-    ${roundedRect({ x: 0, y: 0, w: 694, h: 186, r: 28, fill: palette.paper, stroke: "#cdbfab", sw: 2, filter: "url(#tightShadow)" })}
-    <text class="bold" x="38" y="78" fill="${palette.red}" font-size="40">ABCDEFGHIJKLMNOPQRSTUVWXYZ</text>
-    <text class="reg" x="42" y="134" fill="${palette.ink}" font-size="38">0123456789  $ %  /  +  -  ?</text>
+  <g transform="translate(1098 1242)">
+    ${priceTag({ x: 0, y: 0, w: 324, h: 232, headline: "CLUB PRICE", price: "$7.99", sub: "with card", color: palette.red })}
+    ${priceTag({ x: 362, y: 34, w: 324, h: 198, headline: "LOCAL BUY", price: "2/$5", sub: "selected", color: palette.green })}
+    ${priceTag({ x: 724, y: 0, w: 324, h: 232, headline: "WEEKLY AD", price: "24/7", sub: "online", color: palette.blue })}
   </g>`,
 });
 
@@ -267,54 +311,68 @@ const gallery01 = svgShell({
   height: 1600,
   bg: palette.paper,
   content: `
-  <rect width="2400" height="1600" fill="url(#grid)" opacity="0.54"/>
-  <g transform="translate(132 128)">
-    ${label({ x: 0, y: 0, text: "LD SANS FAMILY", fill: palette.red, size: 34, cls: "bold", spacing: 7 })}
-    <text class="xl" x="0" y="144" fill="${palette.ink}" font-size="130">Weight, width, and voice.</text>
-    <text class="reg" x="4" y="224" fill="${palette.muted}" font-size="40">A working specimen for retail hierarchy, compact labels, and display-sized store language.</text>
+  <rect width="2400" height="1600" fill="url(#grid)" opacity="0.46"/>
+  <rect x="0" y="0" width="930" height="1600" fill="${palette.ink}"/>
+  <text class="xl" x="-96" y="1112" fill="#fffaf2" font-size="1010" opacity="0.12">Aa</text>
+  <g transform="translate(116 112)">
+    ${label({ x: 0, y: 0, text: "LD SANS FAMILY", fill: palette.yellow, size: 34, spacing: 7 })}
+    <text class="xl" x="0" y="172" fill="#fffaf2" font-size="136">Weight,</text>
+    <text class="xl" x="0" y="300" fill="#fffaf2" font-size="136">width,</text>
+    <text class="xl" x="0" y="428" fill="#fffaf2" font-size="136">voice.</text>
+    ${multiline({
+      x: 4,
+      y: 570,
+      fill: "#fffaf2",
+      size: 39,
+      leading: 52,
+      cls: "reg",
+      lines: ["Retail type has to move", "from calm utility to bold", "offer language without", "changing personality."],
+    })}
   </g>
-  <g transform="translate(0 426)">
-    ${specimenRow({ y: 0, cls: "extra", labelText: "ExtraLight", weight: "200", sample: "aloha essentials", size: 103 })}
-    ${specimenRow({ y: 182, cls: "light", labelText: "Light", weight: "300", sample: "pharmacy rewards", size: 103 })}
-    ${specimenRow({ y: 364, cls: "reg", labelText: "Regular", weight: "400", sample: "weekly ad circular", size: 103 })}
-    ${specimenRow({ y: 546, cls: "med", labelText: "Medium", weight: "500", sample: "store pickup today", size: 103 })}
-    ${specimenRow({ y: 728, cls: "bold", labelText: "Bold", weight: "700", sample: "extra savings", size: 103 })}
-    ${specimenRow({ y: 910, cls: "xl", labelText: "Black", weight: "900", sample: "LONGS DRUGS", size: 103 })}
+  <g transform="translate(1014 128)">
+    ${weightBand({ x: 0, y: 0, w: 1240, h: 148, cls: "extra", name: "ExtraLight", weight: "200", sample: "aloha essentials", color: palette.blue })}
+    ${weightBand({ x: 0, y: 172, w: 1240, h: 148, cls: "light", name: "Light", weight: "300", sample: "pharmacy rewards", color: palette.green })}
+    ${weightBand({ x: 0, y: 344, w: 1240, h: 148, cls: "reg", name: "Regular", weight: "400", sample: "weekly ad circular", color: "#6f6254" })}
+    ${weightBand({ x: 0, y: 516, w: 1240, h: 148, cls: "med", name: "Medium", weight: "500", sample: "store pickup today", color: palette.coral })}
+    ${weightBand({ x: 0, y: 688, w: 1240, h: 148, cls: "bold", name: "Bold", weight: "700", sample: "extra savings", color: palette.red })}
+    ${weightBand({ x: 0, y: 860, w: 1240, h: 148, cls: "xl", name: "Black", weight: "900", sample: "LONGS DRUGS", color: palette.ink })}
   </g>
-  <g transform="translate(142 1514)">
-    <text class="italic" x="0" y="0" fill="${palette.blue}" font-size="43">Italic: practical emphasis without losing utility.</text>
-    <text class="bolditalic" x="982" y="0" fill="${palette.red}" font-size="43">Bold Italic: sale, alert, and campaign tone.</text>
+  <g transform="translate(1014 1248)">
+    <text class="italic" x="0" y="0" fill="${palette.blue}" font-size="48">Italic gives service copy a human pace.</text>
+    <text class="bolditalic" x="0" y="86" fill="${palette.red}" font-size="62">Bold Italic works like a sale flag.</text>
   </g>`,
 });
 
 const gallery02 = svgShell({
   width: 1600,
   height: 2200,
-  bg: "#ebe2d4",
+  bg: palette.sand,
   content: `
-  <rect width="1600" height="2200" fill="url(#grid)" opacity="0.45"/>
-  <g transform="translate(96 116)">
-    ${label({ x: 0, y: 0, text: "RETAIL SCALE MOCKUP", fill: palette.red, size: 30, cls: "bold", spacing: 6 })}
-    <text class="xl" x="0" y="154" fill="${palette.ink}" font-size="122">Aisle language</text>
-    <text class="reg" x="2" y="224" fill="${palette.muted}" font-size="35">Testing hierarchy at the distance of a shelf, door, and promotional endcap.</text>
+  <rect width="1600" height="2200" fill="url(#grid)" opacity="0.4"/>
+  <rect x="1260" y="0" width="340" height="2200" fill="${palette.greenDeep}"/>
+  <text class="xl" x="1190" y="2066" fill="#fffaf2" font-size="360" opacity="0.1" transform="rotate(-90 1190 2066)">AISLE</text>
+  <g transform="translate(104 116)">
+    ${label({ x: 0, y: 0, text: "RETAIL SCALE MOCKUP", fill: palette.red, size: 31, spacing: 6 })}
+    <text class="xl" x="0" y="154" fill="${palette.ink}" font-size="130">Aisle language</text>
+    <text class="reg" x="4" y="226" fill="${palette.muted}" font-size="38">Distance, hierarchy, and numerals in one working store system.</text>
   </g>
-  <g transform="translate(108 390)" filter="url(#softShadow)">
-    ${roundedRect({ x: 0, y: 0, w: 1384, h: 330, r: 28, fill: "url(#redPanel)" })}
-    <rect width="1384" height="330" rx="28" fill="url(#microDots)"/>
-    <text class="xl" x="70" y="150" fill="#fffaf2" font-size="118">Pharmacy</text>
-    <text class="med" x="74" y="230" fill="#fffaf2" font-size="42" opacity="0.84">PICKUP  •  CONSULTATION  •  VACCINES</text>
+  <g transform="translate(112 386)" filter="url(#softShadow)">
+    ${roundedRect({ x: 0, y: 0, w: 1212, h: 344, r: 30, fill: "url(#redPanel)" })}
+    <rect width="1212" height="344" rx="30" fill="url(#microDots)"/>
+    <text class="xl" x="68" y="162" fill="#fffaf2" font-size="128">Pharmacy</text>
+    <text class="med" x="72" y="244" fill="#fffaf2" font-size="43" opacity="0.84">PICKUP / CONSULTATION / VACCINES</text>
   </g>
-  <g transform="translate(108 820)">
-    ${shelfBox({ x: 0, y: 0, w: 420, h: 540, labelText: "HEALTH", color: palette.green, product: "Cold Relief", meta: "Aisle 3 / everyday care" })}
-    ${shelfBox({ x: 484, y: 72, w: 420, h: 540, labelText: "BEAUTY", color: palette.coral, product: "Skin Care", meta: "New item callouts" })}
-    ${shelfBox({ x: 968, y: 0, w: 420, h: 540, labelText: "SNACKS", color: palette.blue, product: "Island Mix", meta: "Local favorites" })}
+  <g transform="translate(112 840)">
+    ${shelfTicket({ x: 0, y: 0, w: 378, h: 520, head: "HEALTH", product: "Cold Relief", meta: "Aisle 3", color: palette.green })}
+    ${shelfTicket({ x: 428, y: 84, w: 378, h: 520, head: "BEAUTY", product: "Skin Care", meta: "New item", color: palette.coral })}
+    ${shelfTicket({ x: 856, y: 0, w: 378, h: 520, head: "SNACKS", product: "Island Mix", meta: "Local pick", color: palette.blue })}
   </g>
-  <g transform="translate(108 1478)">
-    ${priceTag({ x: 0, y: 0, w: 408, h: 420, headline: "EXTRACARE", price: "$12.49", sub: "member price", color: palette.red })}
-    ${priceTag({ x: 486, y: 52, w: 408, h: 368, headline: "BUY 1 GET 1", price: "50%", sub: "second item", color: palette.green })}
-    ${priceTag({ x: 972, y: 0, w: 408, h: 420, headline: "WEEKLY AD", price: "3/$10", sub: "through Sunday", color: palette.blue })}
+  <g transform="translate(112 1518)">
+    ${priceTag({ x: 0, y: 0, w: 376, h: 388, headline: "EXTRACARE", price: "$12.49", sub: "member price", color: palette.red })}
+    ${priceTag({ x: 430, y: 54, w: 376, h: 334, headline: "BOGO", price: "50%", sub: "second item", color: palette.green })}
+    ${priceTag({ x: 860, y: 0, w: 376, h: 388, headline: "WEEKLY AD", price: "3/$10", sub: "through Sun", color: palette.blue })}
   </g>
-  <text class="med" x="116" y="2074" fill="${palette.muted}" font-size="30" letter-spacing="4">SPACING / NUMERALS / DISTANCE READABILITY</text>`,
+  <text class="med" x="112" y="2082" fill="${palette.muted}" font-size="30" letter-spacing="4">SPACING / NUMERALS / DISTANCE READABILITY</text>`,
 });
 
 const gallery03 = svgShell({
@@ -322,24 +380,26 @@ const gallery03 = svgShell({
   height: 1800,
   bg: palette.paper,
   content: `
-  <rect width="1800" height="1800" fill="url(#grid)" opacity="0.66"/>
-  <g transform="translate(118 118)">
-    ${label({ x: 0, y: 0, text: "GLYPH PROPORTION STUDY", fill: palette.red, size: 30, cls: "bold", spacing: 6 })}
-    <text class="xl" x="0" y="154" fill="${palette.ink}" font-size="118">Forms that hold up.</text>
+  <rect width="1800" height="1800" fill="url(#grid)" opacity="0.62"/>
+  <rect x="0" y="1316" width="1800" height="484" fill="${palette.ink}"/>
+  <g transform="translate(116 116)">
+    ${label({ x: 0, y: 0, text: "GLYPH PROPORTION STUDY", fill: palette.red, size: 31, spacing: 6 })}
+    <text class="xl" x="0" y="154" fill="${palette.ink}" font-size="120">Forms that hold up.</text>
   </g>
-  <g transform="translate(108 408)">
-    <line x1="0" y1="0" x2="1584" y2="0" stroke="${palette.red}" stroke-width="6" opacity="0.75"/>
-    <line x1="0" y1="234" x2="1584" y2="234" stroke="${palette.blue}" stroke-width="4" opacity="0.45"/>
-    <line x1="0" y1="614" x2="1584" y2="614" stroke="${palette.red}" stroke-width="6" opacity="0.75"/>
-    <line x1="0" y1="826" x2="1584" y2="826" stroke="${palette.green}" stroke-width="4" opacity="0.38"/>
-    <text class="xl" x="72" y="615" fill="${palette.ink}" font-size="650">agR2</text>
-    <text class="bolditalic" x="94" y="1070" fill="${palette.red}" font-size="260">a g R 2</text>
+  <g transform="translate(104 384)">
+    <line x1="0" y1="0" x2="1592" y2="0" stroke="${palette.red}" stroke-width="6" opacity="0.82"/>
+    <line x1="0" y1="238" x2="1592" y2="238" stroke="${palette.blue}" stroke-width="4" opacity="0.44"/>
+    <line x1="0" y1="616" x2="1592" y2="616" stroke="${palette.red}" stroke-width="6" opacity="0.82"/>
+    <line x1="0" y1="830" x2="1592" y2="830" stroke="${palette.green}" stroke-width="4" opacity="0.42"/>
+    <text class="xl" x="42" y="624" fill="${palette.ink}" font-size="650">agR2</text>
+    <text class="bolditalic" x="70" y="906" fill="${palette.red}" font-size="218" opacity="0.2">a g R 2</text>
+    <circle cx="1444" cy="114" r="102" fill="${palette.yellow}" opacity="0.8"/>
+    <rect x="1300" y="664" width="226" height="226" rx="30" fill="${palette.blue}" opacity="0.18"/>
   </g>
-  <g transform="translate(128 1300)">
-    ${roundedRect({ x: 0, y: 0, w: 1544, h: 290, r: 26, fill: "#f1e8da", stroke: "#d0c2ae", sw: 2 })}
-    <text class="reg" x="48" y="84" fill="${palette.muted}" font-size="32" letter-spacing="4">DETAIL NOTES</text>
-    <text class="med" x="48" y="156" fill="${palette.ink}" font-size="44">Open counters, sturdy curves, and direct numerals support fast retail reading.</text>
-    <text class="reg" x="48" y="226" fill="${palette.muted}" font-size="34">Black for store and campaign scale. Regular and Medium for dense digital and shelf information.</text>
+  <g transform="translate(126 1414)">
+    <text class="reg" x="0" y="0" fill="${palette.yellow}" font-size="34" letter-spacing="4">DETAIL NOTES</text>
+    <text class="med" x="0" y="82" fill="#fffaf2" font-size="48">Open counters. Sturdy curves. Direct numerals.</text>
+    <text class="reg" x="0" y="152" fill="#fffaf2" font-size="35" opacity="0.78">Black sets campaign scale; Regular and Medium hold dense digital information.</text>
   </g>`,
 });
 
@@ -348,53 +408,42 @@ const gallery04 = svgShell({
   height: 1600,
   bg: "#e9dfd0",
   content: `
-  <rect width="2400" height="1600" fill="url(#grid)" opacity="0.38"/>
-  <g transform="translate(120 118)">
-    ${label({ x: 0, y: 0, text: "PRINT AND PROMOTION MOCKUPS", fill: palette.red, size: 32, cls: "bold", spacing: 6 })}
+  <rect width="2400" height="1600" fill="url(#grid)" opacity="0.34"/>
+  <rect x="1680" y="0" width="720" height="1600" fill="url(#bluePanel)"/>
+  <text class="xl" x="1688" y="1504" fill="#fffaf2" font-size="520" opacity="0.09">AD</text>
+  <g transform="translate(118 116)">
+    ${label({ x: 0, y: 0, text: "PRINT AND PROMOTION MOCKUPS", fill: palette.red, size: 32, spacing: 6 })}
     <text class="xl" x="0" y="150" fill="${palette.ink}" font-size="126">Proofs for the store floor.</text>
   </g>
-  <g transform="translate(138 360)">
-    <g transform="rotate(-3 0 0)" filter="url(#softShadow)">
-      ${roundedRect({ x: 0, y: 0, w: 650, h: 900, r: 22, fill: palette.paper })}
-      <rect x="0" y="0" width="650" height="222" rx="22" fill="url(#redPanel)"/>
-      <rect x="0" y="180" width="650" height="42" fill="${palette.redDark}"/>
-      <text class="xl" x="54" y="132" fill="#fffaf2" font-size="96">Weekly Ad</text>
-      <text class="bold" x="58" y="326" fill="${palette.ink}" font-size="74">Local deals</text>
-      <text class="xl" x="58" y="520" fill="${palette.red}" font-size="168">2/$6</text>
-      <text class="reg" x="62" y="622" fill="${palette.muted}" font-size="38">Everyday essentials, clearer pricing, practical rhythm.</text>
-      <rect x="58" y="706" width="534" height="28" rx="14" fill="#ded4c4"/>
-      <rect x="58" y="768" width="376" height="28" rx="14" fill="#ded4c4"/>
+  <g transform="translate(128 354)">
+    <g transform="rotate(-5 0 0)" filter="url(#softShadow)">
+      ${roundedRect({ x: 0, y: 0, w: 664, h: 900, r: 22, fill: palette.paper })}
+      <rect x="0" y="0" width="664" height="238" rx="22" fill="url(#redPanel)"/>
+      <rect x="0" y="196" width="664" height="44" fill="${palette.redDark}"/>
+      <text class="xl" x="56" y="142" fill="#fffaf2" font-size="98">Weekly Ad</text>
+      <text class="bold" x="60" y="330" fill="${palette.ink}" font-size="76">Local deals</text>
+      <text class="xl" x="58" y="536" fill="${palette.red}" font-size="178">2/$6</text>
+      <text class="reg" x="64" y="636" fill="${palette.muted}" font-size="38">Everyday essentials</text>
+      <rect x="62" y="724" width="536" height="28" rx="14" fill="#ded4c4"/>
+      <rect x="62" y="784" width="382" height="28" rx="14" fill="#ded4c4"/>
     </g>
-    <g transform="translate(720 62) rotate(2)" filter="url(#softShadow)">
-      ${roundedRect({ x: 0, y: 0, w: 640, h: 860, r: 22, fill: "#f8f3eb" })}
-      <rect x="46" y="50" width="548" height="214" rx="18" fill="url(#greenPanel)"/>
-      <text class="xl" x="82" y="178" fill="#fffaf2" font-size="86">Store Pickup</text>
-      <text class="med" x="84" y="230" fill="#fffaf2" font-size="29" opacity="0.85" letter-spacing="3">READY TODAY</text>
-      <text class="bold" x="48" y="394" fill="${palette.ink}" font-size="66">Signage suite</text>
-      <text class="reg" x="50" y="464" fill="${palette.muted}" font-size="36">Directional, promotional, and service moments use one consistent type voice.</text>
-      <text class="xl" x="50" y="688" fill="${palette.blue}" font-size="160">A12</text>
+    <g transform="translate(690 48) rotate(2)" filter="url(#softShadow)">
+      ${roundedRect({ x: 0, y: 0, w: 680, h: 888, r: 22, fill: "#f8f3eb" })}
+      <rect x="48" y="50" width="584" height="236" rx="20" fill="url(#greenPanel)"/>
+      <text class="xl" x="84" y="178" fill="#fffaf2" font-size="88">Store Pickup</text>
+      <text class="med" x="86" y="238" fill="#fffaf2" font-size="31" opacity="0.86" letter-spacing="3">READY TODAY</text>
+      <text class="bold" x="50" y="416" fill="${palette.ink}" font-size="72">Signage suite</text>
+      <text class="reg" x="52" y="492" fill="${palette.muted}" font-size="38">Service, pickup, and aisle IDs.</text>
+      <text class="xl" x="52" y="726" fill="${palette.blue}" font-size="176">A12</text>
     </g>
-    <g transform="translate(1448 -16) rotate(-1)" filter="url(#softShadow)">
-      ${roundedRect({ x: 0, y: 0, w: 710, h: 940, r: 22, fill: palette.paper })}
-      <text class="reg" x="58" y="96" fill="${palette.muted}" font-size="34" letter-spacing="4">BODY COPY TEST</text>
-      <text class="xl" x="54" y="236" fill="${palette.ink}" font-size="104">Easy to scan,</text>
-      <text class="xl" x="54" y="338" fill="${palette.ink}" font-size="104">hard to miss.</text>
-      ${paragraph({
-        x: 58,
-        y: 458,
-        size: 39,
-        leading: 54,
-        cls: "reg",
-        fill: palette.charcoal,
-        lines: [
-          "Longs Sans keeps words direct at",
-          "small sizes while still carrying",
-          "enough warmth for promotions,",
-          "local campaigns, and service copy.",
-        ],
-      })}
-      <rect x="58" y="764" width="594" height="86" rx="43" fill="${palette.red}"/>
-      <text class="bold" x="116" y="820" fill="#fffaf2" font-size="40">Shop weekly ad</text>
+    <g transform="translate(1398 -12) rotate(-1)" filter="url(#softShadow)">
+      ${roundedRect({ x: 0, y: 0, w: 704, h: 944, r: 22, fill: palette.paper })}
+      ${imageBlock({ id: "print-proof-photo", uri: longsImages.everyday, x: 52, y: 52, w: 600, h: 300, r: 22 })}
+      <text class="reg" x="54" y="430" fill="${palette.muted}" font-size="34" letter-spacing="4">BODY COPY TEST</text>
+      <text class="xl" x="52" y="554" fill="${palette.ink}" font-size="102">Easy to scan,</text>
+      <text class="xl" x="52" y="654" fill="${palette.ink}" font-size="102">hard to miss.</text>
+      <rect x="54" y="768" width="344" height="86" rx="43" fill="${palette.red}"/>
+      <text class="bold" x="110" y="824" fill="#fffaf2" font-size="39">Shop ad</text>
     </g>
   </g>`,
 });
@@ -404,44 +453,49 @@ const gallery05 = svgShell({
   height: 1350,
   bg: "#f2eadf",
   content: `
-  <rect width="2400" height="1350" fill="url(#grid)" opacity="0.38"/>
-  <g transform="translate(120 112)">
-    ${label({ x: 0, y: 0, text: "DIGITAL SYSTEM MOCKUPS", fill: palette.red, size: 32, cls: "bold", spacing: 6 })}
+  <rect width="2400" height="1350" fill="url(#grid)" opacity="0.34"/>
+  <rect x="0" y="0" width="2400" height="88" fill="${palette.ink}"/>
+  <g transform="translate(118 146)">
+    ${label({ x: 0, y: 0, text: "DIGITAL SYSTEM MOCKUPS", fill: palette.red, size: 32, spacing: 6 })}
     <text class="xl" x="0" y="142" fill="${palette.ink}" font-size="118">Interface type, retail pace.</text>
   </g>
-  <g transform="translate(118 326)" filter="url(#softShadow)">
-    ${roundedRect({ x: 0, y: 0, w: 1340, h: 850, r: 34, fill: "#111315" })}
-    ${roundedRect({ x: 24, y: 28, w: 1292, h: 794, r: 24, fill: palette.paper })}
-    <rect x="24" y="28" width="1292" height="118" rx="24" fill="${palette.red}"/>
-    <rect x="24" y="110" width="1292" height="36" fill="${palette.red}"/>
-    <text class="xl" x="72" y="102" fill="#fffaf2" font-size="56">Longs Drugs</text>
-    <text class="med" x="918" y="96" fill="#fffaf2" font-size="28" opacity="0.9">Weekly Ad  /  Pharmacy  /  Stores</text>
-    <text class="xl" x="78" y="266" fill="${palette.ink}" font-size="82">Find local savings faster.</text>
-    <text class="reg" x="82" y="338" fill="${palette.muted}" font-size="36">A digital hierarchy for quick shopping, pickup, and service decisions.</text>
-    ${priceTag({ x: 82, y: 424, w: 300, h: 280, headline: "TODAY", price: "$4.99", sub: "with card", color: palette.red })}
-    ${priceTag({ x: 430, y: 424, w: 300, h: 280, headline: "LOCAL", price: "2/$8", sub: "selected", color: palette.green })}
-    ${priceTag({ x: 778, y: 424, w: 300, h: 280, headline: "CARE", price: "24/7", sub: "online", color: palette.blue })}
-    <rect x="82" y="742" width="258" height="46" rx="23" fill="${palette.red}"/>
-    <text class="bold" x="124" y="773" fill="#fffaf2" font-size="24">View all deals</text>
-  </g>
+  ${browserFrame({
+    x: 118,
+    y: 342,
+    w: 1360,
+    h: 832,
+    content: `
+      <rect x="24" y="30" width="1312" height="120" rx="24" fill="${palette.red}"/>
+      <rect x="24" y="112" width="1312" height="38" fill="${palette.red}"/>
+      <text class="xl" x="72" y="104" fill="#fffaf2" font-size="58">Longs Drugs</text>
+      ${textLine({ x: 988, y: 96, text: "Weekly Ad / Stores", maxWidth: 300, fill: "#fffaf2", size: 28, min: 20, cls: "med", opacity: 0.9 })}
+      ${imageBlock({ id: "digital-browser-img", uri: longsImages.weeklyHero, x: 708, y: 190, w: 574, h: 314, r: 26 })}
+      <text class="med" x="78" y="238" fill="${palette.red}" font-size="30" letter-spacing="4">TODAY AT LONGS</text>
+      <text class="xl" x="76" y="342" fill="${palette.ink}" font-size="86">Find savings</text>
+      <text class="xl" x="76" y="426" fill="${palette.ink}" font-size="86">faster.</text>
+      ${priceTag({ x: 78, y: 548, w: 278, h: 224, headline: "TODAY", price: "$4.99", sub: "with card", color: palette.red })}
+      ${priceTag({ x: 398, y: 548, w: 278, h: 224, headline: "LOCAL", price: "2/$8", sub: "selected", color: palette.green })}
+      ${priceTag({ x: 718, y: 548, w: 278, h: 224, headline: "CARE", price: "24/7", sub: "online", color: palette.blue })}
+    `,
+  })}
   ${phoneFrame({
-    x: 1608,
-    y: 248,
-    w: 566,
+    x: 1624,
+    y: 232,
+    w: 560,
     h: 932,
     content: `
-      <rect x="18" y="24" width="530" height="132" rx="32" fill="${palette.red}"/>
-      <text class="xl" x="56" y="104" fill="#fffaf2" font-size="48">Longs</text>
-      <text class="med" x="56" y="218" fill="${palette.ink}" font-size="36">Store near you</text>
-      <text class="xl" x="56" y="312" fill="${palette.ink}" font-size="64">Kahala Mall</text>
-      <text class="reg" x="58" y="366" fill="${palette.muted}" font-size="30">Open until 10 PM</text>
-      <rect x="56" y="432" width="454" height="142" rx="22" fill="#f0e6d7"/>
-      <text class="bold" x="88" y="492" fill="${palette.red}" font-size="34">Pickup ready</text>
-      <text class="reg" x="88" y="540" fill="${palette.ink}" font-size="29">Pharmacy order #4821</text>
-      <rect x="56" y="624" width="454" height="92" rx="46" fill="${palette.green}"/>
+      <rect x="18" y="24" width="524" height="132" rx="32" fill="${palette.red}"/>
+      <text class="xl" x="56" y="104" fill="#fffaf2" font-size="50">Longs</text>
+      <text class="med" x="56" y="220" fill="${palette.ink}" font-size="36">Store near you</text>
+      <text class="xl" x="56" y="314" fill="${palette.ink}" font-size="64">Kahala Mall</text>
+      <text class="reg" x="58" y="368" fill="${palette.muted}" font-size="30">Open until 10 PM</text>
+      <rect x="56" y="430" width="448" height="142" rx="22" fill="#f0e6d7"/>
+      ${textLine({ x: 88, y: 492, text: "Pickup ready", maxWidth: 384, fill: palette.red, size: 35, cls: "bold" })}
+      ${textLine({ x: 88, y: 540, text: "Order #4821", maxWidth: 384, fill: palette.ink, size: 29, cls: "reg" })}
+      <rect x="56" y="624" width="448" height="92" rx="46" fill="${palette.green}"/>
       <text class="bold" x="138" y="683" fill="#fffaf2" font-size="34">Get directions</text>
       <text class="reg" x="56" y="796" fill="${palette.muted}" font-size="28">Aa Bb Cc 123</text>
-      <text class="bolditalic" x="56" y="852" fill="${palette.red}" font-size="33">Bold Italic for timely alerts</text>
+      ${textLine({ x: 56, y: 852, text: "Bold Italic alert", maxWidth: 448, fill: palette.red, size: 34, cls: "bolditalic" })}
     `,
   })}`,
 });
@@ -451,52 +505,56 @@ const gallery06 = svgShell({
   height: 1600,
   bg: "#eee5d8",
   content: `
-  <rect width="2400" height="1600" fill="url(#grid)" opacity="0.34"/>
-  <circle cx="2108" cy="126" r="420" fill="${palette.yellow}" opacity="0.34"/>
-  <g transform="translate(120 118)">
-    ${label({ x: 0, y: 0, text: "WEBSITE TYPE-IN-USE STUDY", fill: palette.red, size: 32, cls: "bold", spacing: 6 })}
-    <text class="xl" x="0" y="150" fill="${palette.ink}" font-size="124">Homepage modules in LD Sans.</text>
-    <text class="reg" x="4" y="220" fill="${palette.muted}" font-size="38">Using Longs prototype imagery to test hero copy, service cards, and promotional calls to action.</text>
+  <rect width="2400" height="1600" fill="url(#grid)" opacity="0.32"/>
+  <rect x="0" y="0" width="2400" height="310" fill="${palette.ink}"/>
+  <text class="xl" x="1520" y="284" fill="#fffaf2" font-size="230" opacity="0.09">WEB</text>
+  <g transform="translate(118 118)">
+    ${label({ x: 0, y: 0, text: "WEBSITE TYPE-IN-USE STUDY", fill: palette.yellow, size: 32, spacing: 6 })}
+    <text class="xl" x="0" y="150" fill="#fffaf2" font-size="124">Homepage modules in LD Sans.</text>
   </g>
-  <g transform="translate(118 360)" filter="url(#softShadow)">
-    ${roundedRect({ x: 0, y: 0, w: 1510, h: 990, r: 34, fill: "#111315" })}
-    ${roundedRect({ x: 24, y: 30, w: 1462, h: 930, r: 24, fill: palette.paper })}
-    <rect x="24" y="30" width="1462" height="116" rx="24" fill="${palette.red}"/>
-    <rect x="24" y="110" width="1462" height="36" fill="${palette.red}"/>
-    <text class="xl" x="72" y="104" fill="#fffaf2" font-size="58">Longs Drugs</text>
-    <text class="med" x="974" y="96" fill="#fffaf2" font-size="28" opacity="0.9">Weekly ad  /  Pharmacy  /  ExtraCare  /  Stores</text>
-    <g transform="translate(64 192)">
-      ${roundedRect({ x: 0, y: 0, w: 1368, h: 360, r: 28, fill: "#f8f1e8" })}
-      ${imageBlock({ id: "homepage-hero-img", uri: longsImages.weeklyHero, x: 710, y: 0, w: 658, h: 360, r: 28 })}
-      <rect x="0" y="0" width="850" height="360" rx="28" fill="#fff8df" opacity="0.92"/>
-      <text class="med" x="54" y="72" fill="${palette.red}" font-size="29" letter-spacing="4">LOCAL WEEKLY SAVINGS</text>
-      <text class="xl" x="52" y="164" fill="${palette.ink}" font-size="82">Your Longs,</text>
-      <text class="xl" x="52" y="244" fill="${palette.ink}" font-size="82">closer to home.</text>
-      <text class="reg" x="56" y="306" fill="${palette.muted}" font-size="31">A warmer retail voice for savings, care, and everyday errands.</text>
-    </g>
-    <g transform="translate(64 584)">
-      ${imageBlock({ id: "homepage-card-extra", uri: longsImages.extraCare, x: 0, y: 0, w: 410, h: 210, r: 20, filter: "url(#tightShadow)" })}
-      ${imageBlock({ id: "homepage-card-vaccine", uri: longsImages.vaccine, x: 480, y: 0, w: 410, h: 210, r: 20, filter: "url(#tightShadow)" })}
-      ${imageBlock({ id: "homepage-card-rx", uri: longsImages.rx, x: 960, y: 0, w: 410, h: 210, r: 20, filter: "url(#tightShadow)" })}
-      <text class="bold" x="0" y="274" fill="${palette.ink}" font-size="40">ExtraCare</text>
-      <text class="bold" x="480" y="274" fill="${palette.ink}" font-size="40">Vaccines</text>
-      <text class="bold" x="960" y="274" fill="${palette.ink}" font-size="40">Pharmacy</text>
-      <text class="reg" x="0" y="322" fill="${palette.muted}" font-size="24">Direct savings language.</text>
-      <text class="reg" x="480" y="322" fill="${palette.muted}" font-size="24">Compact service labels.</text>
-      <text class="reg" x="960" y="322" fill="${palette.muted}" font-size="24">Practical digital utility.</text>
-    </g>
-  </g>
+  ${browserFrame({
+    x: 112,
+    y: 390,
+    w: 1540,
+    h: 980,
+    content: `
+      <rect x="24" y="30" width="1492" height="116" rx="24" fill="${palette.red}"/>
+      <rect x="24" y="110" width="1492" height="36" fill="${palette.red}"/>
+      <text class="xl" x="72" y="104" fill="#fffaf2" font-size="58">Longs Drugs</text>
+      ${textLine({ x: 1020, y: 96, text: "Weekly ad / Pharmacy / Stores", maxWidth: 430, fill: "#fffaf2", size: 28, min: 20, cls: "med", opacity: 0.9 })}
+      <g transform="translate(64 192)">
+        ${imageBlock({ id: "homepage-hero-img", uri: longsImages.weeklyHero, x: 618, y: 0, w: 790, h: 390, r: 28 })}
+        <rect x="0" y="0" width="780" height="390" rx="28" fill="#fff7df" opacity="0.94"/>
+        <text class="med" x="54" y="76" fill="${palette.red}" font-size="30" letter-spacing="4">LOCAL WEEKLY SAVINGS</text>
+        <text class="xl" x="52" y="178" fill="${palette.ink}" font-size="86">Your Longs,</text>
+        <text class="xl" x="52" y="262" fill="${palette.ink}" font-size="86">closer home.</text>
+        <rect x="56" y="310" width="250" height="62" rx="31" fill="${palette.red}"/>
+        <text class="bold" x="104" y="350" fill="#fffaf2" font-size="27">Shop deals</text>
+      </g>
+      <g transform="translate(64 636)">
+        ${imageBlock({ id: "homepage-card-extra", uri: longsImages.extraCare, x: 0, y: 0, w: 390, h: 206, r: 20, filter: "url(#tightShadow)" })}
+        ${imageBlock({ id: "homepage-card-vaccine", uri: longsImages.vaccine, x: 468, y: 0, w: 390, h: 206, r: 20, filter: "url(#tightShadow)" })}
+        ${imageBlock({ id: "homepage-card-rx", uri: longsImages.rx, x: 936, y: 0, w: 390, h: 206, r: 20, filter: "url(#tightShadow)" })}
+        ${textLine({ x: 0, y: 270, text: "ExtraCare", maxWidth: 390, fill: palette.ink, size: 42, cls: "bold" })}
+        ${textLine({ x: 468, y: 270, text: "Vaccines", maxWidth: 390, fill: palette.ink, size: 42, cls: "bold" })}
+        ${textLine({ x: 936, y: 270, text: "Pharmacy", maxWidth: 390, fill: palette.ink, size: 42, cls: "bold" })}
+        ${textLine({ x: 0, y: 318, text: "Savings", maxWidth: 390, fill: palette.muted, size: 27, cls: "reg" })}
+        ${textLine({ x: 468, y: 318, text: "Care access", maxWidth: 390, fill: palette.muted, size: 27, cls: "reg" })}
+        ${textLine({ x: 936, y: 318, text: "Pickup tools", maxWidth: 390, fill: palette.muted, size: 27, cls: "reg" })}
+      </g>
+    `,
+  })}
   ${phoneFrame({
-    x: 1746,
-    y: 444,
+    x: 1762,
+    y: 482,
     w: 486,
     h: 820,
     content: `
       ${imageBlock({ id: "homepage-phone-img", uri: longsImages.appDeals, x: 30, y: 48, w: 426, h: 350, r: 26 })}
-      <text class="med" x="48" y="462" fill="${palette.red}" font-size="27" letter-spacing="3">MOBILE PROMO CARD</text>
-      <text class="xl" x="48" y="546" fill="${palette.ink}" font-size="58">Deals of</text>
-      <text class="xl" x="48" y="604" fill="${palette.ink}" font-size="58">the Week</text>
-      <text class="reg" x="50" y="660" fill="${palette.muted}" font-size="27">LD Sans keeps compact digital modules readable.</text>
+      <text class="med" x="48" y="462" fill="${palette.red}" font-size="27" letter-spacing="3">MOBILE PROMO</text>
+      <text class="xl" x="48" y="548" fill="${palette.ink}" font-size="58">Deals of</text>
+      <text class="xl" x="48" y="606" fill="${palette.ink}" font-size="58">the Week</text>
+      <text class="reg" x="50" y="660" fill="${palette.muted}" font-size="27">Compact and readable.</text>
       <rect x="48" y="708" width="238" height="58" rx="29" fill="${palette.red}"/>
       <text class="bold" x="84" y="746" fill="#fffaf2" font-size="25">Shop deals</text>
     `,
@@ -508,66 +566,73 @@ const gallery07 = svgShell({
   height: 1600,
   bg: "#f4efe6",
   content: `
-  <rect width="2400" height="1600" fill="url(#grid)" opacity="0.38"/>
+  <rect width="2400" height="1600" fill="url(#grid)" opacity="0.34"/>
+  <rect x="0" y="0" width="710" height="1600" fill="url(#greenPanel)"/>
+  <text class="xl" x="-40" y="1448" fill="#fffaf2" font-size="460" opacity="0.11">MAP</text>
   <g transform="translate(120 118)">
-    ${label({ x: 0, y: 0, text: "STORE FINDER EXPERIENCE", fill: palette.red, size: 32, cls: "bold", spacing: 6 })}
-    <text class="xl" x="0" y="150" fill="${palette.ink}" font-size="124">Utility pages need warmth.</text>
-    <text class="reg" x="4" y="220" fill="${palette.muted}" font-size="38">A type study for search, location cards, map context, and service details.</text>
+    ${label({ x: 0, y: 0, text: "STORE FINDER EXPERIENCE", fill: palette.yellow, size: 32, spacing: 6 })}
+    <text class="xl" x="-70" y="150" fill="#fffaf2" font-size="118">Utility</text>
+    <text class="xl" x="-70" y="264" fill="#fffaf2" font-size="98">pages need</text>
+    <text class="xl" x="-70" y="380" fill="#fffaf2" font-size="118">warmth.</text>
   </g>
-  <g transform="translate(112 346)" filter="url(#softShadow)">
-    ${roundedRect({ x: 0, y: 0, w: 1568, h: 1010, r: 34, fill: "#111315" })}
-    ${roundedRect({ x: 24, y: 30, w: 1520, h: 950, r: 24, fill: palette.paper })}
-    <rect x="24" y="30" width="1520" height="112" rx="24" fill="${palette.red}"/>
-    <rect x="24" y="106" width="1520" height="36" fill="${palette.red}"/>
-    <text class="xl" x="72" y="102" fill="#fffaf2" font-size="56">Find a Longs Drugs</text>
-    <text class="med" x="1156" y="94" fill="#fffaf2" font-size="27" opacity="0.9">Open now  /  Pharmacy  /  Pickup</text>
-    ${imageBlock({ id: "store-finder-hero", uri: longsImages.storeFinder, x: 64, y: 190, w: 660, h: 360, r: 26, filter: "url(#tightShadow)" })}
-    <g transform="translate(780 190)">
-      <text class="med" x="0" y="32" fill="${palette.red}" font-size="29" letter-spacing="4">LOCATION SEARCH</text>
-      <text class="xl" x="0" y="118" fill="${palette.ink}" font-size="74">Stores near you</text>
-      <rect x="0" y="172" width="650" height="78" rx="39" fill="#f0e7d9" stroke="#d4c5b3" stroke-width="2"/>
-      <text class="reg" x="36" y="224" fill="${palette.muted}" font-size="31">Search by ZIP, city, or island</text>
-      <rect x="0" y="292" width="236" height="70" rx="35" fill="${palette.red}"/>
-      <text class="bold" x="56" y="338" fill="#fffaf2" font-size="31">Search</text>
-    </g>
-    <g transform="translate(64 640)">
-      ${roundedRect({ x: 0, y: 0, w: 430, h: 236, r: 22, fill: "#f8f1e8", stroke: "#dacdbc", sw: 2, filter: "url(#tightShadow)" })}
-      <text class="bold" x="32" y="62" fill="${palette.ink}" font-size="39">Kahala Mall</text>
-      <text class="reg" x="34" y="110" fill="${palette.muted}" font-size="27">Open until 10 PM</text>
-      <text class="med" x="34" y="166" fill="${palette.green}" font-size="29">Pharmacy open</text>
-      ${roundedRect({ x: 284, y: 148, w: 112, h: 50, r: 25, fill: palette.red })}
-      <text class="bold" x="312" y="181" fill="#fffaf2" font-size="22">Map</text>
-      ${roundedRect({ x: 504, y: 0, w: 430, h: 236, r: 22, fill: "#f8f1e8", stroke: "#dacdbc", sw: 2, filter: "url(#tightShadow)" })}
-      <text class="bold" x="536" y="62" fill="${palette.ink}" font-size="39">Pearl City</text>
-      <text class="reg" x="538" y="110" fill="${palette.muted}" font-size="27">Pickup available</text>
-      <text class="med" x="538" y="166" fill="${palette.blue}" font-size="29">Weekly ad store</text>
-      ${roundedRect({ x: 788, y: 148, w: 112, h: 50, r: 25, fill: palette.red })}
-      <text class="bold" x="816" y="181" fill="#fffaf2" font-size="22">Map</text>
-      ${roundedRect({ x: 1008, y: 0, w: 430, h: 236, r: 22, fill: "#f8f1e8", stroke: "#dacdbc", sw: 2, filter: "url(#tightShadow)" })}
-      <text class="bold" x="1040" y="62" fill="${palette.ink}" font-size="39">Hilo</text>
-      <text class="reg" x="1042" y="110" fill="${palette.muted}" font-size="27">Local services</text>
-      <text class="med" x="1042" y="166" fill="${palette.green}" font-size="29">Store hours today</text>
-      ${roundedRect({ x: 1292, y: 148, w: 112, h: 50, r: 25, fill: palette.red })}
-      <text class="bold" x="1320" y="181" fill="#fffaf2" font-size="22">Map</text>
-    </g>
-  </g>
-  ${phoneFrame({
-    x: 1774,
-    y: 440,
-    w: 462,
-    h: 812,
+  ${browserFrame({
+    x: 610,
+    y: 300,
+    w: 1580,
+    h: 1018,
     content: `
-      <rect x="18" y="24" width="426" height="118" rx="32" fill="${palette.red}"/>
+      <rect x="24" y="30" width="1532" height="112" rx="24" fill="${palette.red}"/>
+      <rect x="24" y="106" width="1532" height="36" fill="${palette.red}"/>
+      <text class="xl" x="72" y="102" fill="#fffaf2" font-size="56">Find a Longs Drugs</text>
+      ${textLine({ x: 1180, y: 94, text: "Open now / Pharmacy", maxWidth: 320, fill: "#fffaf2", size: 27, min: 18, cls: "med", opacity: 0.9 })}
+      ${imageBlock({ id: "store-finder-hero", uri: longsImages.storeFinder, x: 64, y: 190, w: 650, h: 360, r: 26, filter: "url(#tightShadow)" })}
+      <g transform="translate(772 190)">
+        <text class="med" x="0" y="32" fill="${palette.red}" font-size="29" letter-spacing="4">LOCATION SEARCH</text>
+        <text class="xl" x="0" y="118" fill="${palette.ink}" font-size="76">Stores near you</text>
+        <rect x="0" y="174" width="650" height="78" rx="39" fill="#f0e7d9" stroke="#d4c5b3" stroke-width="2"/>
+        <text class="reg" x="36" y="226" fill="${palette.muted}" font-size="31">Search by ZIP or island</text>
+        <rect x="0" y="294" width="236" height="70" rx="35" fill="${palette.red}"/>
+        <text class="bold" x="56" y="340" fill="#fffaf2" font-size="31">Search</text>
+      </g>
+      <g transform="translate(64 638)">
+        ${roundedRect({ x: 0, y: 0, w: 430, h: 236, r: 22, fill: "#f8f1e8", stroke: "#dacdbc", sw: 2, filter: "url(#tightShadow)" })}
+        ${textLine({ x: 32, y: 62, text: "Kahala Mall", maxWidth: 364, fill: palette.ink, size: 39, cls: "bold" })}
+        <text class="reg" x="34" y="110" fill="${palette.muted}" font-size="27">Open until 10 PM</text>
+        <text class="med" x="34" y="166" fill="${palette.green}" font-size="29">Pharmacy open</text>
+        ${roundedRect({ x: 284, y: 148, w: 112, h: 50, r: 25, fill: palette.red })}
+        <text class="bold" x="312" y="181" fill="#fffaf2" font-size="22">Map</text>
+        ${roundedRect({ x: 506, y: 0, w: 430, h: 236, r: 22, fill: "#f8f1e8", stroke: "#dacdbc", sw: 2, filter: "url(#tightShadow)" })}
+        ${textLine({ x: 538, y: 62, text: "Pearl City", maxWidth: 364, fill: palette.ink, size: 39, cls: "bold" })}
+        <text class="reg" x="540" y="110" fill="${palette.muted}" font-size="27">Pickup available</text>
+        <text class="med" x="540" y="166" fill="${palette.blue}" font-size="29">Weekly ad store</text>
+        ${roundedRect({ x: 790, y: 148, w: 112, h: 50, r: 25, fill: palette.red })}
+        <text class="bold" x="818" y="181" fill="#fffaf2" font-size="22">Map</text>
+        ${roundedRect({ x: 1012, y: 0, w: 430, h: 236, r: 22, fill: "#f8f1e8", stroke: "#dacdbc", sw: 2, filter: "url(#tightShadow)" })}
+        ${textLine({ x: 1044, y: 62, text: "Hilo", maxWidth: 364, fill: palette.ink, size: 39, cls: "bold" })}
+        <text class="reg" x="1046" y="110" fill="${palette.muted}" font-size="27">Local services</text>
+        <text class="med" x="1046" y="166" fill="${palette.green}" font-size="29">Hours today</text>
+        ${roundedRect({ x: 1296, y: 148, w: 112, h: 50, r: 25, fill: palette.red })}
+        <text class="bold" x="1324" y="181" fill="#fffaf2" font-size="22">Map</text>
+      </g>
+    `,
+  })}
+  ${phoneFrame({
+    x: 140,
+    y: 520,
+    w: 430,
+    h: 760,
+    content: `
+      <rect x="18" y="24" width="394" height="118" rx="32" fill="${palette.red}"/>
       <text class="xl" x="52" y="96" fill="#fffaf2" font-size="44">Stores</text>
-      <text class="med" x="48" y="206" fill="${palette.ink}" font-size="35">Nearest location</text>
-      <text class="xl" x="48" y="292" fill="${palette.ink}" font-size="58">Kahala</text>
-      <text class="xl" x="48" y="350" fill="${palette.ink}" font-size="58">Mall</text>
-      <text class="reg" x="50" y="402" fill="${palette.muted}" font-size="26">4211 Waialae Ave.</text>
-      <rect x="48" y="466" width="366" height="112" rx="22" fill="#f0e7d9"/>
-      <text class="bold" x="78" y="516" fill="${palette.red}" font-size="31">Open until 10 PM</text>
-      <text class="reg" x="80" y="554" fill="${palette.ink}" font-size="24">Pharmacy, pickup, photo</text>
-      <rect x="48" y="632" width="366" height="82" rx="41" fill="${palette.green}"/>
-      <text class="bold" x="124" y="685" fill="#fffaf2" font-size="30">Get directions</text>
+      <text class="med" x="48" y="206" fill="${palette.ink}" font-size="34">Nearest</text>
+      <text class="xl" x="48" y="290" fill="${palette.ink}" font-size="58">Kahala</text>
+      <text class="xl" x="48" y="348" fill="${palette.ink}" font-size="58">Mall</text>
+      <text class="reg" x="50" y="400" fill="${palette.muted}" font-size="25">4211 Waialae Ave.</text>
+      <rect x="48" y="464" width="334" height="108" rx="22" fill="#f0e7d9"/>
+      ${textLine({ x: 78, y: 514, text: "Open until 10 PM", maxWidth: 274, fill: palette.red, size: 30, min: 22, cls: "bold" })}
+      <text class="reg" x="80" y="552" fill="${palette.ink}" font-size="23">Pharmacy / pickup</text>
+      <rect x="48" y="624" width="334" height="82" rx="41" fill="${palette.green}"/>
+      <text class="bold" x="112" y="677" fill="#fffaf2" font-size="29">Directions</text>
     `,
   })}`,
 });
@@ -577,27 +642,31 @@ const gallery08 = svgShell({
   height: 1350,
   bg: "#ebe2d4",
   content: `
-  <rect width="2400" height="1350" fill="url(#grid)" opacity="0.34"/>
-  <g transform="translate(112 102)">
-    ${label({ x: 0, y: 0, text: "WEEKLY AD WEB MOCKUP", fill: palette.red, size: 32, cls: "bold", spacing: 6 })}
+  <rect width="2400" height="1350" fill="url(#grid)" opacity="0.3"/>
+  <rect x="0" y="0" width="2400" height="1350" fill="${palette.red}" opacity="0.08"/>
+  <g transform="translate(112 100)">
+    ${label({ x: 0, y: 0, text: "WEEKLY AD WEB MOCKUP", fill: palette.red, size: 32, spacing: 6 })}
     <text class="xl" x="0" y="142" fill="${palette.ink}" font-size="116">High-impact offer language.</text>
   </g>
-  <g transform="translate(112 306)" filter="url(#softShadow)">
-    ${roundedRect({ x: 0, y: 0, w: 1528, h: 838, r: 34, fill: "#111315" })}
-    ${roundedRect({ x: 24, y: 30, w: 1480, h: 780, r: 24, fill: palette.paper })}
-    ${imageBlock({ id: "weekly-web-hero", uri: longsImages.weeklyHero, x: 24, y: 30, w: 1480, h: 780, r: 24 })}
-    <rect x="24" y="30" width="736" height="780" rx="24" fill="#fff7df" opacity="0.94"/>
-    <text class="med" x="82" y="118" fill="${palette.red}" font-size="31" letter-spacing="4">THIS WEEK AT LONGS</text>
-    <text class="xl" x="78" y="238" fill="${palette.ink}" font-size="92">Weekly ad</text>
-    <text class="xl" x="78" y="328" fill="${palette.ink}" font-size="92">without the</text>
-    <text class="xl" x="78" y="418" fill="${palette.ink}" font-size="92">noise.</text>
-    <text class="reg" x="84" y="492" fill="${palette.muted}" font-size="35">Large offer type, tighter navigation, and direct category labels.</text>
-    <rect x="84" y="584" width="276" height="72" rx="36" fill="${palette.red}"/>
-    <text class="bold" x="132" y="631" fill="#fffaf2" font-size="30">View ad</text>
-    ${priceTag({ x: 430, y: 560, w: 246, h: 220, headline: "LOCAL", price: "2/$5", sub: "with card", color: palette.green })}
-  </g>
+  ${browserFrame({
+    x: 112,
+    y: 306,
+    w: 1538,
+    h: 838,
+    content: `
+      ${imageBlock({ id: "weekly-web-hero", uri: longsImages.weeklyHero, x: 24, y: 30, w: 1490, h: 780, r: 24 })}
+      <rect x="24" y="30" width="720" height="780" rx="24" fill="#fff7df" opacity="0.94"/>
+      <text class="med" x="82" y="118" fill="${palette.red}" font-size="31" letter-spacing="4">THIS WEEK AT LONGS</text>
+      <text class="xl" x="78" y="244" fill="${palette.ink}" font-size="98">Weekly ad</text>
+      <text class="xl" x="78" y="338" fill="${palette.ink}" font-size="98">without</text>
+      <text class="xl" x="78" y="432" fill="${palette.ink}" font-size="98">the noise.</text>
+      <rect x="84" y="560" width="276" height="72" rx="36" fill="${palette.red}"/>
+      <text class="bold" x="132" y="607" fill="#fffaf2" font-size="30">View ad</text>
+      ${priceTag({ x: 430, y: 548, w: 246, h: 236, headline: "LOCAL", price: "2/$5", sub: "with card", color: palette.green })}
+    `,
+  })}
   ${phoneFrame({
-    x: 1746,
+    x: 1744,
     y: 214,
     w: 486,
     h: 874,
@@ -610,8 +679,8 @@ const gallery08 = svgShell({
       ${priceTag({ x: 252, y: 606, w: 184, h: 168, headline: "BUY", price: "50%", sub: "select", color: palette.blue })}
     `,
   })}
-  <g transform="translate(112 1192)">
-    <text class="italic" x="0" y="0" fill="${palette.blue}" font-size="42">The same type family moves from campaign hero to compact mobile deal labels.</text>
+  <g transform="translate(112 1212)">
+    <text class="italic" x="0" y="0" fill="${palette.blue}" font-size="42">The same family moves from campaign hero scale to compact mobile deal labels.</text>
   </g>`,
 });
 
