@@ -190,7 +190,7 @@ function shelfTicket({ x, y, w, h, head, product, meta, color }) {
   </g>`;
 }
 
-function browserFrame({ x, y, w, h, content, barFill = "#101412" }) {
+function browserFrame({ x, y, w, h, content, barFill = "#243b35" }) {
   return `<g transform="translate(${x} ${y})" filter="url(#softShadow)">
     ${roundedRect({ x: 0, y: 0, w, h, r: 34, fill: barFill })}
     ${roundedRect({ x: 24, y: 30, w: w - 48, h: h - 60, r: 24, fill: palette.paper })}
@@ -200,7 +200,7 @@ function browserFrame({ x, y, w, h, content, barFill = "#101412" }) {
 
 function phoneFrame({ x, y, w, h, content }) {
   return `<g transform="translate(${x} ${y})" filter="url(#softShadow)">
-    ${roundedRect({ x: 0, y: 0, w, h, r: 44, fill: "#101412" })}
+    ${roundedRect({ x: 0, y: 0, w, h, r: 44, fill: "#243b35" })}
     ${roundedRect({ x: 18, y: 24, w: w - 36, h: h - 48, r: 32, fill: palette.paper })}
     ${content}
   </g>`;
@@ -279,11 +279,13 @@ const cover = svgShell({
       cls: "reg",
       lines: ["A retail type system for", "signage, web, price tags,", "and everyday store use."],
     })}
-    <rect x="2" y="724" width="610" height="2" fill="#fffaf2" opacity="0.42"/>
-    ${textLine({ x: 4, y: 818, text: "ExtraLight 200", fill: "#fffaf2", size: 32, cls: "extra", opacity: 0.76 })}
-    ${textLine({ x: 4, y: 904, text: "Regular 400", fill: "#fffaf2", size: 46, cls: "reg" })}
-    ${textLine({ x: 4, y: 1006, text: "Medium 500", fill: "#fffaf2", size: 58, cls: "med" })}
-    ${textLine({ x: 4, y: 1132, text: "Black 900", fill: "#fffaf2", size: 88, cls: "xl" })}
+    <text class="bold" x="4" y="676" fill="#fffaf2" font-size="44">Built for ʻŌlelo Hawaiʻi.</text>
+    <text class="reg" x="6" y="728" fill="#fffaf2" font-size="34" opacity="0.82">Natural ʻokina. Local clarity.</text>
+    <rect x="2" y="782" width="610" height="2" fill="#fffaf2" opacity="0.42"/>
+    ${textLine({ x: 4, y: 886, text: "ExtraLight 200", fill: "#fffaf2", size: 32, cls: "extra", opacity: 0.76 })}
+    ${textLine({ x: 4, y: 972, text: "Regular 400", fill: "#fffaf2", size: 46, cls: "reg" })}
+    ${textLine({ x: 4, y: 1074, text: "Medium 500", fill: "#fffaf2", size: 58, cls: "med" })}
+    ${textLine({ x: 4, y: 1200, text: "Black 900", fill: "#fffaf2", size: 88, cls: "xl" })}
   </g>
   <g transform="translate(1100 116)">
     ${imageBlock({ id: "cover-weekly", uri: longsImages.weeklyHero, x: 0, y: 0, w: 1138, h: 424, r: 34, filter: "url(#softShadow)" })}
@@ -312,7 +314,7 @@ const gallery01 = svgShell({
   bg: palette.paper,
   content: `
   <rect width="2400" height="1600" fill="url(#grid)" opacity="0.46"/>
-  <rect x="0" y="0" width="930" height="1600" fill="${palette.ink}"/>
+  <rect x="0" y="0" width="930" height="1600" fill="url(#greenPanel)"/>
   <text class="xl" x="-96" y="1112" fill="#fffaf2" font-size="1010" opacity="0.12">Aa</text>
   <g transform="translate(116 112)">
     ${label({ x: 0, y: 0, text: "LD SANS FAMILY", fill: palette.yellow, size: 34, spacing: 7 })}
@@ -326,16 +328,16 @@ const gallery01 = svgShell({
       size: 39,
       leading: 52,
       cls: "reg",
-      lines: ["Retail type has to move", "from calm utility to bold", "offer language without", "changing personality."],
+      lines: ["Made for a local Hawaiʻi", "staple, with ʻŌlelo Hawaiʻi", "treated as a core use case,", "not an afterthought."],
     })}
   </g>
   <g transform="translate(1014 128)">
-    ${weightBand({ x: 0, y: 0, w: 1240, h: 148, cls: "extra", name: "ExtraLight", weight: "200", sample: "aloha essentials", color: palette.blue })}
-    ${weightBand({ x: 0, y: 172, w: 1240, h: 148, cls: "light", name: "Light", weight: "300", sample: "pharmacy rewards", color: palette.green })}
-    ${weightBand({ x: 0, y: 344, w: 1240, h: 148, cls: "reg", name: "Regular", weight: "400", sample: "weekly ad circular", color: "#6f6254" })}
+    ${weightBand({ x: 0, y: 0, w: 1240, h: 148, cls: "extra", name: "ExtraLight", weight: "200", sample: "ʻōlelo Hawaiʻi", color: palette.blue })}
+    ${weightBand({ x: 0, y: 172, w: 1240, h: 148, cls: "light", name: "Light", weight: "300", sample: "mālama pharmacy", color: palette.green })}
+    ${weightBand({ x: 0, y: 344, w: 1240, h: 148, cls: "reg", name: "Regular", weight: "400", sample: "Hawaiʻi weekly ad", color: "#6f6254" })}
     ${weightBand({ x: 0, y: 516, w: 1240, h: 148, cls: "med", name: "Medium", weight: "500", sample: "store pickup today", color: palette.coral })}
     ${weightBand({ x: 0, y: 688, w: 1240, h: 148, cls: "bold", name: "Bold", weight: "700", sample: "extra savings", color: palette.red })}
-    ${weightBand({ x: 0, y: 860, w: 1240, h: 148, cls: "xl", name: "Black", weight: "900", sample: "LONGS DRUGS", color: palette.ink })}
+    ${weightBand({ x: 0, y: 860, w: 1240, h: 148, cls: "xl", name: "Black", weight: "900", sample: "LONGS DRUGS", color: palette.greenDeep })}
   </g>
   <g transform="translate(1014 1248)">
     <text class="italic" x="0" y="0" fill="${palette.blue}" font-size="48">Italic gives service copy a human pace.</text>
@@ -381,7 +383,7 @@ const gallery03 = svgShell({
   bg: palette.paper,
   content: `
   <rect width="1800" height="1800" fill="url(#grid)" opacity="0.62"/>
-  <rect x="0" y="1316" width="1800" height="484" fill="${palette.ink}"/>
+  <rect x="0" y="1316" width="1800" height="484" fill="${palette.greenDeep}"/>
   <g transform="translate(116 116)">
     ${label({ x: 0, y: 0, text: "GLYPH PROPORTION STUDY", fill: palette.red, size: 31, spacing: 6 })}
     <text class="xl" x="0" y="154" fill="${palette.ink}" font-size="120">Forms that hold up.</text>
@@ -392,14 +394,14 @@ const gallery03 = svgShell({
     <line x1="0" y1="616" x2="1592" y2="616" stroke="${palette.red}" stroke-width="6" opacity="0.82"/>
     <line x1="0" y1="830" x2="1592" y2="830" stroke="${palette.green}" stroke-width="4" opacity="0.42"/>
     <text class="xl" x="42" y="624" fill="${palette.ink}" font-size="650">agR2</text>
-    <text class="bolditalic" x="70" y="906" fill="${palette.red}" font-size="218" opacity="0.2">a g R 2</text>
+    <text class="bolditalic" x="70" y="906" fill="${palette.red}" font-size="218" opacity="0.2">ʻŌ Hawaiʻi</text>
     <circle cx="1444" cy="114" r="102" fill="${palette.yellow}" opacity="0.8"/>
     <rect x="1300" y="664" width="226" height="226" rx="30" fill="${palette.blue}" opacity="0.18"/>
   </g>
   <g transform="translate(126 1414)">
     <text class="reg" x="0" y="0" fill="${palette.yellow}" font-size="34" letter-spacing="4">DETAIL NOTES</text>
-    <text class="med" x="0" y="82" fill="#fffaf2" font-size="48">Open counters. Sturdy curves. Direct numerals.</text>
-    <text class="reg" x="0" y="152" fill="#fffaf2" font-size="35" opacity="0.78">Black sets campaign scale; Regular and Medium hold dense digital information.</text>
+    <text class="med" x="0" y="82" fill="#fffaf2" font-size="48">Natural ʻokina. Sturdy curves. Direct numerals.</text>
+    <text class="reg" x="0" y="152" fill="#fffaf2" font-size="35" opacity="0.78">Designed for ʻŌlelo Hawaiʻi while holding professional retail clarity.</text>
   </g>`,
 });
 
@@ -454,7 +456,7 @@ const gallery05 = svgShell({
   bg: "#f2eadf",
   content: `
   <rect width="2400" height="1350" fill="url(#grid)" opacity="0.34"/>
-  <rect x="0" y="0" width="2400" height="88" fill="${palette.ink}"/>
+  <rect x="0" y="0" width="2400" height="88" fill="${palette.redDark}"/>
   <g transform="translate(118 146)">
     ${label({ x: 0, y: 0, text: "DIGITAL SYSTEM MOCKUPS", fill: palette.red, size: 32, spacing: 6 })}
     <text class="xl" x="0" y="142" fill="${palette.ink}" font-size="118">Interface type, retail pace.</text>
@@ -506,7 +508,7 @@ const gallery06 = svgShell({
   bg: "#eee5d8",
   content: `
   <rect width="2400" height="1600" fill="url(#grid)" opacity="0.32"/>
-  <rect x="0" y="0" width="2400" height="310" fill="${palette.ink}"/>
+  <rect x="0" y="0" width="2400" height="310" fill="url(#greenPanel)"/>
   <text class="xl" x="1520" y="284" fill="#fffaf2" font-size="230" opacity="0.09">WEB</text>
   <g transform="translate(118 118)">
     ${label({ x: 0, y: 0, text: "WEBSITE TYPE-IN-USE STUDY", fill: palette.yellow, size: 32, spacing: 6 })}

@@ -1436,7 +1436,8 @@ main {
 .project--longs-sans .project-chapter__media,
 .project--longs-sans .project-visual-strip__item,
 .project--longs-sans .project-gallery__item {
-  background: #151816;
+  background: linear-gradient(135deg, #fffaf2, #eadfce);
+  box-shadow: inset 0 0 0 1px rgba(158, 20, 25, 0.14);
 }
 
 .project--longs-sans .project-hero__media,
@@ -1469,14 +1470,14 @@ main {
   min-height: 0;
   border-radius: 6px;
   object-fit: contain;
-  background: #151816;
+  background: #f7f1e6;
 }
 
 .project--longs-sans .project-gallery__item img {
   height: auto;
   border-radius: 6px;
   object-fit: contain;
-  background: #151816;
+  background: #f7f1e6;
 }
 
 .project--longs-sans .project-chapter__media figcaption,
