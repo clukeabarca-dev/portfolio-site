@@ -34,7 +34,7 @@ const chapterBody =
 ---
 
 <BaseLayout title={project.data.title} description={project.data.summary} bodyClass={`project-theme-${project.data.theme}`}>
-  <article class="project">
+  <article class:list={["project", `project--${project.id}`]}>
     <header class="project-hero">
       <div class="project-hero__copy" data-reveal>
         <p class="eyebrow">{project.data.year} / {project.data.disciplines.join(" / ")}</p>
