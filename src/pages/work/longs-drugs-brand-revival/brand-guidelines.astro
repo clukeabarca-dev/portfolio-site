@@ -2,8 +2,10 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 
 const officialGuidelinesUrl = "https://longs.com/brand-guidelines.html";
-const coverImage = "/images/projects/longs-drugs-brand-revival/cover.webp";
-const coverAlt = "Retail shelves with packaged goods in a store environment.";
+const coverImage = "/images/projects/longs-drugs-brand-revival/generated-v2/brand-guidelines-cover.png";
+const coverAlt = "Longs Drugs brand standards sheets, color cards, digital mockups, retail signage, and merchandise arranged on a warm yellow tabletop.";
+const systemImage = "/images/projects/longs-drugs-brand-revival/generated-v2/gallery-digital-system.png";
+const systemAlt = "Longs Drugs website and mobile interface mockups with task cards, navigation modules, icons, and color chips.";
 
 const foundations = [
   {
@@ -23,10 +25,10 @@ const foundations = [
   },
 ];
 
-const coverReads = [
-  "Use full, stocked retail scenes to keep the brand tied to daily errands rather than abstract lifestyle mood.",
-  "Let familiar product scale, aisle rhythm, and shelf density inform page grids, promos, and campaign compositions.",
-  "Keep color accents bright but disciplined so the red Longs signal can stay dominant across busy retail contexts.",
+const systemStandards = [
+  "Lead with the Longs mark, then make pharmacy, savings, store, and wellness actions easy to identify.",
+  "Use color as wayfinding: red for recognition, navy for structure, yellow for emphasis, and supporting colors for category cues.",
+  "Pair local warmth with practical interface structure so the system feels familiar without becoming decorative.",
 ];
 
 const voiceRules = [
@@ -98,8 +100,8 @@ const launchChecks = [
       <figure class="brand-guide-hero__media" data-parallax>
         <img src={coverImage} alt={coverAlt} />
         <figcaption>
-          <span>Portfolio cover</span>
-          Retail context anchors the revival system in familiar everyday shopping behavior.
+          <span>Brand standards overview</span>
+          A working system for logo, color, digital navigation, retail signage, and campaign applications.
         </figcaption>
       </figure>
     </header>
@@ -120,19 +122,20 @@ const launchChecks = [
       </div>
     </section>
 
-    <section class="brand-guide-cover-read" aria-labelledby="cover-read-title">
+    <section class="brand-guide-cover-read" aria-labelledby="system-translation-title">
       <figure data-reveal>
-        <img src={coverImage} alt={coverAlt} loading="lazy" />
+        <img src={systemImage} alt={systemAlt} loading="lazy" />
       </figure>
       <div class="brand-guide-cover-read__copy" data-reveal>
-        <p class="eyebrow">Visual read</p>
-        <h2 id="cover-read-title">Let the cover image guide the revival.</h2>
+        <p class="eyebrow">System standards</p>
+        <h2 id="system-translation-title">Translate the rules into real customer paths.</h2>
         <p>
-          The current portfolio cover is doing useful brand work: it shows shelf density, product
-          familiarity, bright retail rhythm, and the practical environment Longs has to serve.
+          The guidelines should help every page make the same practical decisions: what the customer
+          needs first, how the Longs identity appears, and how brand color supports navigation without
+          overwhelming the task.
         </p>
         <ul>
-          {coverReads.map((item) => <li>{item}</li>)}
+          {systemStandards.map((item) => <li>{item}</li>)}
         </ul>
       </div>
     </section>
