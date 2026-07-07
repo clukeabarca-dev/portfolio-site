@@ -1,0 +1,218 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const officialGuidelinesUrl = "https://longs.com/brand-guidelines.html";
+const coverImage = "/images/projects/longs-drugs-brand-revival/cover.webp";
+const coverAlt = "Retail shelves with packaged goods in a store environment.";
+
+const foundations = [
+  {
+    label: "Recognition",
+    title: "Keep Longs instantly familiar",
+    body: "The revival starts with the details customers already know: red brand presence, clear shelf communication, everyday utility, and a neighborhood-store tone.",
+  },
+  {
+    label: "Warmth",
+    title: "Make the system feel local",
+    body: "Color, photography, and copy should feel grounded in Hawaii without leaning on decorative shorthand or overly polished corporate language.",
+  },
+  {
+    label: "Usefulness",
+    title: "Prioritize the next action",
+    body: "Retail, pharmacy, savings, and community information should be quick to scan, simple to understand, and easy to act on from mobile first.",
+  },
+];
+
+const coverReads = [
+  "Use full, stocked retail scenes to keep the brand tied to daily errands rather than abstract lifestyle mood.",
+  "Let familiar product scale, aisle rhythm, and shelf density inform page grids, promos, and campaign compositions.",
+  "Keep color accents bright but disciplined so the red Longs signal can stay dominant across busy retail contexts.",
+];
+
+const voiceRules = [
+  "Write like a helpful neighbor: direct, warm, and practical.",
+  "Use short headings that name the customer benefit before the operational detail.",
+  "Keep local references respectful, specific, and easy for broad audiences to understand.",
+  "Avoid unsupported health, savings, or service claims.",
+];
+
+const palette = [
+  { name: "Longs Red", value: "#CC2027", className: "brand-guide-swatch--red" },
+  { name: "Navy", value: "#1D3463", className: "brand-guide-swatch--navy" },
+  { name: "Yellow", value: "#F8D805", className: "brand-guide-swatch--yellow" },
+  { name: "Sky", value: "#70CDDE", className: "brand-guide-swatch--sky" },
+  { name: "Seafoam", value: "#6FC7B1", className: "brand-guide-swatch--seafoam" },
+  { name: "Sunrise", value: "#FF821E", className: "brand-guide-swatch--sunrise" },
+];
+
+const systemRules = [
+  {
+    title: "Logo",
+    body: "Treat the red Longs script as the lead recognition asset. Give it clean space, avoid busy backgrounds, and protect contrast at small sizes.",
+  },
+  {
+    title: "Typography",
+    body: "Use legible sans-serif type for interface and retail copy. Let hierarchy come from size, weight, and spacing before adding decoration.",
+  },
+  {
+    title: "Layout",
+    body: "Build pages in clear editorial blocks: an immediate customer promise, direct task paths, and supporting story only where it adds confidence.",
+  },
+  {
+    title: "Photography",
+    body: "Favor real retail texture, community warmth, and product clarity. Images should help people understand the service or offer faster.",
+  },
+];
+
+const launchChecks = [
+  "Does the first screen read as Longs before the user reaches body copy?",
+  "Can someone find pharmacy, savings, store, or community actions without hunting?",
+  "Do color and image choices stay warm without reducing readability?",
+  "Does the page work as a practical mobile retail experience?",
+];
+---
+
+<BaseLayout
+  title="Longs Drugs Brand Guidelines"
+  description="A portfolio companion page for the Longs Drugs Brand Revival project, adapted from the standalone brand-guidelines prototype."
+  bodyClass="project-theme-light"
+>
+  <article class="brand-guide-page">
+    <header class="brand-guide-hero">
+      <div class="brand-guide-hero__copy" data-reveal>
+        <a class="brand-guide-back" href="/work/longs-drugs-brand-revival/">Longs Drugs Brand Revival</a>
+        <p class="eyebrow">Brand guidelines companion</p>
+        <h1>Longs Drugs Brand Revival Guidelines</h1>
+        <p>
+          A case-study version of the Longs digital brand playbook, shaped around the revival project:
+          recognizable retail heritage, warmer local character, and clearer digital paths for everyday
+          pharmacy, wellness, savings, and store needs.
+        </p>
+        <div class="brand-guide-actions">
+          <a class="button" href={officialGuidelinesUrl} target="_blank" rel="noopener">
+            Open official Longs guidelines
+          </a>
+          <a class="button button--quiet" href="#working-system">View working system</a>
+        </div>
+      </div>
+      <figure class="brand-guide-hero__media" data-parallax>
+        <img src={coverImage} alt={coverAlt} />
+        <figcaption>
+          <span>Portfolio cover</span>
+          Retail context anchors the revival system in familiar everyday shopping behavior.
+        </figcaption>
+      </figure>
+    </header>
+
+    <section class="brand-guide-section brand-guide-section--intro" aria-labelledby="foundation-title">
+      <div class="brand-guide-section__heading" data-reveal>
+        <p class="eyebrow">Brand foundation</p>
+        <h2 id="foundation-title">A trusted neighborhood brand, sharpened for digital use.</h2>
+      </div>
+      <div class="brand-guide-card-grid brand-guide-card-grid--3">
+        {foundations.map((item) => (
+          <article class="brand-guide-card" data-reveal>
+            <span>{item.label}</span>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="brand-guide-cover-read" aria-labelledby="cover-read-title">
+      <figure data-reveal>
+        <img src={coverImage} alt={coverAlt} loading="lazy" />
+      </figure>
+      <div class="brand-guide-cover-read__copy" data-reveal>
+        <p class="eyebrow">Visual read</p>
+        <h2 id="cover-read-title">Let the cover image guide the revival.</h2>
+        <p>
+          The current portfolio cover is doing useful brand work: it shows shelf density, product
+          familiarity, bright retail rhythm, and the practical environment Longs has to serve.
+        </p>
+        <ul>
+          {coverReads.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="brand-guide-section" id="working-system" aria-labelledby="voice-title">
+      <div class="brand-guide-section__heading" data-reveal>
+        <p class="eyebrow">Voice and behavior</p>
+        <h2 id="voice-title">Write like the store is close by.</h2>
+        <p>
+          The revival voice should be clear and useful first. It can feel warm and local without
+          over-explaining, over-promising, or turning every message into a campaign line.
+        </p>
+      </div>
+      <div class="brand-guide-rule-list" data-reveal>
+        {voiceRules.map((rule, index) => (
+          <article>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{rule}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="brand-guide-palette" aria-labelledby="palette-title">
+      <div class="brand-guide-section__heading" data-reveal>
+        <p class="eyebrow">Color palette</p>
+        <h2 id="palette-title">Red leads. Island color supports.</h2>
+        <p>
+          The palette keeps Longs Red as the recognition signal, uses navy for trust and structure,
+          and brings in bright supporting color where the page needs warmth, wayfinding, or campaign energy.
+        </p>
+      </div>
+      <div class="brand-guide-swatch-grid" aria-label="Longs revival color swatches">
+        {palette.map((color) => (
+          <article class={`brand-guide-swatch ${color.className}`} data-reveal>
+            <span aria-hidden="true"></span>
+            <strong>{color.name}</strong>
+            <em>{color.value}</em>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="brand-guide-section" aria-labelledby="system-title">
+      <div class="brand-guide-section__heading" data-reveal>
+        <p class="eyebrow">Digital system</p>
+        <h2 id="system-title">Simple rules for pages, promos, and retail touchpoints.</h2>
+      </div>
+      <div class="brand-guide-card-grid brand-guide-card-grid--4">
+        {systemRules.map((item) => (
+          <article class="brand-guide-card brand-guide-card--compact" data-reveal>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="brand-guide-checks" aria-labelledby="checks-title">
+      <div data-reveal>
+        <p class="eyebrow">Before publishing</p>
+        <h2 id="checks-title">Use this quick check before a Longs page goes live.</h2>
+      </div>
+      <ol data-reveal>
+        {launchChecks.map((check) => <li>{check}</li>)}
+      </ol>
+    </section>
+
+    <section class="brand-guide-official" aria-labelledby="official-title">
+      <div data-reveal>
+        <p class="eyebrow">Official reference</p>
+        <h2 id="official-title">Continue to the Longs guidelines page.</h2>
+        <p>
+          This portfolio page is a project companion. For the public reference and canonical
+          brand-guidelines destination, use the Longs page below.
+        </p>
+      </div>
+      <a class="button button--dark" href={officialGuidelinesUrl} target="_blank" rel="noopener" data-reveal>
+        Visit longs.com/brand-guidelines.html
+      </a>
+    </section>
+  </article>
+</BaseLayout>

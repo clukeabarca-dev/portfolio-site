@@ -8,7 +8,7 @@ interface Props {
 
 const { project, featured = false } = Astro.props;
 const data = project.data;
-const previewImages = (data.gallery ?? []).slice(0, 2);
+const previewImages = (data.gallery ?? []).filter((image) => image.src !== data.cover).slice(0, 2);
 ---
 
 <article
