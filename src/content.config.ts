@@ -17,6 +17,7 @@ const projects = defineCollection({
     client: z.string(),
     location: z.string().optional(),
     featured: z.boolean().default(false),
+    archived: z.boolean().default(false),
     order: z.number().default(999),
     cover: z.string().min(1),
     coverAlt: z.string(),

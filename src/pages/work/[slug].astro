@@ -2,9 +2,10 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
+import { isPublishedProject } from "../../lib/projects";
 
 export async function getStaticPaths() {
-  const projects = await getCollection("projects");
+  const projects = (await getCollection("projects")).filter(isPublishedProject);
 
   return projects.map((project) => ({
     params: { slug: project.id },
@@ -14,7 +15,9 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
-const allProjects = (await getCollection("projects")).filter((item) => item.id !== project.id);
+const allProjects = (await getCollection("projects")).filter(
+  (item) => item.id !== project.id && isPublishedProject(item),
+);
 const relatedProjects = allProjects
   .filter((item) => item.data.disciplines.some((discipline) => project.data.disciplines.includes(discipline)))
   .slice(0, 2);
