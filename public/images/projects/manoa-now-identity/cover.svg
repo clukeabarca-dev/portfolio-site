@@ -1,49 +1,81 @@
-<svg width="1600" height="1100" viewBox="0 0 1600 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1600" height="1100" fill="#F4F1EA"/>
-  <rect x="0" y="0" width="1600" height="1100" fill="#17352F" opacity="0.16"/>
-  <path d="M0 862C249 721 431 752 620 614C819 469 930 237 1160 182C1307 147 1447 187 1600 86V1100H0V862Z" fill="#17352F" opacity="0.78"/>
-  <path d="M1230 0H1600V1100H1076L1230 0Z" fill="#111315" opacity="0.86"/>
-  <g opacity="0.2">
-    <path d="M0 24H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 100H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 176H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 252H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 328H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 404H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 480H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 556H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 632H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 708H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 784H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 860H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 936H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 1012H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 1088H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 1164H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M18 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M100 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M182 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M264 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M346 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M428 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M510 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M592 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M674 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M756 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M838 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M920 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1002 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1084 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1166 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1248 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1330 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1412 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1494 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1576 0V1100" stroke="#111315" stroke-width="1"/>
+<svg width="2400" height="1600" viewBox="0 0 2400 1600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="2400" height="1600" fill="#F6EFE3"/>
+  <rect x="72" y="72" width="2256" height="1456" rx="44" fill="#102F2A"/>
+  <rect x="104" y="104" width="2192" height="1392" rx="30" fill="#F9F3E8"/>
+  <path d="M104 1136C408 946 686 990 941 815C1205 634 1358 322 1668 238C1892 177 2092 232 2296 112V1496H104V1136Z" fill="#17352F" opacity="0.12"/>
+  <g opacity="0.18">
+    <path d="M228 104V1496" stroke="#17352F" stroke-width="2"/>
+    <path d="M496 104V1496" stroke="#17352F" stroke-width="2"/>
+    <path d="M764 104V1496" stroke="#17352F" stroke-width="2"/>
+    <path d="M1032 104V1496" stroke="#17352F" stroke-width="2"/>
+    <path d="M1300 104V1496" stroke="#17352F" stroke-width="2"/>
+    <path d="M1568 104V1496" stroke="#17352F" stroke-width="2"/>
+    <path d="M1836 104V1496" stroke="#17352F" stroke-width="2"/>
+    <path d="M2104 104V1496" stroke="#17352F" stroke-width="2"/>
+    <path d="M104 300H2296" stroke="#17352F" stroke-width="2"/>
+    <path d="M104 568H2296" stroke="#17352F" stroke-width="2"/>
+    <path d="M104 836H2296" stroke="#17352F" stroke-width="2"/>
+    <path d="M104 1104H2296" stroke="#17352F" stroke-width="2"/>
+    <path d="M104 1372H2296" stroke="#17352F" stroke-width="2"/>
   </g>
-  <rect x="48" y="48" width="1504" height="1004" rx="18" stroke="#111315" stroke-width="2" opacity="0.22"/>
-  <text x="72" y="104" fill="#111315" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="6">Cover</text>
-  <text x="72" y="502" fill="#111315" font-family="Georgia, serif" font-size="78" font-weight="400"><tspan x="72" dy="0">Manoa Now Identity</tspan></text>
-  <text x="72" y="988" fill="#111315" font-family="Arial, sans-serif" font-size="24" letter-spacing="5" opacity="0.62">manoa-now-identity</text>
-  <text x="1320" y="988" fill="#F4F1EA" font-family="Arial, sans-serif" font-size="24" letter-spacing="5">PLACEHOLDER</text>
+
+  <text x="1200" y="186" fill="#17352F" font-family="Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="8" text-anchor="middle">MANOA NOW</text>
+  <text x="1200" y="282" fill="#111315" font-family="Georgia, serif" font-size="118" font-weight="400" text-anchor="middle">Identity evolution</text>
+  <text x="1200" y="346" fill="#52635D" font-family="Arial, sans-serif" font-size="28" letter-spacing="3" text-anchor="middle">APP UTILITY TO CAMPAIGN SYSTEM</text>
+
+  <rect x="164" y="456" width="910" height="704" rx="30" fill="#FFFFFF" stroke="#17352F" stroke-opacity="0.18" stroke-width="2"/>
+  <text x="214" y="528" fill="#52635D" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="5">OLD IDENTITY</text>
+  <rect x="214" y="586" width="810" height="456" rx="22" fill="#D4EEF2"/>
+  <rect x="284" y="652" width="202" height="330" rx="32" fill="#FFFFFF" stroke="#17352F" stroke-opacity="0.2" stroke-width="8"/>
+  <rect x="360" y="682" width="52" height="10" rx="5" fill="#17352F" opacity="0.22"/>
+  <rect x="540" y="626" width="202" height="330" rx="32" fill="#FFFFFF" stroke="#17352F" stroke-opacity="0.2" stroke-width="8"/>
+  <rect x="616" y="656" width="52" height="10" rx="5" fill="#17352F" opacity="0.22"/>
+  <rect x="796" y="652" width="164" height="330" rx="32" fill="#FFFFFF" stroke="#17352F" stroke-opacity="0.2" stroke-width="8"/>
+  <rect x="328" y="764" width="114" height="78" rx="14" fill="#EAC9BA"/>
+  <rect x="584" y="724" width="116" height="78" rx="14" fill="#C7EAF2"/>
+  <rect x="584" y="824" width="116" height="78" rx="14" fill="#A9D737"/>
+  <rect x="826" y="724" width="104" height="56" rx="12" fill="#EF4378"/>
+  <rect x="826" y="802" width="104" height="56" rx="12" fill="#1DAED6"/>
+  <text x="214" y="1110" fill="#111315" font-family="Arial, sans-serif" font-size="34" font-weight="700">Campus resource app</text>
+
+  <path d="M1134 794H1258" stroke="#17352F" stroke-width="10" stroke-linecap="round"/>
+  <path d="M1224 748L1270 794L1224 840" stroke="#17352F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="1326" y="456" width="910" height="704" rx="30" fill="#FFFFFF" stroke="#17352F" stroke-opacity="0.18" stroke-width="2"/>
+  <text x="1376" y="528" fill="#52635D" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="5">NEW IDENTITY</text>
+  <rect x="1376" y="586" width="318" height="456" rx="22" fill="#F36A21"/>
+  <text x="1424" y="688" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="46" font-weight="900" font-style="italic">DISCOVER</text>
+  <text x="1424" y="746" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="46" font-weight="900" font-style="italic">MANOA</text>
+  <rect x="1760" y="586" width="424" height="456" rx="22" fill="#111315"/>
+  <g transform="translate(1808 638)">
+    <g fill="none" stroke-linecap="round" stroke-width="10">
+      <path d="M0 0C18 22 48 22 66 0" stroke="#EF4378"/>
+      <path d="M96 0C114 22 144 22 162 0" stroke="#1DAED6"/>
+      <path d="M192 0C210 22 240 22 258 0" stroke="#A9D737"/>
+      <path d="M288 0C306 22 336 22 354 0" stroke="#F36A21"/>
+      <path d="M0 118C18 96 48 96 66 118" stroke="#F4D94E"/>
+      <path d="M96 118C114 96 144 96 162 118" stroke="#EF4378"/>
+      <path d="M192 118C210 96 240 96 258 118" stroke="#1DAED6"/>
+      <path d="M288 118C306 96 336 96 354 118" stroke="#A9D737"/>
+    </g>
+    <rect x="15" y="32" width="36" height="36" fill="#EF4378"/>
+    <rect x="111" y="32" width="36" height="36" fill="#1DAED6"/>
+    <rect x="207" y="32" width="36" height="36" fill="#A9D737"/>
+    <rect x="303" y="32" width="36" height="36" fill="#F36A21"/>
+    <rect x="15" y="150" width="36" height="36" fill="#F4D94E"/>
+    <rect x="111" y="150" width="36" height="36" fill="#EF4378"/>
+    <rect x="207" y="150" width="36" height="36" fill="#1DAED6"/>
+    <rect x="303" y="150" width="36" height="36" fill="#A9D737"/>
+  </g>
+  <text x="1376" y="1110" fill="#111315" font-family="Arial, sans-serif" font-size="34" font-weight="700">Brand study system</text>
+
+  <rect x="168" y="1210" width="2064" height="230" rx="28" fill="#17352F"/>
+  <text x="218" y="1272" fill="#F6EFE3" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="5">CASE STUDY SIGNAL</text>
+  <text x="218" y="1334" fill="#F6EFE3" font-family="Georgia, serif" font-size="40">The mark moves from a service interface into apparel, posters,</text>
+  <text x="218" y="1390" fill="#F6EFE3" font-family="Georgia, serif" font-size="40">patterns, and campaign language.</text>
+
+  <circle cx="1068" cy="404" r="28" fill="#EF4378"/>
+  <circle cx="1156" cy="404" r="28" fill="#1DAED6"/>
+  <circle cx="1244" cy="404" r="28" fill="#A9D737"/>
+  <circle cx="1332" cy="404" r="28" fill="#F36A21"/>
 </svg>
