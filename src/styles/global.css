@@ -2793,6 +2793,26 @@ body.is-lightbox-open {
   }
 }
 
+.project--akira-toriyama-early-works .project-gallery__item:first-child {
+  grid-column: 1 / -1;
+}
+
+.project--akira-toriyama-early-works .project-gallery__item--wide img {
+  aspect-ratio: auto 3 / 2;
+}
+
+.project--akira-toriyama-early-works .project-gallery__item--tall img {
+  aspect-ratio: auto 8 / 11;
+}
+
+.project--akira-toriyama-early-works .project-gallery__item--square img {
+  aspect-ratio: auto 1 / 1;
+}
+
+.project--akira-toriyama-early-works .project-gallery__item img[src$=".svg"] {
+  aspect-ratio: auto 16 / 11;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
