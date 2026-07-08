@@ -41,6 +41,7 @@ const visualReel = visualReelSelections
     const galleryImage = galleryIndex === null ? undefined : project.data.gallery?.[galleryIndex];
     if (!galleryImage) {
       return {
+        id: project.id,
         src: project.data.cover,
         alt: project.data.coverAlt,
         title: project.data.title,
@@ -49,6 +50,7 @@ const visualReel = visualReelSelections
     }
 
     return {
+      id: project.id,
       src: galleryImage.src,
       alt: galleryImage.alt,
       title: project.data.title,
@@ -111,7 +113,7 @@ const visualReel = visualReelSelections
     <div class="visual-reel__track">
       {
         visualReel.map((image, index) => (
-          <figure class:list={["visual-reel__item", index % 3 === 1 && "visual-reel__item--tall"]} data-reveal>
+          <figure class:list={["visual-reel__item", `visual-reel__item--${image.id}`, index % 3 === 1 && "visual-reel__item--tall"]} data-reveal>
             <img src={image.src} alt={image.alt} loading="lazy" />
             <figcaption>
               <span>{image.title}</span>
