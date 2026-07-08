@@ -58,6 +58,6 @@
     <rect x="0" y="88" width="512" height="76" fill="#F8BA00"/>
     <rect x="512" y="88" width="316" height="76" fill="#111315"/>
     <rect x="828" y="88" width="316" height="76" fill="#F4F1EA" stroke="#111315" stroke-opacity="0.2"/>
-    <rect x="1144" y="88" width="248" height="76" fill="#E64B3C"/>
+    <rect x="1144" y="88" width="248" height="76" fill="#D0D0D1"/>
   </g>
 </svg>

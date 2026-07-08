@@ -22,7 +22,7 @@
   <text x="126" y="380" fill="#AEB0AA" font-family="Arial, sans-serif" font-size="19" letter-spacing="2">EXHIBITION PALETTE</text>
   <rect x="126" y="438" width="256" height="256" fill="#F8BA00"/>
   <rect x="126" y="724" width="256" height="82" fill="#F4F1EA"/>
-  <rect x="126" y="830" width="256" height="82" fill="#E64B3C"/>
+  <rect x="126" y="830" width="256" height="82" fill="#111315"/>
   <text x="126" y="966" fill="#F4F1EA" font-family="Arial, sans-serif" font-size="17" letter-spacing="2">YELLOW / BLACK / PAPER</text>
   <g font-family="Arial, sans-serif">
     <text x="504" y="142" fill="#111315" font-size="24" font-weight="700" letter-spacing="4">PRIMARY INK MIXES</text>
@@ -30,7 +30,7 @@
   </g>
   <g font-family="Arial, sans-serif" font-size="18" font-weight="700">
     <rect x="504" y="232" width="258" height="200" rx="4" fill="#F8BA00"/>
-    <text x="532" y="286" fill="#111315">Exhibition Yellow</text>
+    <text x="532" y="286" fill="#111315">Golden Yellow</text>
     <text x="532" y="344" fill="#111315" font-size="44">#F8BA00</text>
     <text x="532" y="394" fill="#111315" font-size="16" opacity="0.66">Lead invitations and visitor badges</text>
     <rect x="790" y="232" width="258" height="200" rx="4" fill="#111315"/>
@@ -38,7 +38,7 @@
     <text x="818" y="344" fill="#F8BA00" font-size="44">#111315</text>
     <text x="818" y="394" fill="#F4F1EA" font-size="16" opacity="0.66">Envelope interiors and type fields</text>
     <rect x="1076" y="232" width="258" height="200" rx="4" fill="#F4F1EA" stroke="#111315" stroke-opacity="0.18"/>
-    <text x="1104" y="286" fill="#111315">Warm Paper</text>
+    <text x="1104" y="286" fill="#111315">Warm White</text>
     <text x="1104" y="344" fill="#111315" font-size="44">#F4F1EA</text>
     <text x="1104" y="394" fill="#56524B" font-size="16">Archive cards and quiet captions</text>
   </g>
@@ -71,9 +71,9 @@
     </g>
   </g>
   <g transform="translate(1248 552)">
-    <rect x="0" y="0" width="168" height="380" fill="#E64B3C"/>
+    <rect x="0" y="0" width="168" height="380" fill="#D0D0D1"/>
     <rect x="-72" y="64" width="168" height="316" fill="#F8BA00"/>
     <rect x="-144" y="128" width="168" height="252" fill="#111315"/>
-    <text x="-120" y="322" fill="#F4F1EA" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2" transform="rotate(-90 -120 322)">BADGE CONTRAST</text>
+    <text x="-120" y="322" fill="#F4F1EA" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2" transform="rotate(-90 -120 322)">TONAL CONTRAST</text>
   </g>
 </svg>

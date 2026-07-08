@@ -40,11 +40,11 @@
       <rect x="0" y="0" width="156" height="156" fill="#F8BA00"/>
       <rect x="182" y="0" width="156" height="156" fill="#111315" stroke="#F4F1EA" stroke-opacity="0.26"/>
       <rect x="364" y="0" width="156" height="156" fill="#F4F1EA"/>
-      <rect x="546" y="0" width="74" height="156" fill="#E64B3C"/>
+      <rect x="546" y="0" width="74" height="156" fill="#D0D0D1"/>
       <text x="0" y="196" fill="#F4F1EA" font-size="15" letter-spacing="2">YELLOW</text>
       <text x="182" y="196" fill="#F4F1EA" font-size="15" letter-spacing="2">BLACK</text>
       <text x="364" y="196" fill="#F4F1EA" font-size="15" letter-spacing="2">PAPER</text>
-      <text x="546" y="196" fill="#F4F1EA" font-size="15" letter-spacing="2">MARK</text>
+      <text x="546" y="196" fill="#F4F1EA" font-size="15" letter-spacing="2">TINT</text>
     </g>
     <g transform="translate(46 394)" stroke="#F4F1EA" stroke-opacity="0.55">
       <path d="M0 0H620M0 56H620M0 112H620M0 168H620"/>
