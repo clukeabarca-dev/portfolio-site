@@ -1,49 +1,63 @@
 <svg width="1600" height="1100" viewBox="0 0 1600 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1600" height="1100" fill="#F4F1EA"/>
-  <rect x="0" y="0" width="1600" height="1100" fill="#E64B3C" opacity="0.16"/>
-  <path d="M0 862C249 721 431 752 620 614C819 469 930 237 1160 182C1307 147 1447 187 1600 86V1100H0V862Z" fill="#E64B3C" opacity="0.78"/>
-  <path d="M1230 0H1600V1100H1076L1230 0Z" fill="#111315" opacity="0.86"/>
-  <g opacity="0.12">
-    <path d="M0 24H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 100H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 176H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 252H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 328H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 404H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 480H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 556H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 632H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 708H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 784H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 860H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 936H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 1012H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 1088H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M0 1164H1600" stroke="#111315" stroke-width="1"/>
-    <path d="M18 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M100 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M182 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M264 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M346 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M428 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M510 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M592 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M674 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M756 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M838 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M920 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1002 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1084 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1166 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1248 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1330 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1412 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1494 0V1100" stroke="#111315" stroke-width="1"/>
-    <path d="M1576 0V1100" stroke="#111315" stroke-width="1"/>
+  <defs>
+    <filter id="stockNoise" x="0" y="0" width="1600" height="1100" filterUnits="userSpaceOnUse">
+      <feTurbulence type="fractalNoise" baseFrequency="0.58" numOctaves="4" seed="41"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.075"/>
+      </feComponentTransfer>
+    </filter>
+    <linearGradient id="paperBg" x1="0" y1="0" x2="1600" y2="1100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBFAF6"/>
+      <stop offset="1" stop-color="#E7E0D3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1100" fill="url(#paperBg)"/>
+  <rect width="1600" height="1100" filter="url(#stockNoise)"/>
+  <text x="80" y="120" fill="#111315" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="5">PAPER STUDIES</text>
+  <text x="80" y="190" fill="#111315" font-family="Georgia, serif" font-size="76">Invitation stock and tactile tests</text>
+  <text x="80" y="235" fill="#56524B" font-family="Arial, sans-serif" font-size="19">Material notes for the enclosed letter, RSVP card, envelope liner, and visitor badge set.</text>
+  <g transform="translate(82 312)" font-family="Arial, sans-serif">
+    <g>
+      <rect x="0" y="0" width="276" height="432" rx="8" fill="#F8BA00"/>
+      <rect x="18" y="18" width="240" height="396" rx="5" stroke="#FFF8DC" stroke-opacity="0.62"/>
+      <text x="28" y="72" fill="#111315" font-size="18" font-weight="700" letter-spacing="3">COVER SHEET</text>
+      <text x="28" y="128" fill="#111315" font-size="52" font-weight="700">120 lb</text>
+      <text x="28" y="172" fill="#111315" font-size="18">Smooth uncoated yellow</text>
+      <path d="M32 278H244M32 306H244M32 334H178" stroke="#111315" stroke-opacity="0.34" stroke-width="4"/>
+      <text x="28" y="384" fill="#111315" font-size="15" opacity="0.72">Holds dense black type without glare.</text>
+    </g>
+    <g transform="translate(310 54)">
+      <rect x="0" y="0" width="276" height="432" rx="8" fill="#111315"/>
+      <path d="M0 0L276 0L138 116Z" fill="#090A0B"/>
+      <text x="28" y="72" fill="#F8BA00" font-size="18" font-weight="700" letter-spacing="3">ENVELOPE LINER</text>
+      <text x="28" y="128" fill="#F4F1EA" font-size="52" font-weight="700">Matte</text>
+      <text x="28" y="172" fill="#F4F1EA" font-size="18" opacity="0.78">Carbon black interior</text>
+      <path d="M32 276H244M32 304H244M32 332H178" stroke="#F8BA00" stroke-opacity="0.48" stroke-width="4"/>
+      <text x="28" y="384" fill="#F4F1EA" font-size="15" opacity="0.72">Turns the mailer into the first reveal.</text>
+    </g>
+    <g transform="translate(620 0)">
+      <rect x="0" y="0" width="276" height="432" rx="8" fill="#F4F1EA" stroke="#111315" stroke-opacity="0.18"/>
+      <rect x="28" y="36" width="220" height="116" fill="#FBFAF6" stroke="#111315" stroke-opacity="0.18"/>
+      <text x="28" y="214" fill="#111315" font-size="18" font-weight="700" letter-spacing="3">RSVP LETTER</text>
+      <text x="28" y="270" fill="#111315" font-size="52" font-weight="700">96 lb</text>
+      <text x="28" y="314" fill="#56524B" font-size="18">Soft white writing sheet</text>
+      <path d="M32 360H244M32 388H206" stroke="#111315" stroke-opacity="0.22" stroke-width="4"/>
+    </g>
+    <g transform="translate(930 54)">
+      <rect x="0" y="0" width="276" height="432" rx="8" fill="#D7D2C8"/>
+      <rect x="30" y="34" width="216" height="322" rx="16" fill="#F4F1EA" stroke="#111315" stroke-opacity="0.24"/>
+      <rect x="48" y="54" width="180" height="282" rx="8" fill="#F8BA00"/>
+      <text x="30" y="396" fill="#111315" font-size="18" font-weight="700" letter-spacing="3">BADGE BACKER</text>
+      <text x="30" y="426" fill="#56524B" font-size="15">Satin gray board with yellow front.</text>
+    </g>
   </g>
-  <rect x="48" y="48" width="1504" height="1004" rx="18" stroke="#111315" stroke-width="2" opacity="0.22"/>
-  <text x="72" y="104" fill="#111315" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="6">Gallery 09</text>
-  <text x="72" y="502" fill="#111315" font-family="Georgia, serif" font-size="78" font-weight="400"><tspan x="72" dy="0">Toriyama Early Works</tspan><tspan x="72" dy="62">Exhibition</tspan></text>
-  <text x="72" y="988" fill="#111315" font-family="Arial, sans-serif" font-size="24" letter-spacing="5" opacity="0.62">akira-toriyama-early-works</text>
-  <text x="1320" y="988" fill="#F4F1EA" font-family="Arial, sans-serif" font-size="24" letter-spacing="5">PLACEHOLDER</text>
+  <g transform="translate(104 842)" font-family="Arial, sans-serif">
+    <text x="0" y="0" fill="#111315" font-size="24" font-weight="700" letter-spacing="4">FOLD AND FINISH NOTES</text>
+    <text x="0" y="42" fill="#56524B" font-size="17">Score envelope flap before liner glue. Keep yellow stock unlaminated so the invitation still feels like paper.</text>
+    <rect x="0" y="88" width="512" height="76" fill="#F8BA00"/>
+    <rect x="512" y="88" width="316" height="76" fill="#111315"/>
+    <rect x="828" y="88" width="316" height="76" fill="#F4F1EA" stroke="#111315" stroke-opacity="0.2"/>
+    <rect x="1144" y="88" width="248" height="76" fill="#E64B3C"/>
+  </g>
 </svg>
