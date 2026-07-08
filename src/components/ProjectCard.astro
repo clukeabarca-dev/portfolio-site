@@ -12,7 +12,7 @@ const previewImages = (data.gallery ?? []).filter((image) => image.src !== data.
 ---
 
 <article
-  class:list={["project-card", featured && "project-card--featured"]}
+  class:list={["project-card", `project-card--${project.id}`, featured && "project-card--featured"]}
   style={`--accent: ${data.accent};`}
   data-reveal
 >
