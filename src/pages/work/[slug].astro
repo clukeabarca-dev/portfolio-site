@@ -34,6 +34,9 @@ const chapterTitle = project.data.chapterTitle ?? "Each project gets room for at
 const chapterBody =
   project.data.chapterBody ??
   "The case study format now supports a richer visual sequence, so project pages can behave more like designed stories than text pages with one cover image.";
+const isAutoluxDetailingStudy = project.id === "identity-studies-archive";
+const galleryEyebrow = isAutoluxDetailingStudy ? "Autolux visuals" : "Image archive";
+const relatedHeading = isAutoluxDetailingStudy ? "Related identity work" : "Continue through the archive";
 ---
 
 <BaseLayout title={project.data.title} description={project.data.summary} bodyClass={`project-theme-${project.data.theme}`}>
@@ -108,7 +111,7 @@ const chapterBody =
       gallery.length > 0 && (
         <section class="project-gallery" aria-label={`${project.data.title} image gallery`}>
           <div class="project-gallery__heading" data-reveal>
-            <p class="eyebrow">Image archive</p>
+            <p class="eyebrow">{galleryEyebrow}</p>
             <h2>{gallery.length} selected visual moments</h2>
           </div>
           <div class="project-gallery__grid">
@@ -131,7 +134,7 @@ const chapterBody =
         <section class="section">
           <div class="section__heading" data-reveal>
             <p class="eyebrow">Related work</p>
-            <h2>Continue through the archive</h2>
+            <h2>{relatedHeading}</h2>
           </div>
           <div class="featured-grid">
             {relatedProjects.map((related) => <ProjectCard project={related} />)}

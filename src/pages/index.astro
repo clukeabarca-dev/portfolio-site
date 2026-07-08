@@ -5,7 +5,18 @@ import ProjectCard from "../components/ProjectCard.astro";
 import { isPublishedProject, sortProjectsByOrder } from "../lib/projects";
 
 const projects = (await getCollection("projects")).filter(isPublishedProject).sort(sortProjectsByOrder);
-const featuredProjects = projects.filter((project) => project.data.featured);
+const featuredProjectIds = [
+  "longs-drugs-brand-revival",
+  "island-living-eco-goods",
+  "hana-paw-pet-goods",
+  "hoku-lei-jewelry",
+  "manoa-now-identity",
+  "akira-toriyama-early-works",
+];
+const projectById = new Map(projects.map((project) => [project.id, project]));
+const featuredProjects = featuredProjectIds
+  .map((id) => projectById.get(id))
+  .filter((project) => project !== undefined);
 const heroVisuals = [
   {
     src: "/images/projects/longs-drugs-brand-revival/cover.webp",
@@ -23,22 +34,40 @@ const heroVisuals = [
     label: "Archive",
   },
 ].filter((image) => image.src && image.alt);
-const visualReel = projects
-  .flatMap((project) => [
-    {
-      src: project.data.cover,
-      alt: project.data.coverAlt,
+const visualReelSelections = [
+  { id: "longs-drugs-brand-revival", galleryIndex: null },
+  { id: "longs-sans", galleryIndex: 0 },
+  { id: "island-living-eco-goods", galleryIndex: 1 },
+  { id: "hana-paw-pet-goods", galleryIndex: 2 },
+  { id: "manoa-now-identity", galleryIndex: 1 },
+  { id: "identity-studies-archive", galleryIndex: null },
+  { id: "akira-toriyama-early-works", galleryIndex: 9 },
+];
+const visualReel = visualReelSelections
+  .map(({ id, galleryIndex }) => {
+    const project = projectById.get(id);
+    if (!project) return null;
+
+    const galleryImage = galleryIndex === null ? undefined : project.data.gallery?.[galleryIndex];
+    if (!galleryImage) {
+      return {
+        id: project.id,
+        src: project.data.cover,
+        alt: project.data.coverAlt,
+        title: project.data.title,
+        caption: project.data.disciplines[0],
+      };
+    }
+
+    return {
+      id: project.id,
+      src: galleryImage.src,
+      alt: galleryImage.alt,
       title: project.data.title,
-      caption: project.data.disciplines[0],
-    },
-    ...(project.data.gallery ?? []).slice(0, 2).map((image) => ({
-      src: image.src,
-      alt: image.alt,
-      title: project.data.title,
-      caption: image.caption,
-    })),
-  ])
-  .slice(0, 7);
+      caption: galleryImage.caption,
+    };
+  })
+  .filter((image) => image !== null);
 ---
 
 <BaseLayout>
@@ -94,7 +123,7 @@ const visualReel = projects
     <div class="visual-reel__track">
       {
         visualReel.map((image, index) => (
-          <figure class:list={["visual-reel__item", index % 3 === 1 && "visual-reel__item--tall"]} data-reveal>
+          <figure class:list={["visual-reel__item", `visual-reel__item--${image.id}`, index % 3 === 1 && "visual-reel__item--tall"]} data-reveal>
             <img src={image.src} alt={image.alt} loading="lazy" />
             <figcaption>
               <span>{image.title}</span>

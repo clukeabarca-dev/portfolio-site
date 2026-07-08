@@ -30,7 +30,7 @@ const projects = defineCollection({
           layout: z.enum(["wide", "tall", "square"]).default("wide"),
         }),
       )
-      .min(5, "Project pages need at least 5 gallery images.")
+      .min(1, "Project pages need at least 1 gallery image.")
       .max(10, "Project pages should stay at 10 gallery images or fewer."),
     accent: z.string(),
     theme: z.enum(["light", "dark"]).default("light"),
