@@ -861,6 +861,13 @@ main {
   line-height: 0.98;
 }
 
+.visual-reel__intro p:not(.eyebrow) {
+  max-width: 620px;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 1.04rem;
+}
+
 .visual-reel__track {
   display: grid;
   grid-template-columns: repeat(7, minmax(220px, 1fr));
