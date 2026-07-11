@@ -2,8 +2,11 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const capabilities = [
+  "Creative direction",
+  "Art direction",
   "Identity systems",
   "Brand development",
+  "Marketing campaigns",
   "Packaging and print",
   "Posters and campaign graphics",
   "Commercial signage",
@@ -26,82 +29,92 @@ const clients = [
 
 const aboutImages = [
   {
-    src: "/images/about/about-strip-01.webp",
-    alt: "Printed collateral and paper samples arranged across a design studio table.",
-    caption: "Process",
+    src: "/images/about/optimized/portrait-mountain.jpg",
+    alt: "Christopher Abarca standing in front of a green mountain landscape.",
+    caption: "Portrait",
   },
   {
-    src: "/images/about/about-strip-02.webp",
-    alt: "Typography proof sheets with letterforms, grid marks, and drawing tools.",
-    caption: "Print",
+    src: "/images/about/optimized/portrait-blue-installation.jpg",
+    alt: "Christopher Abarca standing in a blue-lit installation space.",
+    caption: "Atmosphere",
   },
   {
-    src: "/images/about/about-strip-03.webp",
-    alt: "Retail storefront with blank sign panels, plants, and warm interior light.",
-    caption: "Place",
+    src: "/images/about/optimized/vending-machines.jpg",
+    alt: "A row of illustrated vending machines and drink displays in Japan.",
+    caption: "Observation",
   },
 ];
 
 const everydayImages = [
   {
-    src: "/images/about/everyday-01.webp",
-    alt: "Blank packaging mockups, bottles, label cards, and material swatches on a studio surface.",
-    caption: "Printed matter",
+    src: "/images/about/optimized/street-signage.jpg",
+    alt: "A busy Japan street filled with layered storefront signs and overhead wires.",
+    caption: "Signage",
   },
   {
-    src: "/images/about/everyday-02.webp",
-    alt: "Gallery wall with blank framed posters, art prints, and proofs.",
-    caption: "Spatial rhythm",
+    src: "/images/about/optimized/night-tunnel.jpg",
+    alt: "A lit tunnel entrance and surrounding city signs at night.",
+    caption: "Light",
   },
   {
-    src: "/images/about/everyday-03.webp",
-    alt: "Storefront scene with blank window, wall, and sidewalk sign panels.",
-    caption: "Street texture",
+    src: "/images/about/optimized/train-platform.jpg",
+    alt: "Train platforms, rails, signs, and city buildings under warm daylight.",
+    caption: "Movement",
   },
   {
-    src: "/images/about/everyday-04.webp",
-    alt: "Apparel and merchandise mockups arranged with hangtags and print cards.",
-    caption: "Pattern and shadow",
+    src: "/images/about/optimized/pink-installation-portrait.jpg",
+    alt: "A portrait inside a vivid pink floral light installation.",
+    caption: "Color",
+  },
+  {
+    src: "/images/about/optimized/cat-detail.jpg",
+    alt: "A cat resting in a patterned hammock under a wooden shelf.",
+    caption: "Detail",
+  },
+  {
+    src: "/images/about/optimized/installation-texture.jpg",
+    alt: "Christopher Abarca seated in an immersive installation with pink and blue light.",
+    caption: "Texture",
   },
 ];
 
 const principles = [
   {
-    title: "Clarity first",
-    text: "The work has to be easy to understand before it can be memorable. I start by organizing the message, audience, and touchpoints.",
+    title: "Collaborative range",
+    text: "I like working across fields, especially when a brand has to connect a product, campaign, screen, printed piece, and physical space at the same time.",
   },
   {
-    title: "Systems over one-offs",
-    text: "A good visual direction should hold together across a logo, package, poster, sign, website, or app screen.",
+    title: "Balance and story",
+    text: "The structure makes the work useful. The storytelling gives it a reason to last and helps each touchpoint feel part of the same recognizable message.",
   },
   {
     title: "Place with restraint",
-    text: "Moving from Hawaii to Seattle gives the work a sense of transition, texture, and atmosphere without leaning on obvious visual cliches.",
+    text: "Living around the globe has given my work a sense of transition, boldness, texture, and atmosphere without leaning on obvious visual cliches.",
   },
 ];
 
-const process = ["Listen", "Structure", "Design", "Extend"];
+const process = ["Listen", "Structure", "Build", "Extend"];
 ---
 
 <BaseLayout
   title="About"
-  description="About Christopher Abarca, a graphic designer with 10 years of experience in identity, brand, print, environmental, and digital design."
+  description="About Christopher Abarca, a graphic designer with over a decade of experience in creative direction, art direction, marketing, brand identity, and digital development."
 >
   <section class="about-hero">
     <div class="about-hero__copy" data-reveal>
       <p class="eyebrow">About</p>
-      <h1>Graphic designer building brand systems across identity, print, environments, and digital products.</h1>
+      <h1>Graphic designer building brands, identities, and digital work through collaboration and story.</h1>
       <p>
-        I am Christopher Abarca, a graphic designer with 10 years of experience creating identity, brand,
-        print, environmental, and digital work. I am moving from Hawaii to Seattle and building a practice
-        around clear visual systems, strong imagery, and practical design that can carry across many touchpoints.
+        My name is Christopher Abarca. I am a graphic designer with experience in creative direction,
+        art direction, marketing, and digital development. I have over a decade of experience in the field,
+        and I love building brands and identities that can live across many touchpoints.
       </p>
     </div>
     <div class="about-hero__card" data-reveal aria-label="Location transition">
       <span>HNL</span>
-      <strong>Pacific point of view</strong>
+      <strong>Global point of view</strong>
       <em>SEA</em>
-      <p>Graphic Designer. 10 years of experience. Open to freelance, full-time, and contract opportunities.</p>
+      <p>Graphic designer. Over a decade of experience. Open to freelance, full-time, and contract opportunities.</p>
     </div>
   </section>
 
@@ -123,13 +136,12 @@ const process = ["Listen", "Structure", "Design", "Extend"];
     <div class="about-grid__intro" data-reveal>
       <p class="eyebrow">Practice</p>
       <p>
-        I work best where a brand has to show up in more than one place. That can mean an identity system,
-        packaging direction, poster series, storefront sign, website, or application interface. The goal is
-        to make each piece feel connected without making every touchpoint look identical.
+        I work best in collaborative efforts across fields. When a brand or company needs to show up
+        in more than one place, I get excited about solving how the same recognizable message can fit
+        onto a screen, in a newspaper, in a store, or across a campaign.
       </p>
       <p>
-        I care about the balance between structure and feeling. The structure makes the work useful. The
-        feeling makes it worth remembering.
+        I care about balance and storytelling. That balance makes the work useful, recognizable, and lasting.
       </p>
     </div>
     <div class="about-grid__notes" data-reveal>
@@ -165,7 +177,7 @@ const process = ["Listen", "Structure", "Design", "Extend"];
   <section class="about-process">
     <div data-reveal>
       <p class="eyebrow">How I work</p>
-      <h2>A simple process for building visual systems that can keep expanding.</h2>
+      <h2>A simple process for turning the story into a flexible working system.</h2>
     </div>
     <ol data-reveal>
       {
@@ -181,8 +193,8 @@ const process = ["Listen", "Structure", "Design", "Extend"];
   <section class="about-personal" data-reveal>
     <p class="eyebrow">Point of view</p>
     <p>
-      Outside of project work, I pay attention to everyday design: storefronts, menus, posters, packaging,
-      and the small details that make a place feel recognizable.
+      Outside of project work, I pay attention to everyday design: storefront signs, transit systems,
+      menus, packaging, lighting, and the small details that make a place feel recognizable.
     </p>
   </section>
 
