@@ -16,7 +16,7 @@ const previewImages = (data.gallery ?? []).filter((image) => image.src !== data.
   style={`--accent: ${data.accent};`}
   data-reveal
 >
-  <a href={`/work/${project.id}/`}>
+  <a href={`/${project.id}/`}>
     <figure class="project-card__media" data-parallax>
       <img src={data.cover} alt={data.coverAlt} loading={featured ? "eager" : "lazy"} />
       {

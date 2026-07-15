@@ -1455,6 +1455,7 @@ main {
 .project-gallery__grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: dense;
   gap: 14px;
 }
 
@@ -1479,6 +1480,58 @@ main {
 .project-gallery__item--square {
   grid-column: span 4;
   min-height: 420px;
+}
+
+.project--photography .project-gallery__grid {
+  grid-auto-flow: dense;
+}
+
+.project--photography .project-gallery__item img,
+.project--archived-projects .project-gallery__item img {
+  object-position: center;
+}
+
+.project--identity-studies .project-hero__media {
+  height: auto;
+  min-height: 0;
+  padding: 10px;
+  background: linear-gradient(135deg, #f6f1e8, #e4d8c6);
+}
+
+.project--identity-studies .project-hero__media::after,
+.project--identity-studies .project-gallery__item::after {
+  display: none;
+}
+
+.project--identity-studies .project-hero__media img {
+  height: auto;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.project--identity-studies .project-gallery__item {
+  min-height: 0;
+  padding: 10px;
+  background: linear-gradient(135deg, #fbf7ee, #e5ded2);
+}
+
+.project--identity-studies .project-gallery__item img {
+  height: auto;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.project--identity-studies .project-gallery__item figcaption {
+  position: static;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: rgba(251, 250, 246, 0.94);
+  color: var(--ink);
+}
+
+.project--identity-studies .project-gallery__item figcaption span {
+  color: var(--muted);
 }
 
 .project--longs-sans .project-hero__media,
