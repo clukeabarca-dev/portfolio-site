@@ -3113,6 +3113,105 @@ body.is-lightbox-open {
   aspect-ratio: auto 16 / 11;
 }
 
+/* Keep project imagery compact and let each card follow its image's natural ratio. */
+.project-visual-strip {
+  align-items: start;
+}
+
+.project-visual-strip__item,
+.project-visual-strip__item--tall,
+.project-chapter__media {
+  display: grid;
+  grid-template-rows: auto auto;
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.project-visual-strip__item img,
+.project-chapter__media img {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.project-visual-strip__item::after,
+.project-chapter__media::after,
+.project-gallery__item::after {
+  display: none;
+}
+
+.project-visual-strip__item figcaption,
+.project-chapter__media figcaption,
+.project-gallery__item figcaption {
+  position: static;
+  margin: 0;
+  padding: 10px 12px;
+  background: rgba(251, 250, 246, 0.96);
+  color: var(--ink);
+}
+
+.project-visual-strip__item figcaption span,
+.project-gallery__item figcaption span {
+  color: var(--muted);
+}
+
+/* A column mosaic packs mixed image ratios without forcing empty card space. */
+.project-gallery__grid {
+  display: block;
+  column-count: 4;
+  column-gap: 14px;
+}
+
+.project-gallery__item,
+.project-gallery__item--wide,
+.project-gallery__item--tall,
+.project-gallery__item--square,
+.project--akira-toriyama-early-works .project-gallery__item:first-child {
+  display: inline-block;
+  width: 100%;
+  min-height: 0;
+  margin: 0 0 14px;
+  padding: 0;
+  break-inside: avoid;
+  grid-column: auto;
+  background: transparent;
+  box-shadow: none;
+  vertical-align: top;
+}
+
+.project-gallery__item img,
+.project--akira-toriyama-early-works .project-gallery__item--wide img,
+.project--akira-toriyama-early-works .project-gallery__item--tall img,
+.project--akira-toriyama-early-works .project-gallery__item--square img,
+.project--akira-toriyama-early-works .project-gallery__item img[src$=".svg"] {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  border-radius: var(--radius) var(--radius) 0 0;
+  object-fit: contain;
+}
+
+@media (max-width: 1180px) {
+  .project-gallery__grid {
+    column-count: 3;
+  }
+}
+
+@media (max-width: 760px) {
+  .project-gallery__grid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-gallery__grid {
+    column-count: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
