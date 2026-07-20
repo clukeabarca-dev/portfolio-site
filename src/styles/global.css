@@ -1452,6 +1452,20 @@ main {
   line-height: 0.98;
 }
 
+.project-gallery__credit {
+  max-width: 760px;
+  margin: -6px 0 26px;
+  color: var(--muted);
+}
+
+.project--photography .project-gallery--original-photography {
+  margin-bottom: 70px;
+}
+
+.project--photography .project-gallery--editing-only {
+  padding-top: 54px;
+}
+
 .project-gallery__grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));

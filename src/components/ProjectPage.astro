@@ -32,6 +32,8 @@ const chapterBody =
   "The project format supports a richer visual sequence, so each page can behave more like a designed story than a text page with one cover image.";
 const isIdentityStudy = project.id === "identity-studies";
 const isPhotographyArchive = project.id === "photography";
+const photographyOriginals = gallery.filter((image) => image.credit !== "editing-only");
+const photographyEdits = gallery.filter((image) => image.credit === "editing-only");
 const galleryEyebrow = isIdentityStudy ? "Two identity studies" : isPhotographyArchive ? "Photo archive" : "Image archive";
 const relatedHeading = isIdentityStudy ? "Related identity work" : "Continue through the archive";
 ---
@@ -105,7 +107,55 @@ const relatedHeading = isIdentityStudy ? "Related identity work" : "Continue thr
     </section>
 
     {
-      gallery.length > 0 && (
+      gallery.length > 0 && isPhotographyArchive && (
+        <>
+          <section class="project-gallery project-gallery--original-photography" aria-label="Original photography by Christopher Abarca">
+            <div class="project-gallery__heading" data-reveal>
+              <p class="eyebrow">Photography + editing</p>
+              <h2>{photographyOriginals.length} photographs made by Christopher Abarca</h2>
+            </div>
+            <p class="project-gallery__credit" data-reveal>
+              I photographed and edited every image in this section.
+            </p>
+            <div class="project-gallery__grid">
+              {photographyOriginals.map((image, index) => (
+                <figure class:list={["project-gallery__item", `project-gallery__item--${image.layout}`]} data-reveal>
+                  <img src={image.src} alt={image.alt} loading={index < 2 ? "eager" : "lazy"} />
+                  <figcaption>
+                    <span>Photography + edit</span>
+                    {image.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+
+          <section class="project-gallery project-gallery--editing-only" aria-label="Manoa Now photography edited by Christopher Abarca">
+            <div class="project-gallery__heading" data-reveal>
+              <p class="eyebrow">Editing + color only</p>
+              <h2>{photographyEdits.length} selected Manoa Now edits</h2>
+            </div>
+            <p class="project-gallery__credit" data-reveal>
+              Photography by Manoa Now contributors. My role was limited to image editing and color treatment; individual photographer names were not embedded in the supplied files.
+            </p>
+            <div class="project-gallery__grid">
+              {photographyEdits.map((image) => (
+                <figure class:list={["project-gallery__item", `project-gallery__item--${image.layout}`]} data-reveal>
+                  <img src={image.src} alt={image.alt} loading="lazy" />
+                  <figcaption>
+                    <span>Editing only</span>
+                    {image.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        </>
+      )
+    }
+
+    {
+      gallery.length > 0 && !isPhotographyArchive && (
         <section class="project-gallery" aria-label={`${project.data.title} image gallery`}>
           <div class="project-gallery__heading" data-reveal>
             <p class="eyebrow">{galleryEyebrow}</p>

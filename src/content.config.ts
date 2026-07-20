@@ -28,6 +28,7 @@ const projects = defineCollection({
           alt: z.string(),
           caption: z.string(),
           layout: z.enum(["wide", "tall", "square"]).default("wide"),
+          credit: z.enum(["photography-and-editing", "editing-only"]).optional(),
         }),
       )
       .min(1, "Project pages need at least 1 gallery image.")
