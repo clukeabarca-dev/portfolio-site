@@ -9,20 +9,21 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header class="site-header" data-reveal>
-  <a class="site-header__brand" href="/" aria-label="Christopher Abarca home">
-    <span class="site-header__mark">CA</span>
-    <span>Christopher Abarca</span>
-  </a>
-  <nav class="site-header__nav" aria-label="Primary navigation">
-    {
-      navItems.map((item) => (
-        <a
-          href={item.href}
-          aria-current={currentPath === item.href ? "page" : undefined}
-        >
-          {item.label}
-        </a>
-      ))
-    }
-  </nav>
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="/" aria-label="Christopher Abarca home">
+      Christopher Abarca
+    </a>
+    <nav class="site-header__nav" aria-label="Primary navigation">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            aria-current={currentPath === item.href ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
 </header>
