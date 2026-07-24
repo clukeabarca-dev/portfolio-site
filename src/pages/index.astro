@@ -7,11 +7,11 @@ import { isPublishedProject, sortProjectsByOrder } from "../lib/projects";
 const projects = (await getCollection("projects")).filter(isPublishedProject).sort(sortProjectsByOrder);
 const featuredProjectIds = [
   "longs-drugs-brand-revival",
+  "manoa-now-identity",
+  "vital-view-3d-web",
   "island-living-eco-goods",
   "hana-paw-pet-goods",
   "hoku-lei-jewelry",
-  "manoa-now-identity",
-  "akira-toriyama-early-works",
 ];
 const projectById = new Map(projects.map((project) => [project.id, project]));
 const featuredProjects = featuredProjectIds
@@ -68,24 +68,47 @@ const visualReel = visualReelSelections
     };
   })
   .filter((image) => image !== null);
+const careerPaths = [
+  {
+    number: "01",
+    title: "Brand and design leadership",
+    text: "Identity systems, guidelines, packaging, retail, web, and the production structure that keeps them connected.",
+    href: "/work/longs-drugs-brand-revival/",
+    link: "See the Longs Drugs system",
+  },
+  {
+    number: "02",
+    title: "Campaigns and art direction",
+    text: "Concepts and visual stories that can move across social, print, events, presentations, and physical spaces.",
+    href: "/work/manoa-now-identity/",
+    link: "See the Manoa Now campaign",
+  },
+  {
+    number: "03",
+    title: "Marketing and digital work",
+    text: "Clear content and customer paths built around launch needs, useful information, and the next action.",
+    href: "/work/vital-view-3d-web/",
+    link: "See the Vital View launch",
+  },
+];
 ---
 
 <BaseLayout>
   <section class="hero">
     <div class="hero__inner">
-      <p class="eyebrow" data-reveal>Graphic design / creative direction / digital development</p>
+      <p class="eyebrow" data-reveal>Brand design / creative direction / integrated campaigns</p>
       <h1 data-reveal>
-        Brands, identities, and visual systems built to hold together in the real world.
+        Brand and creative leadership for work that has to hold together in the real world.
       </h1>
       <div class="hero__summary" data-reveal>
         <p>
-          My name is Christopher Abarca. I am a graphic designer with experience in creative
-          direction, art direction, marketing, and digital development. I have over a decade of
-          experience, and I love building brands and identities.
+          I build brand systems, campaigns, packaging, retail experiences, and digital work. I like
+          taking a clear idea from the first conversation through the details that make it useful,
+          recognizable, and ready to live across many touchpoints.
         </p>
         <div class="hero__actions" aria-label="Primary actions">
           <a class="button" href="/work/">View work</a>
-          <a class="button button--quiet" href="/about/">About me</a>
+          <a class="button button--quiet" href="/christopher-abarca-lead-brand-art-director-resume.pdf">Resume</a>
         </div>
       </div>
     </div>
@@ -114,6 +137,25 @@ const visualReel = visualReelSelections
       in more than one place, I get excited by the problem of making a campaign or product fit on a
       screen, in print, and in a store while still carrying the same recognizable message.
     </p>
+  </section>
+
+  <section class="career-paths" aria-labelledby="career-paths-title">
+    <div class="career-paths__heading" data-reveal>
+      <p class="eyebrow">Selected paths</p>
+      <h2 id="career-paths-title">The work can be read through three connected parts of my practice.</h2>
+    </div>
+    <div class="career-paths__grid">
+      {
+        careerPaths.map((path) => (
+          <article data-reveal>
+            <span>{path.number}</span>
+            <h3>{path.title}</h3>
+            <p>{path.text}</p>
+            <a href={path.href}>{path.link}</a>
+          </article>
+        ))
+      }
+    </div>
   </section>
 
   <section class="visual-reel" aria-label="Visual project preview">

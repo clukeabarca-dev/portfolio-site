@@ -16,6 +16,8 @@ const projects = defineCollection({
     role: z.string(),
     client: z.string(),
     location: z.string().optional(),
+    projectType: z.string().optional(),
+    projectScope: z.string().optional(),
     featured: z.boolean().default(false),
     archived: z.boolean().default(false),
     order: z.number().default(999),

@@ -18,11 +18,13 @@ interface Props {
 
 const {
   title = "Christopher Abarca",
-  description = "Christopher Abarca is a graphic designer with over a decade of experience in creative direction, art direction, marketing, brand identity, and digital development.",
+  description = "Christopher Abarca is a brand and creative lead working across identity systems, campaigns, packaging, retail, and digital experiences.",
   bodyClass = "",
 } = Astro.props;
 
 const pageTitle = title === "Christopher Abarca" ? title : `${title} | Christopher Abarca`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.url);
+const socialImageUrl = new URL("/og.png", Astro.url);
 ---
 
 <!doctype html>
@@ -32,6 +34,16 @@ const pageTitle = title === "Christopher Abarca" ? title : `${title} | Christoph
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
     <title>{pageTitle}</title>
   </head>
   <body class={bodyClass}>

@@ -82,6 +82,7 @@ main {
 .about-personal,
 .about-everyday,
 .archive,
+.career-paths,
 .project-facts,
 .project-body,
 .about-grid {
@@ -132,6 +133,14 @@ main {
 .site-header__nav a[aria-current="page"] {
   border-color: currentColor;
   color: var(--ink);
+}
+
+.site-footer__links,
+.index-band__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
 }
 
 .eyebrow {
@@ -833,6 +842,75 @@ main {
   border-bottom: 1px solid var(--line);
 }
 
+.career-paths {
+  padding: 96px 0;
+}
+
+.career-paths__heading {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.45fr) minmax(0, 1fr);
+  gap: 48px;
+  margin-bottom: 32px;
+  align-items: start;
+}
+
+.career-paths__heading h2 {
+  max-width: 920px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 400;
+  line-height: 0.98;
+}
+
+.career-paths__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.career-paths article {
+  display: grid;
+  min-height: 330px;
+  padding: 24px;
+  border-right: 1px solid var(--line);
+  align-content: start;
+}
+
+.career-paths article:last-child {
+  border-right: 0;
+}
+
+.career-paths article > span {
+  margin-bottom: 64px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+}
+
+.career-paths h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.career-paths article p {
+  margin: 18px 0 28px;
+  color: var(--muted);
+}
+
+.career-paths article a {
+  margin-top: auto;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-transform: uppercase;
+}
+
 .visual-reel {
   width: min(100% - 40px, 1320px);
   margin: 0 auto;
@@ -1249,7 +1327,7 @@ main {
 
 .project-facts {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1px;
   padding: 1px;
   background: var(--line);
@@ -2760,6 +2838,7 @@ body.is-lightbox-open {
   .brand-guide-cover-read,
   .brand-guide-checks,
   .visual-reel__intro,
+  .career-paths__heading,
   .about-image-strip,
   .section--split,
   .about-hero,
@@ -2776,6 +2855,7 @@ body.is-lightbox-open {
 
   .hero__summary,
   .featured-grid,
+  .career-paths__grid,
   .archive__grid,
   .project-facts,
   .brand-guide-card-grid--3,
@@ -2819,6 +2899,20 @@ body.is-lightbox-open {
 
   .about-principles {
     grid-template-columns: 1fr;
+  }
+
+  .career-paths article {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .career-paths article:last-child {
+    border-bottom: 0;
+  }
+
+  .career-paths article > span {
+    margin-bottom: 34px;
   }
 
   .about-everyday {
@@ -2928,7 +3022,8 @@ body.is-lightbox-open {
 
   .site-header__nav {
     width: 100%;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
   .hero {
@@ -2999,6 +3094,7 @@ body.is-lightbox-open {
   }
 
   .visual-reel__intro h2,
+  .career-paths__heading h2,
   .project-gallery__heading h2 {
     font-size: 2.75rem;
   }

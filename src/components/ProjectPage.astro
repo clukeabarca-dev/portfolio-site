@@ -36,6 +36,14 @@ const photographyOriginals = gallery.filter((image) => image.credit !== "editing
 const photographyEdits = gallery.filter((image) => image.credit === "editing-only");
 const galleryEyebrow = isIdentityStudy ? "Two identity studies" : isPhotographyArchive ? "Photo archive" : "Image archive";
 const relatedHeading = isIdentityStudy ? "Related identity work" : "Continue through the archive";
+const projectFacts = [
+  { label: "Role", value: project.data.role },
+  { label: "Client", value: project.data.client },
+  { label: "Project", value: project.data.projectType },
+  { label: "Scope", value: project.data.projectScope },
+  { label: "Medium", value: project.data.medium.join(", ") },
+  { label: "Location", value: project.data.location ?? "Remote" },
+].filter((fact) => fact.value);
 ---
 
 <BaseLayout title={project.data.title} description={project.data.summary} bodyClass={`project-theme-${project.data.theme}`}>
@@ -52,26 +60,14 @@ const relatedHeading = isIdentityStudy ? "Related identity work" : "Continue thr
     </header>
 
     <section class="project-facts" aria-label="Project facts" data-reveal>
-      <div>
-        <span>Role</span>
-        <p>{project.data.role}</p>
-      </div>
-      <div>
-        <span>Client</span>
-        <p>{project.data.client}</p>
-      </div>
-      <div>
-        <span>Medium</span>
-        <p>{project.data.medium.join(", ")}</p>
-      </div>
-      <div>
-        <span>Location</span>
-        <p>{project.data.location ?? "Remote"}</p>
-      </div>
-      <div>
-        <span>Images</span>
-        <p>{gallery.length} visual moments</p>
-      </div>
+      {
+        projectFacts.map((fact) => (
+          <div>
+            <span>{fact.label}</span>
+            <p>{fact.value}</p>
+          </div>
+        ))
+      }
     </section>
 
     {

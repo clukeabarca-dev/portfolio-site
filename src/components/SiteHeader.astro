@@ -3,6 +3,8 @@ const navItems = [
   { href: "/", label: "Index" },
   { href: "/work/", label: "Work" },
   { href: "/about/", label: "About" },
+  { href: "/christopher-abarca-lead-brand-art-director-resume.pdf", label: "Resume" },
+  { href: "https://www.linkedin.com/in/clukeabarca/", label: "LinkedIn", external: true },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -19,6 +21,8 @@ const currentPath = Astro.url.pathname;
           <a
             href={item.href}
             aria-current={currentPath === item.href ? "page" : undefined}
+            target={item.external ? "_blank" : undefined}
+            rel={item.external ? "noopener" : undefined}
           >
             {item.label}
           </a>
