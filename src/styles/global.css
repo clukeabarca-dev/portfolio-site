@@ -1132,6 +1132,11 @@ main {
   align-items: end;
 }
 
+.index-band > .button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
 .index-band .eyebrow {
   color: rgba(244, 241, 234, 0.68);
 }
